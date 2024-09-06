@@ -7,7 +7,7 @@
 #include <tuple>
 
 //Algorithm that solves the thomas algorithm
-arma::vec thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal);
+arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal);
 
 // function that writes vectors v and g to file
 void write_thomas_to_file(std::string filename, arma::mat v_g_mat);
