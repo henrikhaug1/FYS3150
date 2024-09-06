@@ -18,7 +18,13 @@ def plot(path):
             x_values[i] = float(x_list[i])
             ux_values[i] = float(ux_list[i])
 
-    plt.plot(x_values, ux_values)
-    plt.show()
 
-plot("/Users/henrikhaug/Documents/Matematikk_med_informatikk/Semester5/FYS3150/Prosjekter_livelst/FYS3150/Project1/src/x_and_ux_values_output.txt")
+
+    fig, ax = plt.subplots()
+    ax.plot(x_values, ux_values,)
+    ax.set_xlabel('x-values')
+    ax.set_ylabel('u(x) values')
+    ax.set_title('u(x) = 100*e^(-10x) for x in [0, 1]')
+    fig.savefig("problem2_ux_plot.pdf")
+
+plot("/Users/henrikhaug/Documents/Matematikk_med_informatikk/Semester5/FYS3150/Prosjekter_livelst/FYS3150/Project1/x_and_ux_values_output.txt")
