@@ -44,21 +44,27 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 		v[i] = (g_tilde[i] - (c[i] * v[i+1]))/b_tilde[i];
 	}
 
-	arma::mat v_g_mat(n_step, 2);
-	v_g_mat.col(0) = v;
-	v_g_mat.col(1) = g; 
+	arma::mat v_x_mat(n_step, 2);
+	v_x_mat.col(0) = v;
+	v_x_mat.col(1) = x; 
 
-	return v_g_mat;
+	return v_x_mat;
 
 }
 
-void write_thomas_to_file(std::string filename, arma::mat v_g_mat){
+void write_thomas_to_file(std::string filename, arma::mat v_x_mat){
 
     std::ofstream ofile;
     ofile.open(filename);
     ofile << std::scientific << std::setprecision(5);
-    ofile << "v-values   g-values" << "\n";
-    ofile << v_g_mat << "\n";
+    ofile << "boundary points:" << "\n";
+    ofile << "v-values   x-values" << "\n";
+    ofile << v_x_mat(0, 0) << "   " << v_x_mat(0, 1) << "\n";
+    ofile << v_x_mat(v_x_mat.col(0).n_rows - 1, 0) << "   " << v_x_mat(v_x_mat.col(0).n_rows - 1, 1) << "\n";
+    ofile << "\n";
+    ofile << "Interior Points:" << "\n";
+    ofile << "v-values   x-values" << "\n";
+    ofile << v_x_mat << "\n";
 
     ofile.close();
 }
