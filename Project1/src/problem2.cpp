@@ -5,8 +5,6 @@
 #include <iomanip>
 
 
-
-
 double u(double x) {
 	double func = (1 - ((1 - exp(-10)) * x) - exp(-10 * x));
 	return func;
