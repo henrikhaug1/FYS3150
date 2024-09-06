@@ -5,7 +5,7 @@
 #include <iomanip>
 #include "problem7_functions.hpp"
 
-void thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal){
+arma::vec thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal){
 
 	double h = 1.0/n_step;
 
@@ -29,10 +29,16 @@ void thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal){
 
 	b_tilde[0] = b[0];
 	g_tilde[0] = g[0];
+
+	arma::vec m = arma::vec(n_step);
+	for(int i = 0; i < n_step; i++){
+		m[i] = a[i] / b[i-1];
+	}
+
 	//Forward substitution -- finding b_tilde and g_tilde values
 	for(int i = 1; i < n_step; i++){
-		b_tilde[i] = b[i] - (a[i] / b[i-1]) * c[i-1];
-		g_tilde[i] = g[i] - (a[i] / b[i-1]) * g_tilde[i-1];
+		b_tilde[i] = b[i] - m[i] * c[i-1];
+		g_tilde[i] = g[i] - m[i] * g_tilde[i-1];
 	}
 
 	//backwards substtutuion -- finding
@@ -40,14 +46,40 @@ void thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal){
 		v[i] = (g_tilde[i] - (c[i] * v[i+1]))/b_tilde[i];
 	}
 
+	arma::mat v_g_mat(v.n_elem, 2);
+	v_g_mat.col(0) = v;
+	v_g_mat.col(1) = g; 
+
+	return v_g_mat;
+
 }
 
-void write_thomas_to_file(std::string filename, arma::vec v, arma::vec g) {
+void write_thomas_to_file(std::string filename, arma::mat v_g_mat){
+
     std::ofstream ofile;
     ofile.open(filename);
     ofile << std::scientific << std::setprecision(5);
-    ofile << "v values   g values" << "\n";
-    for (int i = 0; i < v.size(); i++){
-        ofile << v[i] << " " << g[i] << "\n";
-    }
+    ofile << "v-values   g-values" << "\n";
+    ofile << v_g_mat << "\n";
+    
+   
+
+    ofile.close();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
