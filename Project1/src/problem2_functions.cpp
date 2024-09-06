@@ -3,7 +3,7 @@
 #include <cmath>
 #include <armadillo>
 #include <iomanip>
-
+#include "problem2_functions.hpp"
 
 double u(double x) {
 	double func = (1 - ((1 - exp(-10)) * x) - exp(-10 * x));

@@ -1,4 +1,6 @@
 #include <iostream>
+#include "problem2_functions.hpp"
+#include <armadillo>
 
 int main() {
 
