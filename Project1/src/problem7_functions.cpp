@@ -64,7 +64,7 @@ void write_thomas_to_file(std::string filename, arma::mat v_x_mat){
     ofile << "\n";
     ofile << "Interior Points:" << "\n";
     ofile << "v-values   x-values" << "\n";
-    ofile << v_x_mat << "\n";
+    ofile << v_x_mat;
 
     ofile.close();
 }
