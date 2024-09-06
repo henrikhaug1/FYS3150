@@ -1,4 +1,5 @@
 #include <iostream>
+#include "problem2_functions.hpp"
 
 int main() {
 

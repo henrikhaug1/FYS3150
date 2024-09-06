@@ -3,7 +3,7 @@
 #include <cmath>
 #include <armadillo>
 #include <iomanip>
-
+#include "problem2_functions.hpp"
 
 
 
