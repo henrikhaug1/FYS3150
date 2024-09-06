@@ -6,6 +6,6 @@
 #include <armadillo>
 
 //Algorithm that solves the thomas algorithm
-void thomas_algo(int n_step)
+void thomas_algo(int n_step);
 
 #endif
