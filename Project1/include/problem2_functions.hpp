@@ -1,5 +1,9 @@
-#ifndef __problem2_functions.hpp__
-#define __problem2_functions.hpp__
+#ifndef __problem2_functions_hpp__
+#define __problem2_functions_hpp__
+
+#include <iostream>
+#include <string>
+#include <armadillo>
 
 //function declaration for u(x)
 double u(double x);
