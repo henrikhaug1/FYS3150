@@ -35,11 +35,11 @@ def plot_problem7(path, n_step):
 	plt.title(f'Comparison of Numerical Solution and Exact Solution with n_steps = {n_step}')
 	plt.legend()
 	plt.grid(True)
-	plt.savefig(f"plot_problem7_with_{n_step}_steps")
+	plt.savefig(f"plot_problem7_with_{n_step}_steps.pdf")
 
-plot_problem7("/Users/henrikhaug/Documents/Matematikk_med_informatikk/Semester5/FYS3150/Prosjekter_livelst/FYS3150/Project1/problem7_v_x_10steps.txt", 10)
-plot_problem7("/Users/henrikhaug/Documents/Matematikk_med_informatikk/Semester5/FYS3150/Prosjekter_livelst/FYS3150/Project1/problem7_v_x_100steps.txt", 100)
-plot_problem7("/Users/henrikhaug/Documents/Matematikk_med_informatikk/Semester5/FYS3150/Prosjekter_livelst/FYS3150/Project1/problem7_v_x_1000steps.txt", 1000)
+plot_problem7("../problem7_v_x_10steps.txt", 10)
+plot_problem7("../problem7_v_x_100steps.txt", 100)
+plot_problem7("../problem7_v_x_1000steps.txt", 1000)
 
 
 
