@@ -1,8 +1,10 @@
 #include "problem8_functions.hpp"
 
-#include <armadillo>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
+
+
 
 arma::vec absolute_error(arma::vec approx_vec, arma::vec true_vec){
 
@@ -24,10 +26,19 @@ arma::vec relative_error(arma::vec approx_vec, arma::vec true_vec){
 	arma::vec relative_error_vec = arma::vec(length_vec);
 	for(int i = 0; i < length_vec; i++){
 		double rel_value = (approx_vec[i] - true_vec[i]) / true_vec[i];
-		relative_error_vec[i] = fabs(rel_value);
+		relative_error_vec[i - 1] = fabs(rel_value);
 	}
 
 	return relative_error_vec;
+}
+
+void write_error_to_file(std::string filename, arma::vec error_vec){
+
+    std::ofstream ofile;
+    ofile.open(filename);
+    ofile << std::scientific << std::setprecision(5);
+    ofile << error_vec;
+    ofile.close();
 }
 
 
