@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <fstream>
 
 
 
@@ -32,13 +33,25 @@ arma::vec relative_error(arma::vec approx_vec, arma::vec true_vec){
 	return relative_error_vec;
 }
 
-void write_error_to_file(std::string filename, arma::vec error_vec){
+arma::vec make_plotting_vec(std::string type_error, arma::vec n_step){
 
-    std::ofstream ofile;
-    ofile.open(filename);
-    ofile << std::scientific << std::setprecision(5);
-    ofile << error_vec;
-    ofile.close();
+
+	// Function is taking vector; n_step = {10, 100, 1000}
+	//Read from files in loop 
+	std::size_t how_many_graphs = n_step.size();
+	for(int i = 0; i < how_many_graphs; i++){
+
+		int n = how_many_graphs[i];
+		std::fstream infile;
+
+		std::string filename = type_error + std::to_string(n) + ".txt";
+		infile.open(filename);
+
+    	ofile << std::scientific << std::setprecision(5);
+    	ofile << error_vec;
+
+
+	}
 }
 
 
