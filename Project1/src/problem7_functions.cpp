@@ -33,6 +33,7 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 
 
 	//Forward substitution -- finding b_tilde and g_tilde values
+	//Setting m[i] = a[i] / b[i-1] to save n_step FLOPs
 	for(int i = 1; i < n_step; i++){
 		m[i] = a[i] / b_tilde[i - 1];
 		b_tilde[i] = b[i] - m[i] * c[i-1];
@@ -58,13 +59,13 @@ void write_thomas_to_file(std::string filename, arma::mat v_x_mat){
     std::ofstream ofile;
     ofile.open(filename);
     ofile << std::scientific << std::setprecision(5);
-    ofile << "boundary points:" << "\n";
-    ofile << "v-values   x-values" << "\n";
+    ofile << "Boundary points:" << "\n";
+    ofile << "v-values      x-values" << "\n";
     ofile << v_x_mat(0, 0) << "   " << v_x_mat(0, 1) << "\n";
     ofile << v_x_mat(v_x_mat.col(0).n_rows - 1, 0) << "   " << v_x_mat(v_x_mat.col(0).n_rows - 1, 1) << "\n";
     ofile << "\n";
-    ofile << "Interior Points:" << "\n";
-    ofile << "v-values   x-values" << "\n";
+    ofile << "Interior Points for n_step = " << v_x_mat.col(0).n_rows << "\n";
+    ofile << "   v-values     x-values" << "\n";
     ofile << v_x_mat;
 
     ofile.close();

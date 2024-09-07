@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <armadillo>
-#include <tuple>
 
 //Algorithm that solves the thomas algorithm
 arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagonal);
