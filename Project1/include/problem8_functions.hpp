@@ -12,6 +12,6 @@ double calc_exact(double x);
 
 double absolute_error(double approx, double exact);
 
-double relztive_error(double approx, double exact);
+double relative_error(double approx, double exact);
 
 #endif
