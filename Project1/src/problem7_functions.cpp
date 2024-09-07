@@ -31,11 +31,12 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 	b_tilde[0] = b[0];
 	g_tilde[0] = g[0];
 
+
 	//Forward substitution -- finding b_tilde and g_tilde values
 	for(int i = 1; i < n_step; i++){
-		m[i - 0] = a[i - 1] / b_tilde[i-1];
-		b_tilde[i] = b[i] - m[i - 1] * c[i-1];
-		g_tilde[i] = g[i] - m[i - 1] * g_tilde[i-1];
+		m[i] = a[i] / b_tilde[i - 1];
+		b_tilde[i] = b[i] - m[i] * c[i-1];
+		g_tilde[i] = g[i] - m[i] * g_tilde[i-1];
 	}
 
 	//backwards substtutuion -- finding

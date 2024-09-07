@@ -32,7 +32,7 @@ def plot_problem7(path, n_step):
 
 	plt.xlabel('x-values')
 	plt.ylabel('Values')
-	plt.title('Comparison of Numerical Solution and Exact Solution')
+	plt.title(f'Comparison of Numerical Solution and Exact Solution with n_steps = {n_step}')
 	plt.legend()
 	plt.grid(True)
 	plt.savefig(f"plot_problem7_with_{n_step}_steps")
