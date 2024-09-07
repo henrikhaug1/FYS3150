@@ -1,16 +1,17 @@
 #ifndef __problem8_functions_hpp__
 #define __problem8_functions_hpp__
 
-#include <armadillo>
 #include <string>
 #include <iostream>
 
-arma::vec absolute_error(arma::vec approx_vec, arma::vec true_vec);
+double u(double x);
 
-arma::vec relative_error(arma::vec approx_vec, arma::vec true_vec);
+double calc_approx(double x, double h);
 
-// function that writes error values to file
-void write_error_to_file(std::string filename, arma::vec error_vec);
+double calc_exact(double x);
 
+double absolute_error(double approx, double exact);
+
+double relztive_error(double approx, double exact);
 
 #endif

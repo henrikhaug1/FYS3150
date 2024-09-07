@@ -4,56 +4,48 @@
 #include <iomanip>
 #include <cmath>
 #include <fstream>
+#include <iomanip>
+#include <string>
 
+double u(double x){
 
-
-arma::vec absolute_error(arma::vec approx_vec, arma::vec true_vec){
-
-	std::size_t length_vec = approx_vec.size();
-
-	arma::vec absolute_error_vec = arma::vec(length_vec);
-	for(int i = 0; i < length_vec; i++){
-		double abs_value = fabs(approx_vec[i] - true_vec[i]);
-		absolute_error_vec[i] = fabs(abs_value);
-	}
-
-	return absolute_error_vec;
+  return 100*exp(-10*x);
 }
 
-arma::vec relative_error(arma::vec approx_vec, arma::vec true_vec){
+//Calculating approximated second derivative aourond a given point x
+double calc_approx(double x, double h){
 
-	std::size_t length_vec = approx_vec.size();
-
-	arma::vec relative_error_vec = arma::vec(length_vec);
-	for(int i = 0; i < length_vec; i++){
-		double rel_value = (approx_vec[i] - true_vec[i]) / true_vec[i];
-		relative_error_vec[i - 1] = fabs(rel_value);
-	}
-
-	return relative_error_vec;
+	double approx = (u(x+h) - 2*u(x) + u(x-h)) / (h*h);
+	return approx;
 }
 
-arma::vec make_plotting_vec(std::string type_error, arma::vec n_step){
+//Calculating the exact souluton of u(x) around a given point x
+double calc_exact(double x){
 
+	double exact = 100 * exp(-10 * x);
+	return exact;
 
-	// Function is taking vector; n_step = {10, 100, 1000}
-	//Read from files in loop 
-	std::size_t how_many_graphs = n_step.size();
-	for(int i = 0; i < how_many_graphs; i++){
-
-		int n = how_many_graphs[i];
-		std::fstream infile;
-
-		std::string filename = type_error + std::to_string(n) + ".txt";
-		infile.open(filename);
-
-    	ofile << std::scientific << std::setprecision(5);
-    	ofile << error_vec;
-
-
-	}
 }
 
+//Calculating the absolute error around a given point x
+double absolute_error(double approx, double exact){
 
+	double absolute_err = fabs(approx - exact);
+	return absolute_err;
+
+}
+
+//Calculating the relative error around a given point x
+double relative_error(double approx, double exact){
+
+	double relative_err = fabs((approx - exact) / exact);
+	return relative_err;
+}
+
+//Writing h-, approx- and exact values to file 
+void write_info_to_file(){
+
+	
+}
 
 

@@ -1,36 +1,80 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_problem8(error_type, n_step_list):
+#---------------------------------------
+h, approx, exact = np.loadtxt("output.txt", usecols = (0, 1, 2), unpack = True)
+abs_err = abs(approx - exact)
+rel_err = abs((approx - exact) / exact)
+log10_rel_err = np.log10(rel_err)
+log10_h = np.log10(h)
 
-	plot = plt.figure(figsize=(12, 8))
+exact_result = exact[0]
+common_title_string = "for approximation of\n u''(x=2) = 4*exp(2*2) = {:.8e}".format(exact_result)
 
-	for i in range(len(n_step_list)):
-		with open("../" + str(error_type) + f"_error{n_step_list[i]}.txt", "r") as infile:
+figwidth = 5.5
+figheight = figwidth / 1.33333
 
-			error_values = np.zeros(n_step_list[i])
-			xi_values = np.linspace(0, 1, n_step_list[i])
+# Plot absolute error vs h
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(h, abs_err, '--', c="0.8", linewidth=1.5)
+plt.plot(h, abs_err, '.', c="black", markersize=10)
+plt.title("Absolute error " + common_title_string, fontsize=10)
+plt.ylabel("absolute error")
+plt.xlabel("h")
+plt.savefig("abs_err_vs_h.pdf")
 
-			error_list = []
-			for line in infile:
-				error_list.append(line.split()[0])
-			for j in range(0, n_step_list[i]):
-				error_values[j] = float(error_list[j])
+# Plot absolute error vs log10(h)
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(log10_h, abs_err, '--', c="0.8", linewidth=1.5)
+plt.plot(log10_h, abs_err, '.', c="black", markersize=10)
+plt.title("Absolute error " + common_title_string, fontsize=10)
+plt.ylabel("absolute error")
+plt.xlabel("log10(h)")
+plt.savefig("abs_err_vs_log10_h.pdf")
 
-			plt.loglog(error_values, xi_values, label = f"error_values_{n_step_list[i]}")
+# Plot absolute error vs h on log-log axes
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(h, abs_err, '--', c="0.8", linewidth=1.5)
+plt.plot(h, abs_err, '.', c="black", markersize=10)
+plt.title("Absolute error " + common_title_string, fontsize=10)
+plt.ylabel("absolute error")
+plt.xlabel("h")
+plt.xscale("log")
+plt.yscale("log")
+plt.savefig("abs_err_vs_h_loglog.pdf")
 
+# Plot relative error vs log10(h)
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(log10_h, rel_err, '--', c="0.8", linewidth=1.5)
+plt.plot(log10_h, rel_err, '.', c="black", markersize=10)
+plt.title("Relative error " + common_title_string, fontsize=10)
+plt.ylabel("relative error")
+plt.xlabel("log10(h)")
+plt.savefig("rel_err_vs_log10_h.pdf")
 
-	plt.xlabel('xi-values')
-	plt.ylabel('log_10(errors)')
-	plt.title(f'plot of log_10(errors) against x_i with n_steps = {n_step_list[i]}')
-	plt.legend()
-	plt.grid(True)
-	plt.show()
+# Plot log10(relative error) vs log10(h)
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(log10_h, log10_rel_err, '--', c="0.8", linewidth=1.5)
+plt.plot(log10_h, log10_rel_err, '.', c="black", markersize=10)
+plt.title("Log10(relative error) " + common_title_string, fontsize=10)
+plt.ylabel("log10(relative error)")
+plt.xlabel("log10(h)")
+plt.savefig("log10_rel_err_vs_log10_h.pdf")
 
-n_step_list_absolute = [10, 100, 1000]
-error_type_absolute = "absolute"
-plot_problem8(error_type_absolute, n_step_list_absolute)
+# Plot relative error vs h on log-log axes
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(h, rel_err, '--', c="0.8", linewidth=1.5)
+plt.plot(h, rel_err, '.', c="black", markersize=10)
+plt.title("Relative error " + common_title_string, fontsize=10)
+plt.ylabel("relative error")
+plt.xlabel("h")
+plt.xscale("log")
+plt.yscale("log")
+plt.savefig("rel_err_vs_h_loglog.pdf")
 
+<<<<<<< HEAD
 n_step_list_relative = [10, 100, 1000]
 error_type_relative = "relative"
 plot_problem8(error_type_relative, n_step_list_relative)
+=======
+>>>>>>> a34d7e5 (updated problem8_functions.cpp and continued on main and python file)

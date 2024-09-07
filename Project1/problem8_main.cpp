@@ -1,25 +1,48 @@
-#include "problem2_functions.hpp"
-#include "problem7_functions.hpp"
 #include "problem8_functions.hpp"
+#include <iomanip>
+
 
 int main(){
 
-	std::vector<int> n_step = {10, 100, 1000};
-	for(int i = 0; i < n_step.size(); i++){
-		int n = n_step[i];
-		// extraction information from matrix
-		arma::mat v_x_mat = thomas_algo(n, -1, 2, -1);
-		arma::vec approx_vec = v_x_mat.col(0);
-		arma::vec true_vec = fill_ux_vec(fill_x_vec(0, 1, n));
 
-		// finding absolute- and relative error
-		arma::vec abs = absolute_error(approx_vec, true_vec);
-		arma::vec rel = relative_error(approx_vec, true_vec);
-		std::string filename_abs = "absolute_error" + std::to_string(n) + ".txt";
-		std::string filename_rel = "relative_error" + std::to_string(n) + ".txt";
-		//writing absolute- and relative error values to file 
-    	write_error_to_file(filename_abs, abs);
-    	write_error_to_file(filename_rel, rel);
-    }
-	return 0;
+
+}
+	  /*
+	  // Output a header 
+	  std::cout << "#" << std::setw(width-1) << "stepsize"
+	            << std::setw(width) << "approx"
+	            << std::setw(width) << "exact"
+	            // Note: We'll compute the errors when analyzing and plotting the results
+	            // << std::setw(width) << "abs_error"
+	            // << std::setw(width) << "rel_error"
+	            // << std::setw(width) << "log10(rel_error)"
+	            << std::endl;
+
+	  // Loop over increasing stepsizes
+	  double h = hmin;
+	  while(h <= hmax)
+	  {
+	    // Compute approximate second derivative
+	    double approx = calc_approx(x, h);
+
+	    // Output to screen
+	    std::cout << std::setw(width) << std::setprecision(prec) << std::scientific << h
+	              << std::setw(width) << std::setprecision(prec) << std::scientific << calc_approx_ 
+	              << std::setw(width) << std::setprecision(prec) << std::scientific << calc_exact_
+	              // Note: We could have computed the errors here and written them to the table
+	              //       (see code below), but we'll instead compute those when plotting
+	              // << std::setw(width) << std::setprecision(prec) << std::scientific << fabs((d2u_exact - d2u_approx))
+	              // << std::setw(width) << std::setprecision(prec) << std::scientific << fabs((d2u_exact - d2u_approx) / d2u_exact) 
+	              // << std::setw(width) << std::setprecision(prec) << std::scientific << log10(fabs((d2u_exact - d2u_approx) / d2u_exact))
+	              << std::endl;
+
+	    // Increase stepsize
+	    h = h * 10.;
+	    */
+
+
+	  }
+
+	  // Done
+	  return 0;
 }
