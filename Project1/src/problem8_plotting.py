@@ -32,6 +32,7 @@ plt.ylabel("absolute error")
 plt.xlabel("log10(h)")
 plt.savefig("abs_err_vs_log10_h.pdf")
 
+<<<<<<< HEAD
 # Plot absolute error vs h on log-log axes
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(h, abs_err, '--', c="0.8", linewidth=1.5)
@@ -42,6 +43,9 @@ plt.xlabel("h")
 plt.xscale("log")
 plt.yscale("log")
 plt.savefig("abs_err_vs_h_loglog.pdf")
+=======
+			plt.plot(np.log10(error_values, xi_values), label = f"error_values_{n_step_list[i]}")
+>>>>>>> c3127ce (umm??)
 
 # Plot relative error vs log10(h)
 plt.figure(figsize=(figwidth, figheight))
