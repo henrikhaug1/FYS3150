@@ -42,10 +42,32 @@ double relative_error(double approx, double exact){
 	return relative_err;
 }
 
-//Writing h-, approx- and exact values to file 
-void write_info_to_file(){
+//Writing h-, absolute error and relative error values to file 
+void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
 
-	
+	arma::vec h_vec = arma::linspace(h_min, h_max, n_step);
+	arma::vec absolute_vec = arma::vec(n_step);
+	arma::vec relative_vec = arma::vec(n_step);
+
+	double exact = calc_exact(x);
+
+	for(int i = 0; i < n_step; i++){
+
+		double approx = calc_approx(x, h_vec[i]);
+
+		absolute_vec[i] = absolute_error(approx, exact);
+		relative_vec[i] = relative_error(approx, exact);
+	}
+
+	std::ofstream ofile;
+	ofile << "h     absolute error     relative error"
+	for(int i = 0; i < n_step ; i++){
+		ofile << h_vec[i] << " " << absolute_vec[i] << " " << relative_vec[i] << "\n";
+	}
+
+	ofile.close()
+
+
 }
 
 

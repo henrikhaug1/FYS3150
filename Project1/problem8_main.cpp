@@ -4,7 +4,9 @@
 
 int main(){
 
+	//we want to write a file with 3 columns; h, approx and exact 
 
+	return 0
 
 }
 	  /*
