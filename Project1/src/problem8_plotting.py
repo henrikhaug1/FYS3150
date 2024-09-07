@@ -32,5 +32,5 @@ error_type_absolute = "absolute"
 plot_problem8(error_type_absolute, n_step_list_absolute)
 
 n_step_list_relative = [10, 100, 1000]
-error_type_relative = "absolute"
+error_type_relative = "relative"
 plot_problem8(error_type_relative, n_step_list_relative)
