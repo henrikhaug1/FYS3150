@@ -46,34 +46,39 @@ double relative_error(double approx, double exact){
 //Writing h-, absolute error and relative error values to file 
 void write_h_absolute_relative(arma::vec n_step_vec, double h_min, double h_max, double x){
 
-	int n = n_step_vec.size(); // 3
-
-	arma::vec h_vec = arma::linspace(h_min, h_max, n_step);
-	arma::vec absolute_vec = arma::vec(n_step);
-	arma::vec relative_vec = arma::vec(n_step);
-
-	double exact = calc_exact(x);
+	int n = n_step_vec.size(); // 
 
 	for(int i = 0; i < n; i++){
 
-		double approx = calc_approx(x, h_vec[i]);
+		arma::vec h_vec = arma::linspace(h_min, h_max, n_step_vec[i]);
+		arma::vec absolute_vec = arma::vec(n_step_vec[i]);
+		arma::vec relative_vec = arma::vec(n_step_vec[i]);
 
-		absolute_vec[i] = absolute_error(approx, exact);
-		relative_vec[i] = relative_error(approx, exact);
-	}
+		double exact = calc_exact(x);
 
-		for(int j = 0; j < n; i++){
+		for(int j = 0; i < n_step_vec[i]; i++){
+
+			double approx = calc_approx(x, h_vec[j]);
+
+			absolute_vec[j] = absolute_error(approx, exact);
+			relative_vec[j] = relative_error(approx, exact);
+		}
+
+		for(int k = 0; k < n_step_vec[i]; k++){
 			std::ofstream ofile;
-			std::string filename = "h-abs-rel" + str(j) + ".txt"
+			std::string filename = "h-abs-rel" + std::str(k) + ".txt"
 			ofile.open("h-abs-rel.txt");
 			ofile << std::scientific << std::setprecision(5);
 			ofile << "h               absolute error  relative error" << "\n";
-			for(int i = 0; i < n_step ; i++){
+
+			for(int i = 0; i < n ; i++){
 				ofile << h_vec[] << "     " << absolute_vec[i] << "     " << relative_vec[i] << "\n";
 			}
+
+			ofile.close();
 		}
 
-	ofile.close();
+	}
 
 }
 

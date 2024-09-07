@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <armadillo>
 
 double u(double x);
 
@@ -15,4 +16,5 @@ double absolute_error(double approx, double exact);
 double relative_error(double approx, double exact);
 
 void write_h_absolute_relative(arma::vec n_step_vec, double h_min, double h_max, double x);
+
 #endif
