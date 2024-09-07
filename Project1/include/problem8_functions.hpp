@@ -14,6 +14,5 @@ double absolute_error(double approx, double exact);
 
 double relative_error(double approx, double exact);
 
-void write_h_approx_exact(int n_step, double h_min, double h_max, double approx, double exact);
-
+void write_h_absolute_relative(int n_step, double h_min, double h_max, double x);
 #endif

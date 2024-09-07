@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <armadillo>
 
 double u(double x){
 
@@ -43,7 +44,7 @@ double relative_error(double approx, double exact){
 }
 
 //Writing h-, absolute error and relative error values to file 
-void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
+void write_h_absolute_relative(int n_step, double h_min, double h_max, double x){
 
 	arma::vec h_vec = arma::linspace(h_min, h_max, n_step);
 	arma::vec absolute_vec = arma::vec(n_step);
@@ -60,13 +61,14 @@ void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
 	}
 
 	std::ofstream ofile;
-	ofile << "h     absolute error     relative error"
+	ofile.open("h-abs-rel.txt");
+	ofile << std::scientific << std::setprecision(5);
+	ofile << "h     absolute error     relative error" << "\n";
 	for(int i = 0; i < n_step ; i++){
 		ofile << h_vec[i] << " " << absolute_vec[i] << " " << relative_vec[i] << "\n";
 	}
 
-	ofile.close()
-
+	ofile.close();
 
 }
 

@@ -1,4 +1,5 @@
 import numpy as np
+<<<<<<< HEAD
 import matplotlib.pyplot as plt
 
 #---------------------------------------
@@ -82,3 +83,6 @@ error_type_relative = "relative"
 plot_problem8(error_type_relative, n_step_list_relative)
 =======
 >>>>>>> a34d7e5 (updated problem8_functions.cpp and continued on main and python file)
+=======
+import matplotlib.pyplot as plt 
+>>>>>>> bcf0cd9 (fixed problem8_functions.cpp and adderd call to problem8_main.cpp)
