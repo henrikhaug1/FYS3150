@@ -63,9 +63,9 @@ void write_h_absolute_relative(int n_step, double h_min, double h_max, double x)
 	std::ofstream ofile;
 	ofile.open("h-abs-rel.txt");
 	ofile << std::scientific << std::setprecision(5);
-	ofile << "h     absolute error     relative error" << "\n";
+	ofile << "h               absolute error  relative error" << "\n";
 	for(int i = 0; i < n_step ; i++){
-		ofile << h_vec[i] << " " << absolute_vec[i] << " " << relative_vec[i] << "\n";
+		ofile << h_vec[i] << "     " << absolute_vec[i] << "     " << relative_vec[i] << "\n";
 	}
 
 	ofile.close();

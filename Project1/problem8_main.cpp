@@ -5,7 +5,7 @@
 
 int main(){
 
-	int n_step = 10; 
+	int n_step = 1000; 
 	double h_min = 1.0e-8;
 	double h_max = 1.0;
 	double x = 2.0;
