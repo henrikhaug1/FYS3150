@@ -35,11 +35,13 @@ arma::mat special_thomas_algo(int n_step){
 		g_tilde[i] = g[i] - m[i] * g_tilde[i-1];
 	}
 
+
 	//backwards substtutuion -- finding
 	v[n_step - 1] = g_tilde[n_step - 1] / b_tilde[n_step - 1];
 	for(int i = n_step - 2; i >= 0; i--){
 		v[i] = (g_tilde[i] - ((-1) * v[i+1]))/b_tilde[i];
 	}
+
 
 	arma::mat v_x_mat(n_step, 2);
 	v_x_mat.col(0) = v;
