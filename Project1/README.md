@@ -8,3 +8,6 @@
 
 ##Problem 8
 - g++-14 problem8_main.cpp src/problem8_functions.cpp -Iinclude -larmadillo -o problem8_main
+
+##Problem 9
+- g++-14 problem9_main.cpp src/problem9_functions.cpp -Iinclude -larmadillo -o problem9_main

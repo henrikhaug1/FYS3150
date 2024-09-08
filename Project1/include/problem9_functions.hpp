@@ -5,5 +5,7 @@
 #include <iostream>
 #include <armadillo>
 
+arma::mat special_thomas_algo(int n_step);
+
 
 #endif
