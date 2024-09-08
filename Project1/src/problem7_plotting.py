@@ -31,7 +31,7 @@ def plot_problem7(filename_list, n_step_list):
 
 			plt.plot(x_values, v_values, "--", label=f"{n_step_list[i]} approx")
 
-			if i == len(n_step_list) - 1:
+			if i == len(n_step_list) - 1: #only ploting exact solution for n_step = 1000
 				plt.plot(x_values, ux_values, label="exact")
 
 
