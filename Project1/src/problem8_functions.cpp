@@ -44,9 +44,9 @@ double relative_error(double approx, double exact){
 }
 
 //Writing h-, absolute error and relative error values to file 
-void write_h_absolute_relative(arma::vec n_step_vec, double h_min, double h_max, double x){
+void write_h_absolute_relative(arma::ivec n_step_vec, double h_min, double h_max, double x){
 
-	int n = n_step_vec.size(); // 
+	int n = n_step_vec.size(); // {10, 100, 100} n=3
 
 	for(int i = 0; i < n; i++){
 
@@ -56,30 +56,31 @@ void write_h_absolute_relative(arma::vec n_step_vec, double h_min, double h_max,
 
 		double exact = calc_exact(x);
 
-		for(int j = 0; i < n_step_vec[i]; i++){
+		for(int j = 0; j < n_step_vec[i]; j++){ //i<10
 
 			double approx = calc_approx(x, h_vec[j]);
 
 			absolute_vec[j] = absolute_error(approx, exact);
 			relative_vec[j] = relative_error(approx, exact);
+
 		}
 
-		for(int k = 0; k < n_step_vec[i]; k++){
-			std::ofstream ofile;
-			std::string filename = "h-abs-rel" + std::str(k) + ".txt"
-			ofile.open("h-abs-rel.txt");
-			ofile << std::scientific << std::setprecision(5);
-			ofile << "h               absolute error  relative error" << "\n";
+		std::ofstream ofile;
+		std::string filename = "h-abs-rel" + std::to_string(n_step_vec[i]) + ".txt";
+		ofile.open(filename);
+		ofile << std::scientific << std::setprecision(5);
+		ofile << "h               absolute error  relative error" << "\n"; //making header for file
 
-			for(int i = 0; i < n ; i++){
-				ofile << h_vec[] << "     " << absolute_vec[i] << "     " << relative_vec[i] << "\n";
-			}
 
-			ofile.close();
+		for(int k = 0; k < n_step_vec[i]; k++){ 
+			ofile << h_vec[k] << "     " << absolute_vec[k] << "     " << relative_vec[k] << "\n";
+
 		}
+
+
+		ofile.close();
 
 	}
-
 }
 
 
