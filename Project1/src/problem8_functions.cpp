@@ -50,9 +50,15 @@ void write_h_absolute_relative(arma::ivec n_step_vec, double h_min, double h_max
 
 	for(int i = 0; i < n; i++){
 
-		arma::vec h_vec = arma::linspace(h_min, h_max, n_step_vec[i]);
+		arma::vec h_vec = arma::vec(n_step_vec[i]);
 		arma::vec absolute_vec = arma::vec(n_step_vec[i]);
 		arma::vec relative_vec = arma::vec(n_step_vec[i]);
+
+		double h = h_min;
+		while(h <= h_max){
+			h_vec[h] = h;
+			h = h * 10;
+		}
 
 		double exact = calc_exact(x);
 
