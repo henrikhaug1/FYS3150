@@ -32,6 +32,6 @@ def plot_problem8(type_error, filename_list):
 	plt.grid(True)
 	plt.show()
 
-filename_list = ["h-abs-rel10.txt", "h-abs-rel100.txt", "h-abs-rel1000.txt"]
+filename_list = ["h-approx-exact10.txt", "h-approx-exact100.txt", "h-approx-exact1000.txt"]
 plot_problem8("absolute", filename_list)
 
