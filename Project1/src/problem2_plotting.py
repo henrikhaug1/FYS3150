@@ -26,6 +26,5 @@ def plot(path):
     ax.set_ylabel('u(x) values')
     ax.set_title('u(x) = 100*e^(-10x) for x in [0, 1]')
     fig.savefig("problem2_ux_plot.pdf")
-    plt.show()
 
 plot("../x_and_ux_values_output.txt")
