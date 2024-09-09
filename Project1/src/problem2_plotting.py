@@ -21,10 +21,10 @@ def plot(path):
 
 
     fig, ax = plt.subplots()
-    ax.plot(x_values, ux_values,)
+    ax.plot(x_values, ux_values)
     ax.set_xlabel('x-values')
     ax.set_ylabel('u(x) values')
     ax.set_title('u(x) = 100*e^(-10x) for x in [0, 1]')
     fig.savefig("problem2_ux_plot.pdf")
 
-plot("../x_and_ux_values_output.txt")
+plot("x_and_ux_values_output.txt")
