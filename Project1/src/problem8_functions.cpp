@@ -64,5 +64,3 @@ void write_h_approx_exact(arma::ivec n_step_vec, double h_min, double h_max, dou
 
 	}
 }
-
-
