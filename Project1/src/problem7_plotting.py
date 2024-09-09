@@ -2,43 +2,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def u(x):
-	func = (1 - ((1 - np.exp(-10)) * x) - np.exp(-10 * x))
+	func = (1 - ((1 - np.exp(-10)) * x) - np.exp((-10) * x))
 	return func
 
 def plot_problem7(filename_list, n_step_list):
 	plt.figure(figsize=(12, 8))
 
-
 	for i in range(len(n_step_list)):
-		v_values = np.zeros(n_step_list[i])
-		x_values = np.zeros(n_step_list[i])
-		ux_values = np.zeros(n_step_list[i])
-
+		v_values = np.zeros(n_step_list[i] + 1)
+		x_values = np.zeros(n_step_list[i] + 1)
+		ux_values = np.zeros(n_step_list[i] + 1)
 
 		with open(filename_list[i], "r") as infile:
 			v_list = []
 			x_list = []
-			for _ in range(7):
-				infile.readline()
+			infile.readline()
 			for line in infile:
 				v_list.append(line.split()[0])
 				x_list.append(line.split()[1])
 
-			for j in range(n_step_list[i]):
+			for j in range(n_step_list[i] + 1):
 				v_values[j] = float(v_list[j])
 				x_values[j] = float(x_list[j])
 				ux_values[j] = u(x_values[j])
 
-			plt.plot(x_values, v_values, "--", label=f"{n_step_list[i]} approx")
+			plt.plot(x_values, v_values, "--", label=f"numerical solution n_step = {n_step_list[i]}")
 
 			if i == len(n_step_list) - 1: #only ploting exact solution for n_step = 1000
-				plt.plot(x_values, ux_values, label="exact")
+				plt.plot(x_values, ux_values, label="exact solution")
 
-
-
-
-	plt.xlabel('')
-	plt.ylabel('x_values')
+	plt.xlabel('x')
+	plt.ylabel('u(x)')
 	plt.title(f'Comparison of Numerical Solution and Exact Solution with different n_step')
 	plt.legend()
 	plt.grid(True)
