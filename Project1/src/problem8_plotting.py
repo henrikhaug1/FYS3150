@@ -34,3 +34,4 @@ def plot_problem8(type_error, filename_list):
 
 filename_list = ["h-abs-rel10.txt", "h-abs-rel100.txt", "h-abs-rel1000.txt"]
 plot_problem8("absolute", filename_list)
+

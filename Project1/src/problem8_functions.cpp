@@ -16,7 +16,7 @@ double u(double x){
 //Calculating approximated second derivative aourond a given point x
 double calc_approx(double x, double h){
 
-	double approx = (u(x+h) - 2*u(x) + u(x-h)) / (h*h);
+	double approx = (u(x + h) - 2 * u(x) + u(x - h)) / (h * h);
 	return approx;
 }
 
@@ -44,42 +44,31 @@ double relative_error(double approx, double exact){
 }
 
 //Writing h-, absolute error and relative error values to file 
-void write_h_absolute_relative(arma::ivec n_step_vec, double h_min, double h_max, double x){
+void write_h_approx_exact(arma::ivec n_step_vec, double h_min, double h_max, double x){
 
 	int n = n_step_vec.size(); // {10, 100, 100} n=3
 
 	for(int i = 0; i < n; i++){
+		int steps = n_step_vec[i];
 
-		arma::vec h_vec = arma::vec(n_step_vec[i]);
-		arma::vec absolute_vec = arma::vec(n_step_vec[i]);
-		arma::vec relative_vec = arma::vec(n_step_vec[i]);
-
-		double h = h_min;
-		while(h <= h_max){
-			h_vec[h] = h;
-			h = h * 10;
-		}
-
+		arma::vec h = arma::linspace(h_min, h_max, steps);
+		arma::vec approx_vec = arma::vec(steps);
 		double exact = calc_exact(x);
 
-		for(int j = 0; j < n_step_vec[i]; j++){ //i<10
-
-			double approx = calc_approx(x, h_vec[j]);
-
-			absolute_vec[j] = absolute_error(approx, exact);
-			relative_vec[j] = relative_error(approx, exact);
+		for(int j = 0; j < steps; j++){
+			double approx = calc_approx(x, h[j]);
 
 		}
 
 		std::ofstream ofile;
-		std::string filename = "h-abs-rel" + std::to_string(n_step_vec[i]) + ".txt";
+		std::string filename = "h-approx-exact" + std::to_string(n_step_vec[i]) + ".txt";
 		ofile.open(filename);
 		ofile << std::scientific << std::setprecision(5);
-		ofile << "h               absolute error  relative error" << "\n"; //making header for file
+		ofile << "h               aprrox val  exact val" << "\n"; //making header for file
 
 
-		for(int k = 0; k < n_step_vec[i]; k++){ 
-			ofile << h_vec[k] << "     " << absolute_vec[k] << "     " << relative_vec[k] << "\n";
+		for(int k = 0; k < steps; k++){ 
+			ofile << h[k] << "     " << approx_vec[k] << "     " << exact << "\n";
 
 		}
 
