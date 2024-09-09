@@ -6,7 +6,7 @@ def u(x):
 	return func
 
 def plot_problem7(filename_list, n_step_list):
-	plt.figure(figsize=(12, 8))
+	fig, ax = plt.subplots()
 
 	for i in range(len(n_step_list)):
 		v_values = np.zeros(n_step_list[i] + 1)
@@ -26,17 +26,18 @@ def plot_problem7(filename_list, n_step_list):
 				x_values[j] = float(x_list[j])
 				ux_values[j] = u(x_values[j])
 
-			plt.plot(x_values, v_values, "--", label=f"numerical solution n_step = {n_step_list[i]}")
+			ax.plot(x_values, v_values, "--", label=f"numerical solution n_step = {n_step_list[i]}")
 
 			if i == len(n_step_list) - 1: #only ploting exact solution for n_step = 1000
-				plt.plot(x_values, ux_values, label="exact solution")
+				ax.plot(x_values, ux_values, label="exact solution")
 
-	plt.xlabel('x')
-	plt.ylabel('u(x)')
-	plt.title(f'Comparison of Numerical Solution and Exact Solution with different n_step')
-	plt.legend()
-	plt.grid(True)
-	plt.show()
+	ax.set_xlabel('x')
+	ax.set_ylabel('u(x)')
+	ax.set_title(f'Comparison of Numerical Solution and Exact Solution with different n_step')
+	ax.legend(loc="upper right", fontsize="small")
+	ax.grid(True)
+	fig.savefig("plot_comparing_exact_numerical.pdf")
+	
 
 filename_list = ["problem7_v_x_10steps.txt", "problem7_v_x_100steps.txt", "problem7_v_x_1000steps.txt", "problem7_v_x_10000steps.txt", "problem7_v_x_100000steps.txt"]
 n_step_list = [10, 100, 1000, 10000, 100000]

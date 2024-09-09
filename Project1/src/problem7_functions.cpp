@@ -21,7 +21,7 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 
 	arma::vec b_tilde = arma::vec(n_step - 1).fill(0);
 	arma::vec g_tilde = arma::vec(n_step - 1).fill(0);
-	arma::vec m = arma::vec(n_step);
+
 
 
 	for(int i = 1; i < n_step + 1 ; i++){
@@ -34,9 +34,9 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 	//Forward substitution -- finding b_tilde and g_tilde values
 	//Setting m[i] = a[i] / b[i-1] to save n_step FLOPs
 	for(int i = 1; i < n_step - 1; i++){
-		m[i] = a[i - 1] / b_tilde[i - 1];
-		b_tilde[i] = b[i] - m[i] * c[i-1];
-		g_tilde[i] = g[i] - m[i] * g_tilde[i-1];
+		double m = a[i - 1] / b_tilde[i - 1];
+		b_tilde[i] = b[i] - m * c[i-1];
+		g_tilde[i] = g[i] - m * g_tilde[i-1];
 	}
 
 	//backwards substtutuion -- finding
