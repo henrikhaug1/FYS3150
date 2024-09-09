@@ -15,5 +15,11 @@ int main(){
     arma::mat v_x_mat_1000 = thomas_algo(1000, -1, 2, -1);
     write_thomas_to_file("problem7_v_x_1000steps.txt", v_x_mat_1000);
 
+    arma::mat v_x_mat_10000 = thomas_algo(10000, -1, 2, -1);
+    write_thomas_to_file("problem7_v_x_10000steps.txt", v_x_mat_10000);
+
+    arma::mat v_x_mat_100000 = thomas_algo(100000, -1, 2, -1);
+    write_thomas_to_file("problem7_v_x_100000steps.txt", v_x_mat_100000);
+
     return 0;
 }

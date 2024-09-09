@@ -38,8 +38,8 @@ def plot_problem7(filename_list, n_step_list):
 	plt.grid(True)
 	plt.show()
 
-filename_list = ["problem7_v_x_10steps.txt", "problem7_v_x_100steps.txt", "problem7_v_x_1000steps.txt"]
-n_step_list = [10, 100, 1000]
+filename_list = ["problem7_v_x_10steps.txt", "problem7_v_x_100steps.txt", "problem7_v_x_1000steps.txt", "problem7_v_x_10000steps.txt", "problem7_v_x_100000steps.txt"]
+n_step_list = [10, 100, 1000, 10000, 100000]
 plot_problem7(filename_list, n_step_list)
 
 
