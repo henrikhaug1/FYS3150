@@ -23,7 +23,7 @@ double calc_approx(double x, double h){
 //Calculating the exact souluton of u(x) around a given point x
 double calc_exact(double x){
 
-	double exact = 100 * exp(-10 * x);
+	double exact = 10000 * exp(-10 * x);
 	return exact;
 
 }
