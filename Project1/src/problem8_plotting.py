@@ -1,6 +1,63 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+filename_10 = "x_v_u10.txt"
+filename_100 = "x_v_u100.txt"
+filename_1000 = "x_v_u1000.txt"
+
+x_10, v_10, u_10 = np.loadtxt(filename_10, usecols=(0, 1, 2), unpack=True, skiprows=1)
+x_100, v_100, u_100 = np.loadtxt(filename_100, usecols=(0, 1, 2), unpack=True, skiprows=1)
+x_1000, v_1000, u_1000 = np.loadtxt(filename_1000, usecols=(0, 1, 2), unpack=True, skiprows=1)
+
+absolute_error_10 = np.absolute(v_10 - u_10)
+relative_error_10 = np.absolute(absolute_error_10 / u_10)
+
+absolute_error_100 = np.absolute(v_100 - u_100)
+relative_error_100 = np.absolute(absolute_error_100 / u_100)
+
+absolute_error_1000 = np.absolute(v_1000 - u_1000)
+relative_error_1000 = np.absolute(absolute_error_1000 / u_1000)
+
+
+log10_abs_error_10 = np.log10(absolute_error_10)
+log10_rel_error_10 = np.log10(relative_error_10)
+
+log10_abs_error_100 = np.log10(absolute_error_100)
+log10_rel_error_100 = np.log10(relative_error_100)
+
+log10_abs_error_1000 = np.log10(absolute_error_1000)
+log10_rel_error_1000 = np.log10(relative_error_1000)
+
+fig, ax = plt.subplots(2)
+ax[0].plot(x_10, log10_abs_error_10, '--', label="n_step=10", alpha=0.5)
+ax[0].plot(x_100, log10_abs_error_100, '--', label="n_step=100", alpha=0.5)
+ax[0].plot(x_1000, log10_abs_error_1000, '--', label="n_step=1000", alpha=0.5)
+ax[0].set_xlabel("x")
+ax[0].set_ylabel("log10(absolute error)")
+ax[0].legend()
+
+
+ax[1].plot(x_10, log10_rel_error_10, '--', label="n_step=10", alpha=0.5)
+ax[1].plot(x_100, log10_rel_error_100, '--', label="n_step=100", alpha=0.5)
+ax[1].plot(x_1000, log10_rel_error_1000, '--', label="n_step=1000", alpha=0.5)
+ax[1].set_xlabel("x")
+ax[1].set_ylabel("log10(relative error)")
+ax[1].legend()
+
+fig.savefig("x_log_error_plot.pdf")
+
+
+
+
+
+
+
+
+
+
+"""import numpy as np
+import matplotlib.pyplot as plt
+
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
 max_epsilon_arr = []
@@ -10,6 +67,7 @@ n_step_list = [10, 100, 1000]
 # --------- n_step = 10 --------
 filename_10 = "h-approx-exact10.txt"
 h_10, approx_10, exact_10 = np.loadtxt(filename_10, usecols=(0, 1, 2), unpack=True, skiprows=1)
+print(approx_10)
 h_10, approx_10, exact_10 = h_10[1:], approx_10[1:], exact_10[1:]
 
 absolute_error_10 = np.absolute(approx_10 - exact_10)
@@ -78,13 +136,13 @@ ax1.set_title("Log10(absolute_error) for x=0.5", fontsize="xx-large")
 ax1.set_ylabel("log10(absolute_error)")
 ax1.set_xlabel("h")
 ax1.legend(loc="lower right", fontsize="large")
+#fig.savefig("log10_absolute_error_h.pdf")
 
 ax2.set_title("Log10(relative_error for x=0.5", fontsize="xx-large")
 ax2.set_ylabel("log10(relative_error)")
 ax2.set_xlabel("h")
 ax2.legend(loc="lower right", fontsize="large")
-
-fig.savefig("log10_absolute_relative_error_h.pdf")
+#fig.savefig("log10_relative_error_h.pdf")
 plt.show()
 
 
@@ -99,3 +157,4 @@ with open(filename, "w") as outfile:
 
 
 
+"""

@@ -62,7 +62,7 @@ void write_thomas_to_file(std::string filename, arma::mat v_x_mat){
 
     std::ofstream ofile;
     ofile.open(filename);
-    ofile << std::scientific << std::setprecision(5);
+    ofile << std::scientific << std::setprecision(8);
     ofile << "   v-values     x-values" << "\n";
     ofile << v_x_mat;
 

@@ -1,4 +1,5 @@
 #include "problem8_functions.hpp"
+#include "problem7_functions.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -9,10 +10,12 @@
 #include <armadillo>
 
 double u(double x){
+	//std::cout << 2.0;//(1 - ((1 - std::exp(-10)) * x) - std::exp((-10) * x));
 
-  return 100*exp(-10*x);
+  return (1 - ((1 - std::exp(-10)) * x) - std::exp((-10) * x));
 }
 
+/*
 //Calculating approximated second derivative aourond a given point x
 double calc_approx(double x, double h){
 
@@ -20,38 +23,31 @@ double calc_approx(double x, double h){
 	return approx;
 }
 
-//Calculating the exact souluton of u(x) around a given point x
-double calc_exact(double x){
+*/
 
-	double exact = 10000 * exp(-10 * x);
-	return exact;
 
-}
+void write_x_v_u(int n_step){
 
-//Writing h-, absolute error and relative error values to file 
-void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
+	arma::mat v_x_mat = thomas_algo(n_step, -1, 2, -1);
+	arma::vec v_vec = v_x_mat.col(0);
+	arma::vec x_vec = v_x_mat.col(1);
 
-	int width = 18;
-	int prec = 10;
+	arma::vec exact_vec = arma::vec(n_step);
 
-	double exact = calc_exact(x);
+	for(int i = 0.0; i < n_step; ++i){
+		exact_vec[i] = u(static_cast<double>(i) / n_step);
+	}
 
-	//Calculate stepsize factor to generate .txt files with different n_step size
-	double factor = pow(10, log10(1.0 / h_min) / (n_step - 1)); // factor to increase h n_step times from h_min to 1
 
 	std::ofstream ofile;
-	std::string filename = "h-approx-exact" + std::to_string(n_step) + ".txt";
+	std::string filename = "x_v_u" + std::to_string(n_step) + ".txt";
 	ofile.open(filename);
-	ofile << std::scientific << std::setprecision(5);
-	ofile << "h               aprrox val      exact val" << "\n"; //making header for file
+	ofile << std::scientific << std::setprecision(8);
+	ofile << "x                      v                  u" << "\n"; //making header for file
 
-	double h = h_min;
-	for(int i = 0; i < n_step; i++){ 
+	for(int i = 1; i < n_step - 1; ++i){ 
+		ofile << x_vec[i] << "     " << v_vec[i] << "     " << exact_vec[i] << "\n";
 
-		double approx = calc_approx(x, h);
-		ofile << h << "     " << approx << "     " << exact << "\n";
-
-		h *= factor;
 	}
 
 	ofile.close();
