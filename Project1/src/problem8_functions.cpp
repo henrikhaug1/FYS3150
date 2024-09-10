@@ -55,7 +55,3 @@ void write_x_v_u(int n_step){
 
 
 
-
-
-
-

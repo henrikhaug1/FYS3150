@@ -28,9 +28,6 @@ run_all: all
 	./problem10_main &
 	wait
 
-plot: problem2_main problem7_main problem8_main
-	python3 problem2_plotting.py problem7_plotting.py problem8_plotting.py
-
 clean:
 	rm -f problem2_main
 	rm -f problem7_main
@@ -51,3 +48,4 @@ clean:
 	rm -f plot_comparing_exact_numerical.pdf
 	rm -f problem2_ux_plot.pdf
 	rm -f x_log_error_plot.pdf
+	rm -f log10_absolute_relative_error_h.pdf
