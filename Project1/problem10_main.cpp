@@ -5,7 +5,7 @@
 #include "problem10_functions.hpp"
 
 int main(){
-	arma::ivec n_steps = arma::ivec("10 100 1000");
+	arma::ivec n_steps = arma::ivec("10 100 1000 10000 100000 1000000");
 
 	std::cout << "n   " <<  "Time general (s)   " << "Time special (s) \n" << std::endl;
 	for(int i = 0; i < n_steps.size(); i++){

@@ -18,13 +18,13 @@ problem9_main:
 	$(CC) problem9_main.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem9_main
 
 problem10_main: 
-	$(CC) problem10_main.cpp src/problem10_functions.cpp $(IFLAG) -larmadillo -o problem10_main
+	$(CC) problem10_main.cpp src/problem10_functions.cpp src/problem7_functions.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem10_main
 
 run_all: all
 	./problem2_main &
 	./problem7_main &
 	./problem8_main &
-	./problem9_main &
+	./problem9_main	&
 	./problem10_main &
 	wait
 
@@ -37,5 +37,17 @@ clean:
 	rm -f problem8_main
 	rm -f problem9_main
 	rm -f problem10_main
-
+	rm -f problem7_v_x_10steps.txt
+	rm -f problem7_v_x_100steps.txt
+	rm -f problem7_v_x_1000steps.txt
+	rm -f problem7_v_x_10000steps.txt
+	rm -f problem7_v_x_100000steps.txt
+	rm -f h-approx-exact10.txt
+	rm -f h-approx-exact100.txt
+	rm -f h-approx-exact1000.txt
+	rm -f log10_relative_error_h.pdf
+	rm -f log10_absolute_error_h.pdf
+	rm -f x_and_ux_values_output.txt
+	rm -f plot_comparing_exact_numerical.pdf
+	rm -f problem2_ux_plot.pdf
 
