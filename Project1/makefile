@@ -5,19 +5,19 @@ IFLAG = -Iinclude
 
 all: problem2_main problem7_main problem8_main problem9_main problem10_main
 
-problem2: 
+problem2_main: 
 	$(CC) problem2_main.cpp src/problem2_functions.cpp $(IFLAG) -larmadillo -o problem2_main
 
-problem7: 
+problem7_main: 
 	$(CC) problem7_main.cpp src/problem7_functions.cpp $(IFLAG) -larmadillo -o problem7_main
 
-problem8: 
+problem8_main: 
 	$(CC) problem8_main.cpp src/problem8_functions.cpp $(IFLAG) -larmadillo -o problem8_main
 
-problem9: 
+problem9_main: 
 	$(CC) problem9_main.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem9_main
 
-problem10: 
+problem10_main: 
 	$(CC) problem10_main.cpp src/problem10_functions.cpp src/problem7_functions.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem10_main
 
 run_all: all
@@ -50,4 +50,3 @@ clean:
 	rm -f x_and_ux_values_output.txt
 	rm -f plot_comparing_exact_numerical.pdf
 	rm -f problem2_ux_plot.pdf
-
