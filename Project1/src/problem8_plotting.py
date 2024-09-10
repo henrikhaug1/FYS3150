@@ -39,7 +39,7 @@ plot_problem8(filename_list)
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename = "h-approx-exact100.txt"
+filename = "h-approx-exact10.txt"
 h, approx, exact = np.loadtxt(filename, usecols=(0, 1, 2), unpack=True, skiprows=1)
 h, approx, exact = h[1:], approx[1:], exact[1:]
 
@@ -54,6 +54,28 @@ figwidth = 5.5
 figheight = figwidth / 1.33333
 common_title_string = "moren din"
 
+
+
+
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(log10_h, log10_rel_err, '--', c="0.8", linewidth=1.5)
+plt.plot(log10_h, log10_rel_err, '.', c="black", markersize=10)
+plt.title("Log10(relative error) " + common_title_string, fontsize=10)
+plt.ylabel("log10(relative error)")
+plt.xlabel("log10(h)")
+plt.savefig("log10_rel_err_vs_h.pdf")
+
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(log10_h, log10_abs_err, '--', c="0.8", linewidth=1.5)
+plt.plot(log10_h, log10_abs_err, '.', c="black", markersize=10)
+plt.title("Log10(relative error) " + common_title_string, fontsize=10)
+plt.ylabel("log10(relative error)")
+plt.xlabel("log10(h)")
+plt.savefig("log10_rel_err_vs_log10_h.pdf")
+
+
+
+"""
 # Plot absolute error vs h
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(h, abs_err, '--', c="0.8", linewidth=1.5)
@@ -61,18 +83,18 @@ plt.plot(h, abs_err, '.', c="black", markersize=10)
 plt.title("Absolute error " + common_title_string, fontsize=10)
 plt.ylabel("absolute error")
 plt.xlabel("h")
-plt.savefig("abs_err_vs_h.pdf")
+plt.savefig("abs_err_vs_h.pdf")"""
 
-# Plot absolute error vs log10(h)
+"""# Plot absolute error vs log10(h)
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(log10_h, abs_err, '--', c="0.8", linewidth=1.5)
 plt.plot(log10_h, abs_err, '.', c="black", markersize=10)
 plt.title("Absolute error " + common_title_string, fontsize=10)
 plt.ylabel("absolute error")
 plt.xlabel("log10(h)")
-plt.savefig("abs_err_vs_log10_h.pdf")
+plt.savefig("abs_err_vs_log10_h.pdf")"""
 
-# Plot absolute error vs h on log-log axes
+"""# Plot absolute error vs h on log-log axes
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(h, abs_err, '--', c="0.8", linewidth=1.5)
 plt.plot(h, abs_err, '.', c="black", markersize=10)
@@ -82,17 +104,17 @@ plt.xlabel("h")
 plt.xscale("log")
 plt.yscale("log")
 plt.savefig("abs_err_vs_h_loglog.pdf")
-
-# Plot relative error vs log10(h)
+"""
+"""# Plot relative error vs log10(h)
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(log10_h, rel_err, '--', c="0.8", linewidth=1.5)
 plt.plot(log10_h, rel_err, '.', c="black", markersize=10)
 plt.title("Relative error " + common_title_string, fontsize=10)
 plt.ylabel("relative error")
 plt.xlabel("log10(h)")
-plt.savefig("rel_err_vs_log10_h.pdf")
+plt.savefig("rel_err_vs_log10_h.pdf")"""
 
-# Plot log10(relative error) vs log10(h)
+"""# Plot log10(relative error) vs log10(h)
 plt.figure(figsize=(figwidth, figheight))
 plt.plot(log10_h, log10_rel_err, '--', c="0.8", linewidth=1.5)
 plt.plot(log10_h, log10_rel_err, '.', c="black", markersize=10)
@@ -110,4 +132,4 @@ plt.ylabel("relative error")
 plt.xlabel("h")
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig("rel_err_vs_h_loglog.pdf")
+plt.savefig("rel_err_vs_h_loglog.pdf")"""

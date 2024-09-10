@@ -28,39 +28,39 @@ double calc_exact(double x){
 
 }
 
-
 //Writing h-, absolute error and relative error values to file 
-void write_h_approx_exact(arma::ivec n_step_vec, double h_min, double h_max, double x){
+void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
 
-	int n = n_step_vec.size(); // {10, 100, 100} n=3
+	int width = 18;
+	int prec = 10;
 
-	for(int i = 0; i < n; i++){
+	double exact = calc_exact(x);
 
-			int steps = n_step_vec[i];
+	//Calculate stepsize factor to generate .txt files with different n_step size
+	double factor = pow(10, log10(1.0 / h_min) / (n_step - 1)); // factor to increase h n_step times from h_min to 1
 
-			arma::vec h = arma::linspace(h_min, h_max, steps);
-			arma::vec approx = arma::vec(steps);
+	std::ofstream ofile;
+	std::string filename = "h-approx-exact" + std::to_string(n_step) + ".txt";
+	ofile.open(filename);
+	ofile << std::scientific << std::setprecision(5);
+	ofile << "h               aprrox val      exact val" << "\n"; //making header for file
 
-			double exact = calc_exact(x);
+	double h = h_min;
+	for(int i = 0; i < n_step; i++){ 
 
-			for(int j = 0;j < steps; j++){
-				approx[j] = calc_approx(x, h[j]);
-			}
+		double approx = calc_approx(x, h);
+		ofile << h << "     " << approx << "     " << exact << "\n";
 
-			std::ofstream ofile;
-			std::string filename = "h-approx-exact" + std::to_string(n_step_vec[i]) + ".txt";
-			ofile.open(filename);
-			ofile << std::scientific << std::setprecision(5);
-			ofile << "h               aprrox val  exact val" << "\n"; //making header for file
-
-
-			for(int k = 0; k < steps; k++){ 
-				ofile << h[k] << "     " << approx[k] << "     " << exact << "\n";
-
-			}
-
-
-		ofile.close();
-
+		h *= factor;
 	}
+
+	ofile.close();
 }
+
+
+
+
+
+
+
+

@@ -11,6 +11,6 @@ double calc_approx(double x, double h);
 
 double calc_exact(double x);
 
-void write_h_approx_exact(arma::ivec n_step_vec, double h_min, double h_max, double x);
+void write_h_approx_exact(int n_step, double h_min, double h_max, double x);
 
 #endif
