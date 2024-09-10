@@ -63,4 +63,3 @@ void write_h_approx_exact(int n_step, double h_min, double h_max, double x){
 
 
 
-
