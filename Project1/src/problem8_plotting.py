@@ -40,7 +40,6 @@ relative_error_100 = np.absolute(absolute_error_100 / exact)
 
 # Finding maximum relative error
 max_epsilon_100 = np.max(relative_error_100)
-breakpoint()
 
 # Replace zero values with nan to avoid log10(0) which is undefined
 absolute_error_100 = np.where(absolute_error_100 == 0, np.nan, absolute_error_100)
@@ -79,13 +78,13 @@ ax1.set_title("Log10(absolute_error) for x=0.5", fontsize="xx-large")
 ax1.set_ylabel("log10(absolute_error)")
 ax1.set_xlabel("h")
 ax1.legend(loc="lower right", fontsize="large")
-#fig.savefig("log10_absolute_error_h.pdf")
 
 ax2.set_title("Log10(relative_error for x=0.5", fontsize="xx-large")
 ax2.set_ylabel("log10(relative_error)")
 ax2.set_xlabel("h")
 ax2.legend(loc="lower right", fontsize="large")
-#fig.savefig("log10_relative_error_h.pdf")
+
+fig.savefig("log10_absolute_relative_error_h.pdf")
 plt.show()
 
 
