@@ -5,19 +5,19 @@ IFLAG = -Iinclude
 
 all: problem2_main problem7_main problem8_main problem9_main problem10_main
 
-problem2_main: 
+problem2: 
 	$(CC) problem2_main.cpp src/problem2_functions.cpp $(IFLAG) -larmadillo -o problem2_main
 
-problem7_main: 
+problem7: 
 	$(CC) problem7_main.cpp src/problem7_functions.cpp $(IFLAG) -larmadillo -o problem7_main
 
-problem8_main: 
+problem8: 
 	$(CC) problem8_main.cpp src/problem8_functions.cpp $(IFLAG) -larmadillo -o problem8_main
 
-problem9_main: 
+problem9: 
 	$(CC) problem9_main.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem9_main
 
-problem10_main: 
+problem10: 
 	$(CC) problem10_main.cpp src/problem10_functions.cpp src/problem7_functions.cpp src/problem9_functions.cpp $(IFLAG) -larmadillo -o problem10_main
 
 run_all: all
