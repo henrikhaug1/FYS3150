@@ -41,6 +41,10 @@ clean:
 	rm -f x_v_u10.txt
 	rm -f x_v_u100.txt
 	rm -f x_v_u1000.txt
+	rm -f x_v_u10000.txt
+	rm -f x_v_u100000.txt
+	rm -f x_v_u1000000.txt
+	rm -f x_v_u10000000.txt
 	rm -f log10_relative_error_h.pdf
 	rm -f log10_absolute_error_h.pdf
 	rm -f x_and_ux_values_output.txt
@@ -49,3 +53,4 @@ clean:
 	rm -f x_log_error_plot.pdf
 	rm -f log10_absolute_relative_error_h.pdf
 	rm -f max_rel_err_table.txt
+	rm -f time_comparison.txt
