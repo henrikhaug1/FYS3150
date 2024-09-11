@@ -26,15 +26,20 @@ void write_x_v_u(int n_step){
 		exact_vec[i] = u(static_cast<double>(i) / n_step);
 	}
 
+	int width = 20;
+	int prec = 8;
 
 	std::ofstream ofile;
 	std::string filename = "x_v_u" + std::to_string(n_step) + ".txt";
 	ofile.open(filename);
-	ofile << std::scientific << std::setprecision(15);
-	ofile << "x                      v                  u" << "\n"; //making header for file
+
+	ofile << std::left << std::setw(width) << "x" << std::setw(width) << "v" << std::setw(width) << "u" << std::endl; //making header for file
 
 	for(int i = 1; i < n_step - 1; ++i){ 
-		ofile << x_vec[i] << "     " << v_vec[i] << "     " << exact_vec[i] << "\n";
+
+		ofile << std::left << std::setw(width) << std::setprecision(prec) << x_vec[i] 
+				  << std::setw(width) << std::setprecision(prec) << v_vec[i]
+				  << std::setw(width) << std::setprecision(prec) << exact_vec[i] << std::endl;
 
 	}
 

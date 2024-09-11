@@ -23,9 +23,9 @@ arma::mat special_thomas_algo(int n_step){
 	arma::vec g_tilde = arma::vec(n_step - 1).fill(0);
 
 
-
+	double h_squared = h * h;
 	for(int i = 1; i < n_step + 1 ; i++){
-		g[i - 1] = (h * h) * f[i];
+		g[i - 1] = h_squared * f[i];
 	}
 
 	b_tilde[0] = b[0];

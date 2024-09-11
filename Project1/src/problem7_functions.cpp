@@ -23,9 +23,9 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 	arma::vec g_tilde = arma::vec(n_step - 1).fill(0);
 
 
-
+	double h_squared = h * h;
 	for(int i = 1; i < n_step + 1 ; i++){
-		g[i - 1] = (h * h) * f[i];
+		g[i - 1] = h_squared * f[i];
 	}
 
 	b_tilde[0] = b[0];
@@ -39,7 +39,7 @@ arma::mat thomas_algo(int n_step, int subdiagonal, int diagonal, int superdiagon
 		g_tilde[i] = g[i] - m * g_tilde[i-1];
 	}
 
-	//backwards substtutuion -- finding
+	//backwards substitution -- finding
 	v[n_step - 1] = g_tilde[n_step - 2] / b_tilde[n_step - 2];
 	for(int i = n_step - 2; i >= 1; i--){
 		v[i] = (g_tilde[i - 1] - (c[i - 1] * v[i+1]))/b_tilde[i - 1];
