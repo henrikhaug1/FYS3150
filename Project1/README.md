@@ -1,10 +1,5 @@
 # FYS3150 Project1
 
-<<<<<<< HEAD
-##Problem 2
-
-=======
-
 ## File organization:
 This project is organized inside the Project1 folder in this manner:
 - Project1 folder contains all main.cpp files and all .pdf and .txt will be saved here after running programs.
@@ -50,4 +45,3 @@ This project is organized inside the Project1 folder in this manner:
 
 ## problem 10
 - g++-14 problem10_main.cpp src/problem10_functions.cpp src/problem7_functions.cpp src/problem9_functions.cpp -Iinclude -larmadillo -o problem10_main
->>>>>>> 26e6fc8 (made project README)
