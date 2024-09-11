@@ -34,15 +34,15 @@ arma::mat special_thomas_algo(int n_step){
 	//Forward substitution -- finding b_tilde and g_tilde values
 	//Setting m[i] = a[i] / b[i-1] to save n_step FLOPs
 	for(int i = 1; i < n_step - 1; i++){
-		double m = a[i - 1] / b_tilde[i - 1];
-		b_tilde[i] = b[i] - m * c[i-1];
+		double m = (-1) / b_tilde[i - 1];
+		b_tilde[i] = 2 - (m * (-2));
 		g_tilde[i] = g[i] - m * g_tilde[i-1];
 	}
 
 	//backwards substtutuion -- finding
 	v[n_step - 1] = g_tilde[n_step - 2] / b_tilde[n_step - 2];
 	for(int i = n_step - 2; i >= 1; i--){
-		v[i] = (g_tilde[i - 1] - (c[i - 1] * v[i+1]))/b_tilde[i - 1];
+		v[i] = (g_tilde[i - 1] - ((-2) * v[i+1]))/b_tilde[i - 1];
 	}
 
 	//setting boundary points:
