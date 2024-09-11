@@ -30,7 +30,7 @@ void write_x_v_u(int n_step){
 	std::ofstream ofile;
 	std::string filename = "x_v_u" + std::to_string(n_step) + ".txt";
 	ofile.open(filename);
-	ofile << std::scientific << std::setprecision(8);
+	ofile << std::scientific << std::setprecision(15);
 	ofile << "x                      v                  u" << "\n"; //making header for file
 
 	for(int i = 1; i < n_step - 1; ++i){ 

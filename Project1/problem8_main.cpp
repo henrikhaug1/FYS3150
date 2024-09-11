@@ -7,10 +7,13 @@
 
 int main(){
 
-	write_x_v_u(10);
-	write_x_v_u(100);
-	write_x_v_u(1000);
+int i = 10;
+while(i <= pow(10, 7)){
 
-	return 0;
+	write_x_v_u(i);
+	i *= 10;
+
+	}
+return 0;
 
 }
