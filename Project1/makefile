@@ -26,7 +26,6 @@ run_all: all
 	./problem8_main &
 	./problem9_main	&
 	./problem10_main &
-	wait
 
 clean:
 	rm -f problem2_main
