@@ -35,7 +35,7 @@ void write_to_file(std::string filename, arma::vec x_vec, arma::vec ux_vec){
 
     std::ofstream ofile;
     ofile.open(filename);
-    ofile << std::scientific << std::setprecision(5);
+    ofile << std::scientific << std::setprecision(8);
     ofile << "x values   u(x) values" << "\n";
 
     for (int i = 0; i < x_vec.size(); i++){
