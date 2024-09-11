@@ -49,3 +49,4 @@ clean:
 	rm -f problem2_ux_plot.pdf
 	rm -f x_log_error_plot.pdf
 	rm -f log10_absolute_relative_error_h.pdf
+	rm -f max_rel_err_table.txt
