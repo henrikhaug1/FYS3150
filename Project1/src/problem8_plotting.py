@@ -83,5 +83,3 @@ with open("max_rel_err_table.txt", "w") as outfile:
 
 
 
-
-
