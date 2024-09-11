@@ -13,7 +13,6 @@ This project is organized inside the Project1 folder in this manner:
 - make run_all (to run all executable files)
 - make filename.cpp file (to compile specific .cpp file)
 - make clean (clean all executables, plots and .txt files)
-- 
 
 ### Example1: Compiling and running the whole project
 - make
