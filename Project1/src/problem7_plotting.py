@@ -28,7 +28,7 @@ def plot_problem7(filename_list, n_step_list):
 
 			ax.plot(x_values, v_values, "--", label=f"numerical solution n_step = {n_step_list[i]}")
 
-			if i == len(n_step_list) - 1: #only ploting exact solution for n_step = 1000
+			if i == len(n_step_list) - 1: #only plotting exact solution for n_step = 1000
 				ax.plot(x_values, ux_values, label="exact solution", alpha=0.5)
 
 	ax.set_xlabel('x')
