@@ -10,20 +10,8 @@
 #include <armadillo>
 
 double u(double x){
-	//std::cout << 2.0;//(1 - ((1 - std::exp(-10)) * x) - std::exp((-10) * x));
-
   return (1 - ((1 - std::exp(-10)) * x) - std::exp((-10) * x));
 }
-
-/*
-//Calculating approximated second derivative aourond a given point x
-double calc_approx(double x, double h){
-
-	double approx = (u(x + h) - 2 * u(x) + u(x - h)) / (h * h);
-	return approx;
-}
-
-*/
 
 
 void write_x_v_u(int n_step){
