@@ -8,11 +8,10 @@
     // checks that the eigenvalues and eigenvectors from Armadillo agrees with the analytical result for N = 6 
 arma::mat set_up_A_matrix(const int N){
     //Defining values
-    double n = N + 1.0;  //Will divide by n later -> needs to be a float
+    double n = N + 1.0; //Will divide by n later -> needs to be a float
     double h = 1.0 / n; //Defining h
     long double a = - 1.0 / (h * h); //Defining a
     long double d = 2.0 / (h * h); //Defining d
-    const double pi = M_PI; //Defining pi
 
     //Matrix A
     arma::mat A(N, N); //Defining size of matrix A 
@@ -25,12 +24,18 @@ arma::mat set_up_A_matrix(const int N){
             A(i, i + 1) = a;  // Superdiagonal
         }
     }
-    return A
+    return A;
 }
 
 void solve_mat_eq(arma::mat A){
     //Solving the matrix equation using arma::eig_sym
     int N = A.n_rows;
+    double n = N + 1.0; //Will divide by n later -> needs to be a float
+    double h = 1.0 / n; //Defining h
+    long double a = - 1.0 / (h * h); //Defining a
+    long double d = 2.0 / (h * h); //Defining d
+    const double pi = M_PI; //Defining pi
+
     arma::vec eigval; //Withdraws the values from arma
     arma::mat eigvec;
 
