@@ -11,14 +11,8 @@ problem2_main:
 problem3_main:
 	$(CC) problem3_main.cpp src/problem3_functions.cpp $(IFLAG) -larmadillo -o problem3_main
 
-problem3_test_main:
-	$(CC) problem3_test_main.cpp src/problem3_test_functions.cpp $(IFLAG) -larmadillo -o problem3_test_main
-
 problem4_main:
 	$(CC) problem4_main.cpp src/problem4_functions.cpp $(IFLAG) -larmadillo -o problem4_main
-
-problem4_test_main:
-	$(CC) problem4_test_main.cpp src/problem4_test_functions.cpp $(IFLAG) -larmadillo -o problem4_test_main
 
 problem5_main:
 	$(CC) problem5_main.cpp src/problem5_functions.cpp $(IFLAG) -larmadillo -o problem5_main
@@ -29,17 +23,13 @@ problem6_main:
 run_all: all
 	./problem2_main &
 	./problem3_main &
-	./problem3_test_main &
 	./problem4_main &
-	./problem4_test_main &
 	./problem5_main &
 	./problem6_main &
 
 clean:
 	rm -f problem2_main
 	rm -f problem3_main
-	rm -f problem3_test_main
 	rm -f problem4_main
-	rm -f problem4_test_main
 	rm -f problem5_main
 	rm -f problem6_main
