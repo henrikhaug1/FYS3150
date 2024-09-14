@@ -1,6 +1,7 @@
 #include <iostream>
 #include <armadillo>
 #include <cmath>
+#include "problem3_functions.hpp"
 
 //a)
 double max_offdiag_symmetric(const arma::mat& A, int& k, int& l){ //Takes in an armadillo matrix with references of two integers. 
