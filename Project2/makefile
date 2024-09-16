@@ -12,7 +12,7 @@ problem3_main:
 	$(CC) problem3_main.cpp src/problem3_functions.cpp $(IFLAG) -larmadillo -o problem3_main
 
 problem4_main:
-	$(CC) problem4_main.cpp src/problem4_functions.cpp $(IFLAG) -larmadillo -o problem4_main
+	$(CC) problem4_main.cpp src/problem3_functions.cpp src/problem4_functions.cpp $(IFLAG) -larmadillo -o problem4_main
 
 problem5_main:
 	$(CC) problem5_main.cpp src/problem5_functions.cpp $(IFLAG) -larmadillo -o problem5_main

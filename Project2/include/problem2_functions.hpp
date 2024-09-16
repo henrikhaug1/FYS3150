@@ -7,6 +7,10 @@
 
 arma::mat set_up_A_matrix(const int N);
 
-void solve_mat_eq(arma::mat A);
+arma::vec solve_eigval(arma::mat A);
+
+arma::mat solve_eigvec(arma::mat A);
+
+void check_eigval_eigvec(arma::vec eigval, arma::mat eigvec);
 
 #endif

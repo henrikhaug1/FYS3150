@@ -27,23 +27,37 @@ arma::mat set_up_A_matrix(const int N){
     return A;
 }
 
-void solve_mat_eq(arma::mat A){
+arma::vec solve_eigval(arma::mat A){
     //Solving the matrix equation using arma::eig_sym
-    int N = A.n_rows;
-    double n = N + 1.0; //Will divide by n later -> needs to be a float
-    double h = 1.0 / n; //Defining h
-    long double a = - 1.0 / (h * h); //Defining a
-    long double d = 2.0 / (h * h); //Defining d
-    const double pi = M_PI; //Defining pi
-
     arma::vec eigval; //Withdraws the values from arma
     arma::mat eigvec;
 
     arma::eig_sym(eigval, eigvec, A); //Calculates the eigenvalues and eigenvectors
 
-    eigval.print("eigval"); //To see eigen val/vec 
-    eigvec.print("eigvec");
+    return eigval;
 
+}
+
+arma::mat solve_eigvec(arma::mat A){
+    //Solving the matrix equation using arma::eig_sym
+    arma::vec eigval; //Withdraws the values from arma
+    arma::mat eigvec;
+
+    arma::eig_sym(eigval, eigvec, A); //Calculates the eigenvalues and eigenvectors
+
+    return eigvec;
+
+}
+
+
+void check_eigval_eigvec(arma::vec eigval, arma::mat eigvec){
+
+    int N = eigval.n_rows;
+    double n = N + 1.0; //Will divide by n later -> needs to be a float
+    double h = 1.0 / n; //Defining h
+    long double a = - 1.0 / (h * h); //Defining a
+    long double d = 2.0 / (h * h); //Defining d
+    const double pi = M_PI; //Defining pi
     //Checks that the eigenvalues and eigenvectors agree with the analytical result
     arma::vec lamba(N);
     arma::mat v(N, N);
