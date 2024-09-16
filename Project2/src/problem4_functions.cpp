@@ -84,6 +84,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
     }
 }
 
+/*
 void jacobi_test(){
 
     arma::mat A = arma::eye(4,4);
@@ -107,21 +108,4 @@ void jacobi_test(){
     std::cout << "End A = " << A << std::endl;
     std::cout << "End R = " << R << std::endl;
 }
-
-void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, arma::mat& eigenvectors, 
-                        const int maxiter, int& iterations, bool& converged){
-    
-    int N = A.n_rows; //Size of matrix
-
-    //Seting up the tridiagonal matrix
-    arma::mat A = set_up_A_matrix(N); 
-
-    //Identity matrix the size of A
-    arma::mat R = arma::eye(N, N);  
-
-    int k = 0;
-    int l = 0;
-
-    //Runs jacobi_rotate until max off-diagonal element < eps
-    jacobi_rotate(A, R, k, l); 
-}
+*/

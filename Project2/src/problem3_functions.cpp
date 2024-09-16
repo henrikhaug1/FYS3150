@@ -33,9 +33,10 @@ void Test_max_offdiag_symmetric(){ //Test code with a predefined matrix
     A(1,2) = -0.7;
     A(0,3) = 0.5;
     double offDiag_returned = 0.0; //Defining variables 
-    int l = 0;
-    int k = 0;
+    int l;
+    int k;
     offDiag_returned = max_offdiag_symmetric(A, l, k); 
     std::cout << "Largest off-diagonal value in A: " << offDiag_returned << " (Absolute values) " << std::endl;
+    std::cout << "k:" << k << " l:" << l << std::endl;
 }
 
