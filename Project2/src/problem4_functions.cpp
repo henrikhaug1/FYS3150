@@ -5,27 +5,23 @@
 #include "problem3_functions.hpp"
 #include "problem4_functions.hpp"
 
-// Performs a single Jacobi rotation, to "rotate away"
-// the off-diagonal element at A(k,l).
-// - Assumes symmetric matrix, so we only consider k < l
-// - Modifies the input matrices A and R
+// a) Implementing Jacobi’s rotation algorithm
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
-//Step 1)
+
+    //Step 1)
     double eps = 1.0e-8; //Tolerance
     arma::mat A_1 = A; 
     arma::mat R_1 = R;
     int row = A.n_rows;
     int col = A.n_cols;
 
-//Step 2)
+    //Step 2)
 
-    double offDiag = max_offdiag_symmetric(A, k, l); //How do i call this function from Problem3?????????????????????
-//offDiag is the absolute value of the maximum off-diagonal element in A
-//This function automatically updates k and l
+    double offDiag = max_offdiag_symmetric(A, k, l); 
 
     double a_kl = A(k, l); //Initial, needed to start the while loop
 
-//Step 3)
+    //Step 3)
     while(fabs(a_kl) > eps){
         a_kl = A(k, l);  //First and continuing a_xx
         double a_ll = A(l, l);  //When continued, will get the a_xx_mp1 calculated in step 3.3
@@ -36,12 +32,14 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
         if(tau > 0){//Choose the solution that gives the smallest tθ. Step 3.2)
             double t_theta = 1 / (tau + sqrt(1 + tau * tau));
         } 
+
         else if(tau < 0){
             double t_theta = 1 / (tau - sqrt(1 + tau * tau));
         } 
         
         double c_theta = 1 / sqrt(1 + t_theta * t_theta);  //Equations from task.
         double s_theta = c_theta * t_theta;
+
         //Step 3.3
         double a_kk_mp1 = a_kk * c_theta * c_theta - 2 * a_kl * c_theta * s_theta + a_ll * s_theta * s_theta;  //Calculating next a_xx
         A(k, k) = a_kk_mp1; //Updating A
@@ -54,60 +52,76 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
         for (int i = 0; i < row; ++i) {//Loops over all rows
             if(i != k and i != l){
+
                 double a_ik = A(i, k);
                 double a_il = A(i, l);
                 double a_ik_mp1 = a_ik * c_theta - a_il * s_theta;
+
                 A(i, k) = a_ik_mp1;
                 double a_ki_mp1 = a_ik_mp1;
+
                 A(k, i) = a_ki_mp1;
                 double a_il_mp1 = a_il * c_theta + a_ik * s_theta;
+
                 A(i, l) = a_il_mp1;
                 double a_li_mp1 = a_il_mp1;
+
                 A(l, i) = a_li_mp1;
             }
+
             //Step 3.4
             double r_ik = R(i, k);
             double r_il = R(i, l);
             double r_ik_mp1 = r_ik * c_theta - r_il * s_theta;
+
             R(i, k) = r_ik_mp1;
             double r_il_mp1 = r_il * c_theta + r_ik * s_theta;
+
             R(i, l) = r_il_mp1;
         }
+
         double offDiag = max_offdiag_symmetric(A, k, l); //Step 3.5
     }
 }
 
-void jacobi_test(){  //Random ass test function. Remove. The eigensolver will overtake its purpose. DEPORT PROGRAM TO SOURCE.
-    arma::mat A = arma::eye(4,4); //Random ass matrix for testing
+void jacobi_test(){
+
+    arma::mat A = arma::eye(4,4);
+
     A(3,0) = 0.5;
     A(2,1) = -0.7;
     A(1,2) = -0.7;
     A(0,3) = 0.5;
+
     std::cout << "Initial A = " << A << std::endl;
+
     int row = A.n_rows;
     int col = A.n_cols;
+
     arma::mat R = arma::eye(row, col);  //Identity matrix the size of A
+
     int k = 0;
     int l = 0;
     jacobi_rotate(A, R, k, l);
+
     std::cout << "End A = " << A << std::endl;
     std::cout << "End R = " << R << std::endl;
 }
-// Jacobi method eigensolver:
-// - Runs jacobi_rotate until max off-diagonal element < eps
-// - Writes the eigenvalues as entries in the vector "eigenvalues"
-// - Writes the eigenvectors as columns in the matrix "eigenvectors"
-//   (The returned eigenvalues and eigenvectors are sorted using arma::sort_index)
-// - Stops if it the number of iterations reaches "maxiter"
-// - Writes the number of iterations to the integer "iterations"
-// - Sets the bool reference "converged" to true if convergence was reached before hitting maxiter
 
 void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, arma::mat& eigenvectors, 
                         const int maxiter, int& iterations, bool& converged){
+    
     int N = A.n_rows; //Size of matrix
-    arma::mat A = set_up_A_matrix(N); //Seting up the tridiagonal matrix
-    arma::mat R = arma::eye(N, N);  //Identity matrix the size of A
+
+    //Seting up the tridiagonal matrix
+    arma::mat A = set_up_A_matrix(N); 
+
+    //Identity matrix the size of A
+    arma::mat R = arma::eye(N, N);  
+
     int k = 0;
     int l = 0;
-    jacobi_rotate(A, R, k, l); //Runs jacobi_rotate until max off-diagonal element < eps
+
+    //Runs jacobi_rotate until max off-diagonal element < eps
+    jacobi_rotate(A, R, k, l); 
 }
