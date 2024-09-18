@@ -29,23 +29,23 @@ arma::mat set_up_A_matrix(const int N){
 
 arma::vec solve_eigval(arma::mat A){
     //Solving the matrix equation using arma::eig_sym
-    arma::vec eigval; //Withdraws the values from arma
-    arma::mat eigvec;
+    arma::vec eigenvalues; //Withdraws the values from arma
+    arma::mat eigenvectors;
 
-    arma::eig_sym(eigval, eigvec, A); //Calculates the eigenvalues and eigenvectors
+    arma::eig_sym(eigenvalues, eigenvectors, A); //Calculates the eigenvalues and eigenvectors
 
-    return eigval;
+    return eigenvalues;
 
 }
 
 arma::mat solve_eigvec(arma::mat A){
     //Solving the matrix equation using arma::eig_sym
-    arma::vec eigval; //Withdraws the values from arma
-    arma::mat eigvec;
+    arma::vec eigenvalues; //Withdraws the values from arma
+    arma::mat eigenvectors;
 
-    arma::eig_sym(eigval, eigvec, A); //Calculates the eigenvalues and eigenvectors
+    arma::eig_sym(eigenvalues, eigenvectors, A); //Calculates the eigenvalues and eigenvectors
 
-    return eigvec;
+    return eigenvectors;
 
 }
 
