@@ -27,16 +27,20 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l){ //Takes in an 
 
 //b)
 void Test_max_offdiag_symmetric(){ //Test code with a predefined matrix
-    arma::mat A = arma::eye(4,4); //
+
+    int N = 4; 
+    arma::mat A = arma::eye(N, N);
+
     A(3,0) = 0.5;
     A(2,1) = -0.7;
     A(1,2) = -0.7;
     A(0,3) = 0.5;
+
     double offDiag_returned = 0.0; //Defining variables 
     int l;
     int k;
+
     offDiag_returned = max_offdiag_symmetric(A, l, k); 
     std::cout << "Largest off-diagonal value in A: " << offDiag_returned << " (Absolute values) " << std::endl;
     std::cout << "k:" << k << " l:" << l << std::endl;
 }
-
