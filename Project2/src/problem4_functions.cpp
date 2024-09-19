@@ -8,6 +8,8 @@
 // a) Implementing Jacobi’s rotation algorithm
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
+    /* This function takes references to an armadillo matrix A and an armadillo matrix R, and two integers as arguments.
+    The functions is an implementation of Jacobi´s rotation method.*/
     
     //Step 1)
     double eps = 1.0e-8; //Tolerance
@@ -124,20 +126,24 @@ void test_jacobi_rotate(){
     int l = 0;
 
     jacobi_rotate(A, R, k, l);
-    std::cout << "A-matrix with eigenvalues along the diagonal" << std::endl;
-    A.print();
 
-    std::cout << "R-matrix with eigenvectors as columns" << std::endl;
-    R.print();
+    //Printing numerical solution
+    std::cout << "Numerical solution:" << std::endl;
+    A.print("A-matrix with eigenvalues along the diagonal:");
+    std::cout << "\n";
+
+    R.print("R-matrix with eigenvectors as columns:");
+    std::cout << "\n";
 
 
-    //Analytical solution
-    std::cout << "Calling test_jacobi_rotate() to compare with analytical results " << std::endl;
+    //Printing analytical solution
+    std::cout << "Analytical solution:" << std::endl;
     arma::mat analytical_eigvec = solve_eigvec(A);
     arma::vec analytical_eigval = solve_eigval(A);
 
-    analytic_eigval.print();
-    analytic_eigvec.print();
+    analytical_eigval.print("Eigenvalues:");
+    std::cout << "\n";
+    analytical_eigvec.print("Eigenvectors:");
 
 }
 
