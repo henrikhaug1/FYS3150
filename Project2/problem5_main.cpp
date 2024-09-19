@@ -7,18 +7,28 @@
 
 int main(){
 
+	//a)
 	double eps = 1.0e-8;
 	arma::vec eigenvalues;
 	arma::mat eigenvectors;
 	const int maxiter = 100;
 	int iterations;
 	bool converged;
-	arma::vec N = {5};
+	arma::vec N = {5, 10, 100, 1000, 10000};
 
 	for(int i = 0; i < N.size(); ++i){
 		const arma::mat A = set_up_A_matrix(N[i]);
 		jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
 	}
+
+	//b)
+	// Generate random N*N matrix
+	arma::mat A_dense = arma::mat(N, N).randn();
+
+	// Symmetrize the matrix by reflecting the upper triangle to lower triangle
+	A_dense = arma::symmatu(A_dense); 
+
+	jacobi_eigensolver(A_dense, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
 
 	
 	return 0;

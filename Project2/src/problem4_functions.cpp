@@ -5,7 +5,7 @@
 #include "problem3_functions.hpp"
 #include "problem4_functions.hpp"
 
-// a) Implementing Jacobi’s rotation algorithm
+// a)
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
     /* This function takes references to an armadillo matrix A and an armadillo matrix R, and two integers as arguments.
@@ -23,6 +23,8 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
     double offDiag = max_offdiag_symmetric(A, k, l);
 
     double a_kl = A(k, l); //Initial, needed to start the while loop
+
+    //int count_sim_transformations = 0;
 
     //Step 3)
     while(fabs(a_kl) > eps){
@@ -112,12 +114,16 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
         //Step 3.5
         double offDiag = max_offdiag_symmetric(A, k, l); 
+
+        //count_sim_transformations +=;
     }
 }
 
 
-
+//b)
 void test_jacobi_rotate(){
+
+    /* This function tests the function jacobi_rotate() with a 6x6-matrix.*/
 
     int N = 6;
     arma::mat A = set_up_A_matrix(N);

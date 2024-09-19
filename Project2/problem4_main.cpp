@@ -5,7 +5,7 @@
 
 int main(){
 
-	//b) Testing jacobi_rotate() with N=6 and comparing with analytical results
+	//b) Testing jacobi_rotate() with N=6 and comparing numerical and analytical results
 	test_jacobi_rotate();
 
 	return 0;

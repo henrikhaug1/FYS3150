@@ -5,16 +5,20 @@
 #include "problem4_functions.hpp"
 #include "problem5_functions.hpp"
 
-// a) Estimating how the number of required transformations scale with the matrix size N
+// a)
 void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, arma::mat& eigenvectors, 
                         const int maxiter, int& iterations, bool& converged){
+
+    /* This function is writing the number of similarity transformations required for matrices with 
+    different size N to a table*/
 
     arma::mat R = arma::eye(A.n_rows, A.n_rows); // Initialize eigenvectors to the identity matrix
     arma::mat A_copy = A;
 
     iterations = 0;
     converged = false;
-    int k, l;
+    int k;
+    int l;
 
     // Iterate up to the maximum number of iterations or until convergence
     for (iterations = 0; iterations < maxiter; iterations++) {
