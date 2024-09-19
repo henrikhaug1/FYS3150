@@ -11,7 +11,7 @@ int main(){
 	arma::mat eigvec = solve_eigvec(A);
 
 	//checks correspondence between analytical and numerical solution
-	check_eigval_eigvec(eigval, eigvec);
+	test_eigval_eigvec(eigval, eigvec);
 
 	return 0;
 }
