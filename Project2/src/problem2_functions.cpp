@@ -61,6 +61,9 @@ arma::mat solve_eigvec(arma::mat A){
 
 void test_eigval_eigvec(arma::vec eigval, arma::mat eigvec){
 
+    /* This test function checks that the eigenvalues and eigenvectors from 
+    Armadillo agrees with the analytical result for N=6*/
+
     int N = eigval.n_rows;
     double n = N + 1.0;
     double h = 1.0 / n;
