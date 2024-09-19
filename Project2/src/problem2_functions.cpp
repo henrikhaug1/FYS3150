@@ -11,7 +11,7 @@ arma::mat set_up_A_matrix(const int N){
     double n = N + 1.0; //Will divide by n later -> needs to be a float
     double h = 1.0 / n; //Defining h
     long double a = - 1.0 / (h * h); //Defining a
-    long double d = 2.0 / (h * h); //Defining d
+    long double; //Defining d
 
     //Matrix A
     arma::mat A(N, N); //Defining size of matrix A 

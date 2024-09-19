@@ -10,7 +10,7 @@ void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, 
                         const int maxiter, int& iterations, bool& converged){
 
     arma::mat R = arma::eye(A.n_rows, A.n_rows); // Initialize eigenvectors to the identity matrix
-    arma::mat A_copy;
+    arma::mat A_copy = A;
 
     iterations = 0;
     converged = false;
@@ -18,12 +18,12 @@ void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, 
 
     // Iterate up to the maximum number of iterations or until convergence
     for (iterations = 0; iterations < maxiter; iterations++) {
-        double max_offdiag = max_offdiag_symmetric(&A_copy, &k, &l);
+        double max_offdiag = max_offdiag_symmetric(A_copy, k, l);
 
         // If the largest off-diagonal element is smaller than eps, set convergance to true
         if (fabs(max_offdiag) < eps) {
             converged = true;
-            std::cout << "Size of matrix: " << A.n_rows << "X" << A.n_rows << ", Amount of transformations: " << iterations << "smallest element: " << max_offdiag << std::endl;
+            std::cout << "Size of matrix: " << A.n_rows << "X" << A.n_rows << ", Amount of transformations: " << iterations << std::endl;
             break;
         }
         

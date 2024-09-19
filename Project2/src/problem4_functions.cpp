@@ -115,23 +115,29 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
 
 
-void jacobi_test(){
+void test_jacobi_rotate(){
 
     int N = 6;
     arma::mat A = set_up_A_matrix(N);
     arma::mat R = arma::eye(N, N);
-    int k, l = 0;
+    int k = 0;
+    int l = 0;
 
     jacobi_rotate(A, R, k, l);
+    std::cout << "A-matrix with eigenvalues along the diagonal" << std::endl;
+    A.print();
 
-    std::cout << "k = " << k << " l = " << l << std::endl;
+    std::cout << "R-matrix with eigenvectors as columns" << std::endl;
+    R.print();
 
-    arma::mat analytic_eigvec = solve_eigvec(A);
-    arma::vec analytic_eigval = solve_eigval(A);
+
+    //Analytical solution
+    std::cout << "Calling test_jacobi_rotate() to compare with analytical results " << std::endl;
+    arma::mat analytical_eigvec = solve_eigvec(A);
+    arma::vec analytical_eigval = solve_eigval(A);
 
     analytic_eigval.print();
     analytic_eigvec.print();
-
 
 }
 

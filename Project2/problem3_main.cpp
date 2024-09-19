@@ -5,7 +5,7 @@
 
 int main(){
 
-    Test_max_offdiag_symmetric();
+    test_max_offdiag_symmetric();
     
 	return 0;
 }

@@ -13,7 +13,7 @@ int main(){
 	const int maxiter = 100;
 	int iterations;
 	bool converged;
-	arma::vec N = {5, 10, 20, 30, 300};
+	arma::vec N = {5};
 
 	for(int i = 0; i < N.size(); ++i){
 		const arma::mat A = set_up_A_matrix(N[i]);

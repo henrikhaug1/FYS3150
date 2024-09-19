@@ -12,7 +12,7 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l){ //Takes in an 
     double offDiag = 0.0;
     for (int i = 0; i < N; ++i) {//Loops over all values of N (size of A)
         for (int j = 0; j < N; ++j){ //Again. LÖÖPS over all values in A
-            if (i != j){ //Ignores the diagonals
+            if (i != j){ //Ignores the diagonal
                 if (fabs(offDiag) < fabs(A(i, j))){ //Checks if the current offDiagonal value of A is larger than a previous one (absolute values)
                     offDiag = A(i, j); //New largest offDiagonal value found
                     k = i; //The integer references are updated for this value
@@ -26,7 +26,7 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l){ //Takes in an 
 }
 
 //b)
-void Test_max_offdiag_symmetric(){ //Test code with a predefined matrix
+void test_max_offdiag_symmetric(){ //Test code with a predefined matrix
 
     int N = 4; 
     arma::mat A = arma::eye(N, N);
