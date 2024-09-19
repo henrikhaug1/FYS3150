@@ -18,13 +18,12 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
     int col = A.n_cols;
 
     //Step 2) finding k and l 
-    double offDiag = max_offdiag_symmetric(A, k, l); 
+    double offDiag = max_offdiag_symmetric(A, k, l);
 
     double a_kl = A(k, l); //Initial, needed to start the while loop
 
     //Step 3)
     while(fabs(a_kl) > eps){
-
         a_kl = A(k, l);  //First and continuing a_xx
         double a_ll = A(l, l);  //When continued, will get the a_xx_mp1 calculated in step 3.3
         double a_kk = A(k, k);
@@ -66,6 +65,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 
         // Updating all other elements where i!=k and i!=l
         for (int i = 0; i < row; ++i){
+
 
             if(i != k and i != l){
 
@@ -114,7 +114,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
 }
 
 
-/*
+
 void jacobi_test(){
 
     int N = 6;
@@ -125,5 +125,13 @@ void jacobi_test(){
     jacobi_rotate(A, R, k, l);
 
     std::cout << "k = " << k << " l = " << l << std::endl;
+
+    arma::mat analytic_eigvec = solve_eigvec(A);
+    arma::vec analytic_eigval = solve_eigval(A);
+
+    analytic_eigval.print();
+    analytic_eigvec.print();
+
+
 }
-*/
+
