@@ -18,7 +18,7 @@ problem5_main:
 	$(CC) problem5_main.cpp src/problem2_functions.cpp src/problem3_functions.cpp src/problem4_functions.cpp src/problem5_functions.cpp $(IFLAG) -larmadillo -o problem5_main
 
 problem6_main:
-	$(CC) problem6_main.cpp src/problem6_functions.cpp $(IFLAG) -larmadillo -o problem6_main
+	$(CC) problem6_main.cpp src/problem2_functions.cpp src/problem3_functions.cpp src/problem4_functions.cpp src/problem5_functions.cpp src/problem6_functions.cpp $(IFLAG) -larmadillo -o problem6_main
 
 run_all: all
 	./problem2_main &
