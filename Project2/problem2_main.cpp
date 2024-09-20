@@ -1,17 +1,18 @@
 #include <iostream>
+#include <armadillo>
 #include "problem2_functions.hpp"
 
 int main(){
 
-	//Setting up tridiagonal A for N = 6
-	arma::mat A = set_up_A_matrix(6);
+	int N = 6;
 
-	//Solving matrix equation 
-	arma::vec eigval = solve_eigval(A);
-	arma::mat eigvec = solve_eigvec(A);
+	arma::mat analytical_eigvec(N, N);
+	arma::vec analytical_eigval(N);
+
+	analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
 
 	//checks correspondence between analytical and numerical solution
-	test_eigval_eigvec(eigval, eigvec);
+	test_eigval_eigvec(analytical_eigval, analytical_eigvec, N);
 
 	return 0;
 }
