@@ -20,9 +20,6 @@ int main(){
 
 	int width = 20;
 
-	//arma::vec iterations_list = arma::vec(N.size());
-
-
 	std::string filename = "N_vs_similarity_transformation.txt";
 	std::ofstream ofile;
 	ofile.open(filename);
@@ -32,25 +29,20 @@ int main(){
 		arma::mat A = set_up_A_matrix(N[i]);
 		jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
 
-		//iterations_list[i] = iterations;
-
 		ofile << std::left << std::setw(width) << N[i] << std::setw(width) << iterations << std::endl; //making header for file
 
 	}
 
 	ofile.close();
 
-
-/*
-
 	//b)
 	// Generate random N*N matrix
-	arma::mat A_dense = arma::randu<arma::mat>(5, 5);
+	arma::mat A_dense = arma::randu<arma::mat>(10, 10);
 
 	// Symmetrize the matrix by reflecting the upper triangle to lower triangle
 	A_dense = arma::symmatu(A_dense); 
 
 	jacobi_eigensolver(A_dense, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
-*/
+
 	return 0;
 }
