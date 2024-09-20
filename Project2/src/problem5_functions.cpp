@@ -21,7 +21,7 @@ void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, 
     iterations = 0;
 
     // Iterate up to the maximum number of iterations or until convergence
-    for (iterations = 0; iterations < maxiter; iterations++) {
+    for (int i = 0; i < maxiter; i++) {
         double max_offdiag = max_offdiag_symmetric(A_copy, k, l);
 
         // If the largest off-diagonal element is smaller than eps, set convergance to true

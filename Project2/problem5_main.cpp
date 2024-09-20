@@ -1,5 +1,7 @@
 #include <iostream>
 #include <armadillo>
+#include <string>
+#include <iomanip>
 #include "problem2_functions.hpp"
 #include "problem3_functions.hpp"
 #include "problem4_functions.hpp"
@@ -11,16 +13,35 @@ int main(){
 	double eps = 1.0e-8;
 	arma::vec eigenvalues;
 	arma::mat eigenvectors;
-	const int maxiter = 100;
+	const int maxiter = 10000;
 	int iterations;
 	bool converged;
-	arma::vec N = {5, 6, 7, 8, 9};
+	arma::vec N = {5, 10, 15, 20, 50, 70};
+
+	int width = 20;
+
+	//arma::vec iterations_list = arma::vec(N.size());
+
+
+	std::string filename = "N_vs_similarity_transformation.txt";
+	std::ofstream ofile;
+	ofile.open(filename);
+	ofile << std::left << std::setw(width) << "N" << std::setw(width) << "similarity transformation" << std::endl;
 
 	for(int i = 0; i < N.size(); ++i){
 		arma::mat A = set_up_A_matrix(N[i]);
 		jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
+
+		//iterations_list[i] = iterations;
+
+		ofile << std::left << std::setw(width) << N[i] << std::setw(width) << iterations << std::endl; //making header for file
+
 	}
 
+	ofile.close();
+
+
+/*
 
 	//b)
 	// Generate random N*N matrix
@@ -30,6 +51,6 @@ int main(){
 	A_dense = arma::symmatu(A_dense); 
 
 	jacobi_eigensolver(A_dense, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
-
+*/
 	return 0;
 }
