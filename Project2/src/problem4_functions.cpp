@@ -125,6 +125,7 @@ void test_jacobi_rotate(){
 
     /* This function tests the function jacobi_rotate() with a 6x6-matrix.*/
 
+    //Numerical solution 
     int N = 6;
     arma::mat A = set_up_A_matrix(N);
     arma::mat R = arma::eye(N, N);
@@ -142,11 +143,15 @@ void test_jacobi_rotate(){
     R.print("R-matrix with eigenvectors as columns:");
     std::cout << "\n";
 
+    //Analytical solution
+    arma::mat analytical_eigvec(N, N);
+    arma::vec analytical_eigval(N);
+    analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
+    analytical_eigvec.print();
+    analytical_eigval.print();
 
     //Printing analytical solution
     std::cout << "Analytical solution:" << std::endl;
-    arma::mat analytical_eigvec = solve_eigvec(A);
-    arma::vec analytical_eigval = solve_eigval(A);
 
     analytical_eigval.print("Eigenvalues:");
     std::cout << "\n";
