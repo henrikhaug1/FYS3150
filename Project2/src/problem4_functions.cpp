@@ -6,7 +6,7 @@
 #include "problem4_functions.hpp"
 
 // a)
-void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
+void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
 
     /* This function takes references to an armadillo matrix A and an armadillo matrix R, and two integers as arguments.
     The functions is an implementation of Jacobi´s rotation method.*/
@@ -23,8 +23,6 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
     double offDiag = max_offdiag_symmetric(A, k, l);
 
     double a_kl = A(k, l); //Initial, needed to start the while loop
-
-    //int count_sim_transformations = 0;
 
     //Step 3)
     while(fabs(a_kl) > eps){
@@ -110,12 +108,14 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l){
             double r_il_mp1;
             r_il_mp1 = (r_il * c_theta) + (r_ik * s_theta);
             R(i, l) = r_il_mp1;
+
+            iterations = iterations + 1;
         }
 
         //Step 3.5
         double offDiag = max_offdiag_symmetric(A, k, l); 
 
-        //count_sim_transformations +=;
+        
     }
 }
 
@@ -130,8 +130,9 @@ void test_jacobi_rotate(){
     arma::mat R = arma::eye(N, N);
     int k = 0;
     int l = 0;
+    int iterations;
 
-    jacobi_rotate(A, R, k, l);
+    jacobi_rotate(A, R, k, l, iterations);
 
     //Printing numerical solution
     std::cout << "Numerical solution:" << std::endl;

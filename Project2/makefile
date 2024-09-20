@@ -3,7 +3,7 @@ IFLAG = -Iinclude
 
 .PHONY: all clean
 
-all: problem2_main problem3_main problem3_test_main
+all: problem2_main problem3_main problem4_main problem5_main problem6_main
 
 problem2_main:
 	$(CC) problem2_main.cpp src/problem2_functions.cpp $(IFLAG) -larmadillo -o problem2_main
