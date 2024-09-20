@@ -31,6 +31,7 @@ int main(){
 
 		ofile << std::left << std::setw(width) << N[i] << std::setw(width) << iterations << std::endl; //making header for file
 
+
 	}
 
 	ofile.close();
