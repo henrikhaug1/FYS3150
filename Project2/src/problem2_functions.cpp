@@ -60,8 +60,8 @@ arma::mat solve_eigvec(arma::mat A){
 
 void analytical_eig_vec_val(arma::mat& analytical_eigvec, arma::vec& analytical_eigval, int N){
 
-    /* This function takes references to an armadillo matrix analytical_eigvec containing the eigen vectors,
-    and an armadillo vector containing the eigenvalues. 
+    /* This function takes references to an armadillo matrix analytical_eigvec containing the eigen vectors, 
+    an armadillo vector and an integer N containing the eigenvalues. 
     This functions the matrix eqation analytically */
 
     double n = N + 1.0;
@@ -88,8 +88,8 @@ void analytical_eig_vec_val(arma::mat& analytical_eigvec, arma::vec& analytical_
 
 void test_eigval_eigvec(arma::vec analytical_eigval, arma::mat analytical_eigvec, int N){
 
-    /* The function is taking an armadillo matrix analytical_eigvec and an armadillo 
-    vector as arguments. This test function checks that the eigenvalues and eigenvectors from 
+    /* The function is taking an armadillo matrix analytical_eigvec, an armadillo 
+    vector and an integer N as arguments. This test function checks that the eigenvalues and eigenvectors from 
     Armadillo agrees with the analytical result for N=6*/
 
 
