@@ -33,3 +33,6 @@ clean:
 	rm -f problem4_main
 	rm -f problem5_main
 	rm -f problem6_main
+	rm -f N_vs_similarity_transformation.txt
+	rm -f eigenvalues.txt
+	rm -f eigenvectors.txt
