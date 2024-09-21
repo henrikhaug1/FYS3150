@@ -28,11 +28,13 @@ void jacobi_eigensolver(const arma::mat& A, double eps, arma::vec& eigenvalues, 
         if (fabs(max_offdiag) < eps) {
             converged = true;
             std::cout << "Size of matrix: " << A.n_rows << "X" << A.n_rows << " rotations: " << iterations << std::endl;
+            eigenvalues = A_copy.diag();
+            eigenvectors = R;
             break;
         }
         
+
         jacobi_rotate(A_copy, R, k, l, iterations); //rotate
+
     }
 }
-
-
