@@ -4,6 +4,6 @@
 
 double max_offdiag_symmetric(const arma::mat& A, int& k, int& l);
 
-void test_max_offdiag_symmetric();
+void test_max_offdiag_symmetric(int N);
 
 #endif

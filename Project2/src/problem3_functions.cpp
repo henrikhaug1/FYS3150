@@ -31,12 +31,11 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l){
 }
 
 //b)
-void test_max_offdiag_symmetric(){
+void test_max_offdiag_symmetric(int N){
 
 
     /* This function tests the function max_offdiag_symmetric() with a predefined matrix.*/ 
 
-    int N = 4; 
     arma::mat A = arma::eye(N, N);
 
     A(3,0) = 0.5;
