@@ -1,39 +1,107 @@
 #include <iostream>
 #include <armadillo>
+#include <vector>
+#include <iomanip>
+#include <fstream>
 #include "problem2_functions.hpp"
 #include "problem3_functions.hpp"
 #include "problem4_functions.hpp"
 #include "problem5_functions.hpp"
 #include "problem6_functions.hpp"
 
+void custom_selection_sort(arma::vec& arr, int& first_index, int& second_index, int& third_index) {
+    int n = arr.size();
+    arma::vec original_indices(n);
 
-void compare_write_to_file(){
+    for (int i = 0; i < n; ++i) {
+        original_indices[i] = i;
+    }
 
-	const int N = 10;
-	double eps = 1.0e-8;
-	arma::vec eigenvalues;
-	arma::mat eigenvectors;
-	const int maxiter = 10000;
-	int iterations;
-	bool converged;
-	int width = 20;
+    for (int i = 0; i < n - 1; ++i) {
+        int minIndex = i;
 
-	arma::mat A = set_up_A_matrix(N);
+        for (int j = i + 1; j < n; ++j) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
 
-	jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
+        std::swap(arr[i], arr[minIndex]);
+        std::swap(original_indices[i], original_indices[minIndex]);
 
+        if (i == 0) {
+            first_index = original_indices[i];
+        } else if (i == 1) {
+            second_index = original_indices[i];
+        } else if (i == 2) {
+            third_index = original_indices[i];
+            break;
+        }
+    }
+}
 
+void compare_write_to_file(const int N) {
+    double eps = 1.0e-8;
+    arma::vec eigenvalues;
+    arma::mat eigenvectors;
+    arma::vec analytical_eigval(N);
+    arma::mat analytical_eigvec(N, N);
+    const int maxiter = 10000;
+    int iterations;
+    bool converged;
+    int width = 20;
+    int prec = 8;
 
-	eigenvalues.print("Eigenvalues:");
-    eigenvectors.print("Eigenvectors:");
+    arma::mat A = set_up_A_matrix(N);
+    jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
 
-    // Write eigenvalues to a file
-    eigenvalues.save("eigenvalues.txt", arma::raw_ascii);
+    int first_index, second_index, third_index;
+    custom_selection_sort(eigenvalues, first_index, second_index, third_index);
 
-    // Write eigenvectors to a file
-    eigenvectors.save("eigenvectors.txt", arma::raw_ascii);
+    // Write numerical to file
+    arma::mat reduced(N, 3); 
+    reduced.col(0) = eigenvectors.col(first_index);
+    reduced.col(1) = eigenvectors.col(second_index);
+    reduced.col(2) = eigenvectors.col(third_index);
 
-    // Optionally, print a message to the console indicating that the files were saved
-    std::cout << "Eigenvalues and eigenvectors saved to files 'eigenvalues.txt' and 'eigenvectors.txt'." << std::endl;
+    std::ofstream ofile;
+    std::string numerical_filename = "numerical_smallest_lambda.txt";
+    ofile.open(numerical_filename);
 
+    ofile << std::left << std::setw(width) << "numerical1" 
+          << std::setw(width) << "numerical2" 
+          << std::setw(width) << "numerical3" << std::endl;
+
+    for (int i = 0; i < N; ++i) { 
+        ofile << std::left << std::setw(width) << std::setprecision(prec) << reduced(i, 0) 
+              << std::setw(width) << std::setprecision(prec) << reduced(i, 1) 
+              << std::setw(width) << std::setprecision(prec) << reduced(i, 2) 
+              << std::endl;
+    }
+
+    ofile.close(); 
+
+    // Write analytical to a separate file
+    analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
+    custom_selection_sort(analytical_eigval, first_index, second_index, third_index);
+
+    reduced.col(0) = analytical_eigvec.col(first_index);
+    reduced.col(1) = analytical_eigvec.col(second_index);
+    reduced.col(2) = analytical_eigvec.col(third_index);
+
+    std::string analytical_filename = "analytical_smallest_lambda.txt";
+    ofile.open(analytical_filename);
+
+    ofile << std::left << std::setw(width) << "analytical1" 
+          << std::setw(width) << "analytical2" 
+          << std::setw(width) << "analytical3" << std::endl;
+
+    for (int i = 0; i < N; ++i) { 
+        ofile << std::left << std::setw(width) << std::setprecision(prec) << reduced(i, 0) 
+              << std::setw(width) << std::setprecision(prec) << reduced(i, 1) 
+              << std::setw(width) << std::setprecision(prec) << reduced(i, 2) 
+              << std::endl;
+    }
+
+    ofile.close();
 }
