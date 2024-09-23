@@ -18,7 +18,6 @@ void compare_write_to_file(){
 	bool converged;
 	int width = 20;
 
-
 	arma::mat A = set_up_A_matrix(N);
 
 	jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
