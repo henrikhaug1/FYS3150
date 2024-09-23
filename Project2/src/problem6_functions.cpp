@@ -49,8 +49,8 @@ void compare_write_to_file(const int N) {
     const int maxiter = 10000;
     int iterations;
     bool converged;
-    int width = 20;
-    int prec = 8;
+    int width = 30;
+    int prec = 15;
 
     arma::mat A = set_up_A_matrix(N);
     jacobi_eigensolver(A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
@@ -65,6 +65,7 @@ void compare_write_to_file(const int N) {
     reduced.col(2) = eigenvectors.col(third_index);
 
     std::ofstream ofile;
+    ofile << std::scientific << std::setprecision(prec);
     std::string numerical_filename = "numerical_smallest_lambda.txt";
     ofile.open(numerical_filename);
 
