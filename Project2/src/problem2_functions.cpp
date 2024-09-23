@@ -86,11 +86,21 @@ void analytical_eig_vec_val(arma::mat& analytical_eigvec, arma::vec& analytical_
 }
 
 
-void test_eigval_eigvec(arma::vec analytical_eigval, arma::mat analytical_eigvec, int N){
+void test_eigval_eigvec(){
 
-    /* The function is taking an armadillo matrix analytical_eigvec, an armadillo 
-    vector and an integer N as arguments. This test function checks that the eigenvalues and eigenvectors from 
+    /* This test function checks that the eigenvalues and eigenvectors from 
     Armadillo agrees with the analytical result for N=6*/
+
+    int N = 6;
+    arma::mat A_analytical = set_up_A_matrix(N);
+    arma::mat R = arma::eye(N, N);
+    int k = 0;
+    int l = 0;
+
+    //Analytical solution
+    arma::mat analytical_eigvec(N, N);
+    arma::vec analytical_eigval(N);
+    analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
 
 
     //Printing analytical eigenvalues and eigenvectors
@@ -99,12 +109,18 @@ void test_eigval_eigvec(arma::vec analytical_eigval, arma::mat analytical_eigvec
     analytical_eigvec.print("Eigenvectors analytical:"); //eigenvec 2 and 6 have the 'wrong' sign but that's okay, c_1 = c_4 = -1 is allowed
     std::cout << "\n";
 
-    //Numerical 
+    //Numerical solution
     arma::mat A = set_up_A_matrix(N);
     arma::mat numerical_eigvec = solve_eigvec(A);
     arma::vec numerical_eigval = solve_eigval(A);
+
+    //Printing numerical eigenvalues and eigenvectors
+    numerical_eigval.print("Eigenvalues numerical:");
+    std::cout << "\n";
+    numerical_eigvec.print("Eigenvectors numerical:");
+    std::cout << "\n";
     
-    //Differences
+    //Differences between anaylical and numerical eigvalues and eigvectors
     arma::vec eigval_diff = numerical_eigval - analytical_eigval;                  //Calculates difference in eigenvalues
     arma::mat eigvec_diff(N, N);                                 //Calculates difference in eigenvectors
 
