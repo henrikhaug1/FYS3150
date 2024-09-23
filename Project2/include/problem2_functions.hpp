@@ -10,6 +10,6 @@ arma::mat solve_eigvec(arma::mat A);
 
 void analytical_eig_vec_val(arma::mat& analytical_eigvec, arma::vec& analytical_eigval, int N);
 
-void test_eigval_eigvec(arma::vec eigval, arma::mat eigvec, int N);
+void test_eigval_eigvec();
 
 #endif
