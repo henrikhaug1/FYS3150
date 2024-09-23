@@ -13,9 +13,6 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
     
     //Step 1)
     double eps = 1.0e-8; //Tolerance
-    arma::mat A_1 = A; 
-    arma::mat R_1 = R;
-
     int row = A.n_rows;
     int col = A.n_cols;
 
@@ -37,11 +34,11 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
         double t_theta;
 
         if(tau > 0){ //Choose the solution that gives the smallest tθ. Step 3.2)
-            double t_theta = 1 / (tau + sqrt(1 + tau * tau));
+            t_theta = 1 / (tau + sqrt(1 + tau * tau));
         } 
 
         else if(tau < 0){
-            double t_theta = 1 / (tau - sqrt(1 + tau * tau));
+            t_theta = 1 / (tau - sqrt(1 + tau * tau));
         } 
         
         //Step 3.3
