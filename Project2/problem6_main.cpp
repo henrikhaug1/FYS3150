@@ -2,7 +2,8 @@
 #include "problem6_functions.hpp"
 
 int main(){
-	compare_write_to_file();
+	int N = 10;
+	compare_write_to_file(N);
 	
 	return 0;
 }
