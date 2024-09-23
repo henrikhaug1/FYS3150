@@ -8,6 +8,9 @@
 // a)
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
 
+    /* This function takes references to an armadillo matrix A and an armadillo matrix R, and two integers as arguments.
+    The functions is an implementation of Jacobi´s rotation method.*/
+
     //Step 1)
     double eps = 1.0e-8;  // Tolerance
     int row = A.n_rows;
@@ -78,6 +81,8 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
 }
 
 void test_jacobi_rotate(){
+
+    /* This function tests the function jacobi_rotate() with a 6x6-matrix.*/
 
     int N = 6;
     arma::mat A = set_up_A_matrix(N);
