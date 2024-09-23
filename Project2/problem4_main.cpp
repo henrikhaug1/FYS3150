@@ -1,7 +1,7 @@
 #include <iostream>
+#include "problem2_functions.hpp"
 #include "problem3_functions.hpp"
 #include "problem4_functions.hpp"
-#include "problem2_functions.hpp"
 
 int main(){
 
