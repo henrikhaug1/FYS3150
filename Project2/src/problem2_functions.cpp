@@ -86,12 +86,11 @@ void analytical_eig_vec_val(arma::mat& analytical_eigvec, arma::vec& analytical_
 }
 
 
-void test_eigval_eigvec(){
+void test_eigval_eigvec(int N){
 
     /* This test function checks that the eigenvalues and eigenvectors from 
     Armadillo agrees with the analytical result for N=6*/
 
-    int N = 6;
     arma::mat A_analytical = set_up_A_matrix(N);
     arma::mat R = arma::eye(N, N);
     int k = 0;
