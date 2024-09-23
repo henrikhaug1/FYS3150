@@ -76,8 +76,9 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
 
         //Step 3.5
         offDiag = max_offdiag_symmetric(A, k, l);
+        iterations += 1;
     }
-    iterations += 1;
+    
 }
 
 void test_jacobi_rotate(int N){
