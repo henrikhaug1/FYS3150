@@ -80,11 +80,10 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations){
     iterations += 1;
 }
 
-void test_jacobi_rotate(){
+void test_jacobi_rotate(int N){
 
     /* This function tests the function jacobi_rotate() with a 6x6-matrix.*/
 
-    int N = 6;
     arma::mat A = set_up_A_matrix(N);
     arma::mat R = arma::eye(N, N);
 

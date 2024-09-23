@@ -4,6 +4,6 @@
 
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l, int& iterations);
 
-void test_jacobi_rotate();
+void test_jacobi_rotate(int N);
 
 #endif
