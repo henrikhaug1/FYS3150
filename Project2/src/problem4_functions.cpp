@@ -125,7 +125,6 @@ void test_jacobi_rotate(){
 
     /* This function tests the function jacobi_rotate() with a 6x6-matrix.*/
 
-    //Numerical solution 
     int N = 6;
     arma::mat A = set_up_A_matrix(N);
     arma::mat R = arma::eye(N, N);
@@ -135,27 +134,61 @@ void test_jacobi_rotate(){
 
     jacobi_rotate(A, R, k, l, iterations);
 
-    //Printing numerical solution
-    std::cout << "Numerical solution:" << std::endl;
-    A.print("A-matrix with eigenvalues along the diagonal:");
+    arma::vec numerical_eigval = arma::vec(A.n_rows);
+    for(int i = 0; i < A.n_rows; i++){
+        numerical_eigval[i] = A.col(i)[i];
+    }
+
+    A.print("A-matrix after Jacobi");
+    std::cout << "\n";
+    R.print("R-matrix after Jacobi");
     std::cout << "\n";
 
-    R.print("R-matrix with eigenvectors as columns:");
-    std::cout << "\n";
 
     //Analytical solution
     arma::mat analytical_eigvec(N, N);
     arma::vec analytical_eigval(N);
     analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
-    analytical_eigvec.print();
-    analytical_eigval.print();
 
     //Printing analytical solution
-    std::cout << "Analytical solution:" << std::endl;
-
-    analytical_eigval.print("Eigenvalues:");
+    analytical_eigval.print("Eigenvalues analytical:");
     std::cout << "\n";
-    analytical_eigvec.print("Eigenvectors:");
+    analytical_eigvec.print("Eigenvectors analytical:");
+    std::cout << "\n";
+
+    //Printing numerical solution
+    numerical_eigval.print("Eigenvalues numerical:");
+    std::cout << "\n";
+    R.print("Eigenvectors numerical:");
+    std::cout << "\n";
+
+    //Differences between anaylical and numerical eigvalues and eigvectors
+    arma::vec eigval_diff = numerical_eigval - analytical_eigval;                  //Calculates difference in eigenvalues
+    arma::mat eigvec_diff(N, N);                                 //Calculates difference in eigenvectors
+
+    //Finds the signs, ref sign differences in eigenvecs 2 and 6
+    arma::mat analytical_eigvec_sign = sign(analytical_eigvec); 
+    arma::mat numerical_eigvec_sign = sign(R);
+
+    //Loops over all eigenvectors
+    for(int i = 0; i < N; ++i){
+
+        if(analytical_eigvec_sign.col(i)[0] == numerical_eigvec_sign.col(i)[0]){   //Checks if the signs are in agreement
+            
+            eigvec_diff.col(i) = analytical_eigvec.col(i) - R.col(i);       //If they are; Subtract
+        }
+
+        else{
+            
+            eigvec_diff.col(i) = analytical_eigvec.col(i) + R.col(i);       //If they are not; Double negative
+        }
+    }
+
+    //Printing the difference between numerical and analytical eigenvalues and eigenvectors
+    eigval_diff.print("Difference between numerical and analytical eigenvalues:");
+    std::cout << "\n";
+
+    eigvec_diff.print("Difference between numerical and analytical eigenvectors:");
 
 }
 
