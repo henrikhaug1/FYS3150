@@ -3,5 +3,6 @@
 
 int main(){
 	compare_write_to_file();
+	
 	return 0;
 }
