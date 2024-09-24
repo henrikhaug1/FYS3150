@@ -19,8 +19,6 @@ for i in range(3):
 	#setting boundary points
 	numerical_eigvecs[0, i] = 0
 	numerical_eigvecs[-1, i] = 0
-	analytical_eigvecs[0, i] = 0
-	analytical_eigvecs[-1, i] = 0
 
 
 	ax[i].plot(x_hat_numerical, numerical_eigvecs[:, i], label=f"Numerical Eigenvector {i+1}", color='magenta')
