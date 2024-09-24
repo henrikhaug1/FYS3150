@@ -104,20 +104,25 @@ void test_jacobi_rotate(int N){
     arma::vec analytical_eigval(N);
     analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
 
-    // Printing analytical solution
+    // sorting values
+    arma::uvec analytical_eigval_sorted = arma::sort_index(analytical_eigval);
+    analytical_eigval = analytical_eigval(analytical_eigval_sorted);
+    analytical_eigvec = analytical_eigvec.cols(analytical_eigval_sorted);
+
+    // Print eigenvalues and eigenvectors
     analytical_eigval.print("Eigenvalues analytical:");
-    std::cout << "\n";
     analytical_eigvec.print("Eigenvectors analytical:");
-    std::cout << "\n";
 
     // Printing numerical solution
-    numerical_eigval.print("Eigenvalues numerical:");
-    std::cout << "\n";
-    R.print("Eigenvectors numerical:");
-    std::cout << "\n";
+    arma::uvec numerical_eigval_sorted = arma::sort_index(numerical_eigval);
+    numerical_eigval = numerical_eigval(numerical_eigval_sorted);
+    R = R.cols(numerical_eigval_sorted);
 
-    // Differences between analytical and numerical eigenvalues and eigenvectors
-    arma::vec eigval_diff = numerical_eigval - analytical_eigval; // Calculates difference in eigenvalues
+    numerical_eigval.print("Eigenvalues numerical:");
+    R.print("Eigenvectors numerical:");
+
+    // Differences
+    arma::vec eigval_diff = numerical_eigval - analytical_eigval;
     arma::mat eigvec_diff(N, N);
 
     arma::mat analytical_eigvec_sign = sign(analytical_eigvec);
