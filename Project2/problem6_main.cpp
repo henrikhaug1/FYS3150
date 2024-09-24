@@ -11,7 +11,9 @@ int main(int argc, char* argv[]){
 
     int N = atoi(argv[1]);
     
-	compare_write_to_file(N);
+	write_to_file_numerical(N);
+    write_to_file_analytical();
+
 	
 	return 0;
 }
