@@ -40,12 +40,10 @@ void custom_selection_sort(arma::vec& arr, int& first_index, int& second_index, 
     }
 }
 
-void compare_write_to_file(const int N) {
+void write_to_file_numerical(const int N) {
     double eps = 1.0e-8;
     arma::vec eigenvalues;
     arma::mat eigenvectors;
-    arma::vec analytical_eigval(N);
-    arma::mat analytical_eigvec(N, N);
     const int maxiter = 10000;
     int iterations;
     bool converged;
@@ -79,19 +77,35 @@ void compare_write_to_file(const int N) {
               << std::setw(width) << std::setprecision(prec) << reduced(i, 2) 
               << std::endl;
     }
+}
 
-    ofile.close(); 
 
-    // Write analytical to a separate file
+void write_to_file_analytical() {
+    int N = 10;
+    double eps = 1.0e-8;
+    arma::vec analytical_eigval(N);
+    arma::mat analytical_eigvec(N, N);
+    const int maxiter = 10000;
+    int iterations;
+    bool converged;
+    int width = 30;
+    int prec = 15;
+
+    arma::mat A = set_up_A_matrix(N);
     analytical_eig_vec_val(analytical_eigvec, analytical_eigval, N);
+
+    int first_index, second_index, third_index;
     custom_selection_sort(analytical_eigval, first_index, second_index, third_index);
 
+    arma::mat reduced(N, 3);
     reduced.col(0) = analytical_eigvec.col(first_index);
     reduced.col(1) = analytical_eigvec.col(second_index);
     reduced.col(2) = analytical_eigvec.col(third_index);
 
-    std::string analytical_filename = "analytical_smallest_lambda.txt";
-    ofile.open(analytical_filename);
+    std::ofstream ofile;
+    ofile << std::scientific << std::setprecision(prec);
+    std::string numerical_filename = "analytical_smallest_lambda.txt";
+    ofile.open(numerical_filename);
 
     ofile << std::left << std::setw(width) << "analytical1" 
           << std::setw(width) << "analytical2" 
@@ -105,4 +119,5 @@ void compare_write_to_file(const int N) {
     }
 
     ofile.close();
+
 }
