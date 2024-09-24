@@ -81,7 +81,7 @@ void write_to_file_numerical(const int N) {
 
 
 void write_to_file_analytical() {
-    int N = 10;
+    int N = 1000;
     double eps = 1.0e-8;
     arma::vec analytical_eigval(N);
     arma::mat analytical_eigvec(N, N);
