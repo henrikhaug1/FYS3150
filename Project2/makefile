@@ -34,5 +34,5 @@ clean:
 	rm -f problem5_main
 	rm -f problem6_main
 	rm -f N_vs_similarity_transformation.txt
-	rm -f analytical_smallest_lambda.txt
-	rm -f numerical_smallest_lambda.txt
+	rm -f numerical_vs_analytical_10.pdf
+	rm -f numerical_vs_analytical_100.pdf
