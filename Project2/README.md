@@ -18,7 +18,7 @@ This project is organized inside the Project2 folder in this manner:
 
 ### Example1: Compiling and running the whole project
 - make
-- make run_all
+- make run_all (This will run problem 2, 3, 4 with N = 6 and problem 6 with N = 10 and N = 100)
 - python3 src/problem6_plotting.py
 
 ### Example2: compiling and running problem 7 with python plotting file
