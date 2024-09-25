@@ -4,7 +4,5 @@
 
 void write_to_file_numerical(const int N);
 
-void write_to_file_analytical();
-
 void custom_selection_sort(arma::vec& arr, int& first_index, int& second_index, int& third_index);
 #endif
