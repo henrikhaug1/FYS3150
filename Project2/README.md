@@ -14,7 +14,7 @@ This project is organized inside the Project2 folder in this manner:
 - make problemx_main (to compile specific .cpp file)
 - make clean (clean all executables, plots and .txt files)
 
-- Some files will ask for for an integer N to express an N x N matrix as a command line argument to save time. There will be a warning while running the executable if an N is needed. 
+- Some files will ask for for an integer N to express an N x N matrix as a command line argument to save time. There will be a warning while running the executable if an N is needed. .
 
 ### Example1: Compiling and running the whole project
 - make
