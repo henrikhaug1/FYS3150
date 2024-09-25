@@ -10,6 +10,9 @@
 #include "problem6_functions.hpp"
 
 void custom_selection_sort(arma::vec& arr, int& first_index, int& second_index, int& third_index) {
+    /*
+    Function that sorts an array from lowest to highest value. Used for sorting eigenvalue vector.
+    */
     int n = arr.size();
     arma::vec original_indices(n);
 
@@ -41,6 +44,9 @@ void custom_selection_sort(arma::vec& arr, int& first_index, int& second_index, 
 }
 
 void write_to_file_numerical(const int N) {
+    /*
+    Function that writes the eigenvectors with the three smallest eigenvalues to file.
+    */
     double eps = 1.0e-8;
     arma::vec eigenvalues;
     arma::mat eigenvectors;
