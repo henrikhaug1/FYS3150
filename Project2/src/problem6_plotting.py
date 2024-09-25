@@ -33,5 +33,7 @@ for i in range(3):
 	ax1[i].plot(x_hat_numerical, num_eigvec_norm[:, i], label=f"Numerical Eigenvector {i+1}",linestyle="--", marker="x", color='blue')
 	ax1[i].legend()
 	ax1[i].grid(True)
+	ax1[i].set_xlabel("x_hat")
+	ax1[i].set_ylabel(f"Eigenvector {i + 1}")
 plt.tight_layout()
-plt.show()
+fig1.savefig("numerical_vs_analytical_" + str(len(numerical_eigvecs)) + ".pdf")
