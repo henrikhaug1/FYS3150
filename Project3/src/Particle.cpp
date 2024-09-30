@@ -13,28 +13,28 @@ Particle::Particle(double charge_in, double mass_in, arma::vec position_in, arma
 }
 
 // Function that returns the charge 
-double charge()
+double Particle::charge()
 {
 	return charge;
 }
 
 
 // Function that returns the mass 
-double mass()
+double Particle::mass()
 {
 	return mass;
 }
 
 
 // Function that returns the position 
-arma::vec position()
+arma::vec Particle::position()
 {
 	return position;
 }
 
 
 // Function that returns the velocity 
-arma::vec velocity()
+arma::vec Particle::velocity()
 {
 	return velocity;
 }
