@@ -25,8 +25,15 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	double y = r(1);
 	double z = r(2);
 
-	double V = ( V0 / (2*d*d) ) * (2*z*z - x*x - y*y)
-	
+	arma::vec x_vec = arma::vec(3).fill(0);
+	arma::vec y_vec = arma::vec(3).fill(0);
+	arma::vec z_vec = arma::vec(3).fill(0);
+
+	x_vec(0), y_vec(1), z_vec(2) = x, y, z;
+
+	arma::vec E = ( V0 / (2*d*d) ) * (2*z*z - x*x - y*y);
+
+	return E;
 } 
 
 // External magnetic field at point r=(x,y,z)
