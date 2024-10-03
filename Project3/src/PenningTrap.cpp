@@ -6,19 +6,27 @@
 // Constructor
 PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in)
 {
-	// ....
+	B0 = B0_in;
+	V0 = V0_in;
+	d = d_in; 
 }
+
 
 // Add a particle to the trap
 void PenningTrap::add_particle(Particle p_in)
 {
-	// ...
+	particle_collection.push_back(p_in);
 }
 
 // External electric field at point r=(x,y,z)
 arma::vec PenningTrap::external_E_field(arma::vec r)
 {
-	// ...
+	double x = r(0);
+	double y = r(1);
+	double z = r(2);
+
+	double V = ( V0 / (2*d*d) ) * (2*z*z - x*x - y*y)
+	
 } 
 
 // External magnetic field at point r=(x,y,z)

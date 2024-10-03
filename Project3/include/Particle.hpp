@@ -28,6 +28,6 @@ class Particle
 
 		// Function that returns the velocity 
 		arma::vec velocity();
-}
+};
 
 #endif

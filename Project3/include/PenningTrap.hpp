@@ -4,10 +4,11 @@
 class PenningTrap
 {
 	public:
-		double B_0;
-		double V_0;
+		double B0;
+		double V0;
 		double d;
-		std::vector<Particle> particle;
+		std::vector<Particle> particle_collection;
+
 
 	// Constructor
 	PenningTrap(double B0_in, double V0_in, double d_in);
@@ -38,6 +39,6 @@ class PenningTrap
 
 	// Evolve the system one time step (dt) using Forward Euler
 	void evolve_forward_Euler(double dt);
-}
+};
 
 #endif
