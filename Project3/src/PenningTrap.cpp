@@ -29,7 +29,10 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	arma::vec y_vec = arma::vec(3).fill(0);
 	arma::vec z_vec = arma::vec(3).fill(0);
 
-	x_vec(0), y_vec(1), z_vec(2) = x, y, z;
+	x_vec(0) = x;
+	y_vec(1) = y;
+	z_vec(2) = z;
+
 
 	arma::vec E = ( V0 / (2*d*d) ) * (2*z*z - x*x - y*y);
 
