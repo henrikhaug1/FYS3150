@@ -6,6 +6,7 @@
 // Defining global variables 
 const long double T = 9.64852558e1; // u / ((𝝁s)^2 * e)
 const long double V = 9.64852558e7; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
+const long double k_e = 1.38935333e5; // (u (𝝁m)^3) / ((𝝁s)^2 * e^2)
 
 
 // Constructor
@@ -52,15 +53,21 @@ arma::vec PenningTrap::external_B_field(arma::vec r) //HVORFOR TAR VI INN r HER?
 }  
 
 // Force on particle_i from particle_j
-arma::vec PenningTrap::force_particle(int i, int j) //HVORFOR TRENGER VI i
+arma::vec PenningTrap::force_particle(int i, int j)
 {
-	Particle particle_j = particle_collection[j];
-	arma::vec external_E_j = external_E_field(particle_j);
-	arma::vec external_B_j = external_B_field(particle_j);
+	arma::vec r_i = particle_collection[i].position;
+	arma::vec r_j = particle_collection[j].position;
+	arma::vec distance = r_i - r_j;
 
-	arma::vec force_on_i_from_j = external_E_j + external_B_j;
-	return force_on_i_from_j;
+	arma::vec q_i = particle_collection[i].charge;
+	arma::vec q_j = particle_collection[j].charge;
 
+	arma::vec E = external_E_field(distance);
+
+	
+	arma::vec force_ij = k_e * (q_i * q_j) * (r_i - r_j) / distance * distance * distance;
+
+	return force_ij;
 }
 
 // The total force on particle_i from the external fields
@@ -80,24 +87,22 @@ arma::vec PenningTrap::total_force_external(int i)
 arma::vec PenningTrap::total_force_particles(int i)
 {
 	arma::vec total_force_on_i;
-	for(int j = 0; j < particle_collection.n_elem; i++)
+	Particle particle_i = particle_collection[i];
+	for(int j = 0; j < particle_collection.n_elem; j++)
 	{
-		total_force_on_i += total_force_particles(j);
+		total_force_on_i += force_particle(particle_i, particle_collection[j])
 	}
+
 	return total_force_on_i;
 }
 
 // The total force on particle_i from both external fields and other particles
 arma::vec PenningTrap::total_force(int i)
 {
-	arma::vec total_force_particles;
-	for(int i = 0; i < particle_collection.n_elem; i++)
-	{
-		total_force_particles += total_force_external(i);
-		total_force_particles += total_force_particles(i);
-	}
-	
-	return total_force_particles;
+	arma::vec total_force;
+	total_force = total_force_particles(i) + total_force_external(i);
+
+	return total_force;
 }
 
 // Evolve the system one time step (dt) using Runge-Kutta 4th order
