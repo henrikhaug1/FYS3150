@@ -2,15 +2,14 @@
 #include <armadillo>
 
 #include "PenningTrap.hpp"
+#include "Particle.hpp"
 
 // Defining global variables 
-const long double T = 9.64852558e1; // u / ((𝝁s)^2 * e)
-const long double V = 9.64852558e7; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
 const long double k_e = 1.38935333e5; // (u (𝝁m)^3) / ((𝝁s)^2 * e^2)
 
 
 // Constructor
-PenningTrap::PenningTrap(double B0_in=T, double V0_in=25*V, double d_in=500)
+PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in)
 {
 	B0 = B0_in;
 	V0 = V0_in;
@@ -40,13 +39,13 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	z_vec(2) = z;
 
 
-	arma::vec E = ( V0 / (2*d*d) ) * (2*z*z - x*x - y*y); //skal vi hardcode V0/d^2?
+	arma::vec E = ( V0 / (2.0*d*d) ) * (2.0*z_vec*z_vec - x_vec*x_vec - y_vec*y_vec);
 
 	return E;
 } 
 
 // External magnetic field at point r=(x,y,z)
-arma::vec PenningTrap::external_B_field(arma::vec r) //HVORFOR TAR VI INN r HER??
+arma::vec PenningTrap::external_B_field(arma::vec r)
 {
 	arma::vec B = arma::vec({0, 0, B0});
 	return B;
@@ -55,12 +54,12 @@ arma::vec PenningTrap::external_B_field(arma::vec r) //HVORFOR TAR VI INN r HER?
 // Force on particle_i from particle_j
 arma::vec PenningTrap::force_particle(int i, int j)
 {
-	arma::vec r_i = particle_collection[i].position;
-	arma::vec r_j = particle_collection[j].position;
+	arma::vec r_i = particle_collection[i].return_position();
+	arma::vec r_j = particle_collection[j].return_position();
 	arma::vec distance = r_i - r_j;
 
-	arma::vec q_i = particle_collection[i].charge;
-	arma::vec q_j = particle_collection[j].charge;
+	double q_i = particle_collection[i].return_charge();
+	double q_j = particle_collection[j].return_charge();
 
 	arma::vec E = external_E_field(distance);
 
@@ -74,11 +73,11 @@ arma::vec PenningTrap::force_particle(int i, int j)
 arma::vec PenningTrap::total_force_external(int i)
 {
 	Particle particle_i = particle_collection[i];
-	double q = particle_i.charge;
+	double q = particle_i.return_charge();
 
-	arma::vec external_E_i = external_E_field(particle_i.position);
-	arma::vec external_B_i = external_B_field(particle_i.position);
-	arma::vec velocity_i = particle_i.velocity;
+	arma::vec external_E_i = external_E_field(particle_i.return_position());
+	arma::vec external_B_i = external_B_field(particle_i.return_position());
+	arma::vec velocity_i = particle_i.return_velocity();
 	arma::vec F = q * external_E_i + arma::cross(q * velocity_i, external_B_i);
 	return F;
 }
@@ -87,10 +86,9 @@ arma::vec PenningTrap::total_force_external(int i)
 arma::vec PenningTrap::total_force_particles(int i)
 {
 	arma::vec total_force_on_i;
-	Particle particle_i = particle_collection[i];
-	for(int j = 0; j < particle_collection.n_elem; j++)
+	for(int j = 0; j < particle_collection.size(); j++)
 	{
-		total_force_on_i += force_particle(particle_i, particle_collection[j])
+		total_force_on_i += force_particle(i, j);
 	}
 
 	return total_force_on_i;
@@ -105,6 +103,7 @@ arma::vec PenningTrap::total_force(int i)
 	return total_force;
 }
 
+/*
 // Evolve the system one time step (dt) using Runge-Kutta 4th order
 void PenningTrap::evolve_RK4(double dt)
 {
@@ -117,5 +116,5 @@ void PenningTrap::volve_forward_Euler(double dt)
 	// ...
 }
 
-
+*/
 

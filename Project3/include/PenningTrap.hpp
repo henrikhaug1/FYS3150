@@ -1,6 +1,11 @@
 #ifndef __PenningTrap_hpp__
 #define __PenningTrap_hpp__
 
+#include "Particle.hpp"
+
+const long double T = 9.64852558e1; // u / ((𝝁s)^2 * e)
+const long double V = 9.64852558e7; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
+
 class PenningTrap
 {
 	public:
@@ -11,7 +16,7 @@ class PenningTrap
 
 
 	// Constructor
-	PenningTrap(double B0_in, double V0_in, double d_in);
+	PenningTrap(double B0_in=T, double V0_in=25*V, double d_in=500);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
