@@ -38,3 +38,5 @@ arma::vec Particle::velocity()
 {
 	return velocity;
 }
+
+

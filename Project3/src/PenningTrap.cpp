@@ -47,8 +47,7 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 // External magnetic field at point r=(x,y,z)
 arma::vec PenningTrap::external_B_field(arma::vec r) //HVORFOR TAR VI INN r HER??
 {
-	arma::vec B = r;
-	B(2) = B0;
+	arma::vec B = arma::vec({0, 0, B0});
 	return B;
 }  
 
@@ -85,6 +84,7 @@ arma::vec PenningTrap::total_force_particles(int i)
 	{
 		total_force_on_i += total_force_particles(j);
 	}
+	return total_force_on_i;
 }
 
 // The total force on particle_i from both external fields and other particles
