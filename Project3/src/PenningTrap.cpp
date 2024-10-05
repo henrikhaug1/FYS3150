@@ -103,18 +103,23 @@ arma::vec PenningTrap::total_force(int i)
 	return total_force;
 }
 
+
+
 /*
+// Evolve the system one time step (dt) using Forward Euler
+void PenningTrap::evolve_forward_Euler(double dt)
+{	
+	//...	
+}
+
+
 // Evolve the system one time step (dt) using Runge-Kutta 4th order
 void PenningTrap::evolve_RK4(double dt)
 {
 	// ...
 }
 
-// Evolve the system one time step (dt) using Forward Euler
-void PenningTrap::volve_forward_Euler(double dt)
-{
-	// ...
-}
+
 
 */
 
