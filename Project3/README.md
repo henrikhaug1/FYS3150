@@ -1,4 +1,4 @@
-# FYS3150 Project2
+# FYS3150 Project3
 
 ## File organization:
 This project is organized inside the Project3 folder in this manner:
