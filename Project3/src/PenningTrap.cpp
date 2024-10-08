@@ -65,7 +65,6 @@ arma::vec PenningTrap::force_particle(int i, int j)
 
 	
 	arma::vec force_ij = k_e * (q_i * q_j) * (r_i - r_j) / distance * distance * distance;
-
 	return force_ij;
 }
 
@@ -78,6 +77,7 @@ arma::vec PenningTrap::total_force_external(int i)
 	arma::vec external_E_i = external_E_field(particle_i.return_position());
 	arma::vec external_B_i = external_B_field(particle_i.return_position());
 	arma::vec velocity_i = particle_i.return_velocity();
+
 	arma::vec F = q * external_E_i + arma::cross(q * velocity_i, external_B_i);
 	return F;
 }
@@ -105,14 +105,26 @@ arma::vec PenningTrap::total_force(int i)
 
 
 
-/*
+
 // Evolve the system one time step (dt) using Forward Euler
 void PenningTrap::evolve_forward_Euler(double dt)
 {	
-	//...	
+	for(int i = 0; i < particle_collection.size(); i++)
+	{
+		Particle& particle_i = particle_collection[i];
+		arma::vec total_force_i = total_force(i);
+
+		arma::vec new_velocity = particle_i.return_velocity() + dt * 
+									total_force_i / particle_i.return_mass();
+		arma::vec new_position = particle_i.return_position() + dt * new_velocity;
+
+		particle_i.set_velocity(new_velocity);
+		particle_i.set_position(new_position);
+
+	}	
 }
 
-
+/*
 // Evolve the system one time step (dt) using Runge-Kutta 4th order
 void PenningTrap::evolve_RK4(double dt)
 {
