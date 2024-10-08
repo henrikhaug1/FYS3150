@@ -41,4 +41,14 @@ arma::vec Particle::return_velocity()
 	return velocity;
 }
 
+//setter for position
+void Particle::set_position(const arma::vec& new_position)
+{
+    position = new_position;
+}
 
+// Setter for velocity
+void Particle::set_velocity(const arma::vec& new_velocity)
+{
+    velocity = new_velocity;
+}
