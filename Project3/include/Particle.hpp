@@ -28,6 +28,12 @@ class Particle
 
 		// Function that returns the velocity 
 		arma::vec return_velocity();
+
+		//Function that sets a new position to Particle
+		void set_position(const arma::vec& new_position);
+
+		//Funciton that sets a new velocity to Particle.
+    	void set_velocity(const arma::vec& new_velocity);
 };
 
 #endif
