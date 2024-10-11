@@ -1,5 +1,6 @@
 #include <iostream>
 #include <armadillo>
+#include <iomanip>
 #include "Particle.hpp"
 #include "PenningTrap.hpp"
 
@@ -61,6 +62,7 @@ int main()
 	std::vector<double> times;
 
 	std::ofstream outfile("simulation_data_1_particle.txt");
+	outfile << std::scientific << std::setprecision(10);
 
 	for (int i = 0; i <= 50; i++) {
 	    trap.evolve_RK4(dt);
