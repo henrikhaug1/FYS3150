@@ -43,7 +43,7 @@ int main()
 	std::cout << "\n";
 
 	std::cout << "---------- Forward Euler Particle 1 ----------" << "\n";
-	trap.evolve_forward_Euler(0.1);
+	trap.evolve_forward_euler(0.1);
 	std::cout << "Particle1 position after FE1: \n" << trap.particle_collection[0].return_position() << std::endl;
 	std::cout << "Particle1 velocity after FE1: \n" << trap.particle_collection[0].return_velocity() << std::endl;
 	
