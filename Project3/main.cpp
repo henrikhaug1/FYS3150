@@ -40,9 +40,12 @@ int main()
 	std::cout << "The total force on particle i from the other particles:\n " << trap.total_force_particles(0) << std::endl;
 	std::cout << "\n";
 	std::cout << "The total force on particle i from the other particles and fields:\n " << trap.total_force(0) << std::endl;
+	std::cout << "\n";
 
-	//trap.evolve_forward_Euler(0.01);
-	//std::cout << particle1.position << " " << particle1.velocity << std::endl;
-	//std::cout << particle2.position << " " << particle2.velocity << std::endl;
-
+	std::cout << "---------- Forward Euler Particle 1 ----------" << "\n";
+	trap.evolve_forward_Euler(0.1);
+	std::cout << "Particle1 position after FE1: \n" << trap.particle_collection[0].return_position() << std::endl;
+	std::cout << "Particle1 velocity after FE1: \n" << trap.particle_collection[0].return_velocity() << std::endl;
+	
+	
 }
