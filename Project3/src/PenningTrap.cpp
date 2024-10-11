@@ -81,10 +81,13 @@ arma::vec PenningTrap::total_force_external(int i)
 // The total force on particle_i from the other particles
 arma::vec PenningTrap::total_force_particles(int i)
 {
-	arma::vec total_force_on_i;
+	arma::vec total_force_on_i = arma::vec({0, 0, 0});
 	for(int j = 0; j < particle_collection.size(); j++)
 	{
-		total_force_on_i += force_particle(i, j);
+		if(j != i)
+		{
+			total_force_on_i += force_particle(i, j);
+		}
 	}
 
 	return total_force_on_i;
