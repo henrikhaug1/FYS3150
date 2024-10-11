@@ -5,8 +5,8 @@
 
 int main()
 {
-	arma::vec position1 = arma::vec({20, 0, 20});
-	arma::vec velocity1 = arma::vec({0, 25, 0});
+	arma::vec position1 = {20, 0, 20};
+	arma::vec velocity1 = {0, 25, 0};
 	Particle particle1 = Particle(1.0, 40.078, position1, velocity1);
 
 	arma::vec position2 = arma::vec({25, 25, 0});
@@ -22,19 +22,21 @@ int main()
 	trap.external_E_field(position1);
 
 	std::cout << "--------- PARTICLE 1 ---------" << std::endl;
-	std::cout << "Position: \n" << trap.external_E_field(position1) << std::endl;
+	std::cout << "Position: \n";
+	position1.print();
 	std::cout << "\n";
-	std::cout << "Velocity: \n" << trap.external_E_field(position1) << std::endl; 
+	std::cout << "Velocity: \n";
+	velocity1.print(); 
 	std::cout << "\n";
 	std::cout << "External electric field: \n" << trap.external_E_field(position1) << std::endl;
 	std::cout << "\n";
 	std::cout << "External magnetic field: \n" << trap.external_B_field(position1) << std::endl;
 	std::cout << "\n";
-	std::cout << "Force on particle i from particle j\n: " << trap.force_particle(0, 1) << std::endl;
+	std::cout << "Force on particle i from particle j:\n " << trap.force_particle(0, 1) << std::endl;
 	std::cout << "\n";
-	std::cout << "The total force on particle i from the external fields: " << trap.total_force_external(0) << std::endl;
+	std::cout << "The total force on particle i from the external fields:\n" << trap.total_force_external(0) << std::endl;
 	std::cout << "\n";
-	std::cout << "TThe total force on particle i from the other particles: " << trap.total_force_external(0) << std::endl;
+	std::cout << "TThe total force on particle i from the other particles:\n " << trap.total_force_external(0) << std::endl;
 
 	//trap.evolve_forward_Euler(0.01);
 	//std::cout << particle1.position << " " << particle1.velocity << std::endl;
