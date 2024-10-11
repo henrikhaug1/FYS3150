@@ -13,3 +13,4 @@ run_all: all
 
 clean:
 	rm -f main
+	rm -f simulation_data_1_particle.txt
