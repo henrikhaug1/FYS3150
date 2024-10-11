@@ -30,16 +30,12 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	double y = r(1);
 	double z = r(2);
 
-	arma::vec x_vec = arma::vec(3).fill(0);
-	arma::vec y_vec = arma::vec(3).fill(0);
-	arma::vec z_vec = arma::vec(3).fill(0);
 
-	x_vec(0) = x;
-	y_vec(1) = y;
-	z_vec(2) = z;
+	arma::vec e_x = {x * x, 0, 0};
+	arma::vec e_y = {0, y * y, 0};
+	arma::vec e_z = {0, 0, 2.0 * z * z};
 
-
-	arma::vec E = ( V0 / (2.0*d*d) ) * (2.0*z_vec*z_vec - x_vec*x_vec - y_vec*y_vec);
+	arma::vec E = ( V0 / (2.0*d*d) ) * (e_z - e_x - e_y);
 
 	return E;
 } 
@@ -56,15 +52,15 @@ arma::vec PenningTrap::force_particle(int i, int j)
 {
 	arma::vec r_i = particle_collection[i].return_position();
 	arma::vec r_j = particle_collection[j].return_position();
-	arma::vec distance = r_i - r_j;
-
+	double distance = arma::norm(r_i - r_j);
 	double q_i = particle_collection[i].return_charge();
 	double q_j = particle_collection[j].return_charge();
 
-	arma::vec E = external_E_field(distance);
+
+	arma::vec force_vec = {r_i % r_j};
 
 	
-	arma::vec force_ij = k_e * (q_i * q_j) * (r_i - r_j) / distance * distance * distance;
+	arma::vec force_ij = (k_e * (q_i * q_j)  / (distance * distance * distance)) * force_vec;
 	return force_ij;
 }
 
@@ -78,7 +74,7 @@ arma::vec PenningTrap::total_force_external(int i)
 	arma::vec external_B_i = external_B_field(particle_i.return_position());
 	arma::vec velocity_i = particle_i.return_velocity();
 
-	arma::vec F = q * external_E_i + arma::cross(q * velocity_i, external_B_i);
+	arma::vec F = q * external_E_i + q * (velocity_i % external_B_i);
 	return F;
 }
 
@@ -111,7 +107,7 @@ void PenningTrap::evolve_forward_Euler(double dt)
 {	
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
-		Particle& particle_i = particle_collection[i];
+		Particle particle_i = particle_collection[i];
 		arma::vec total_force_i = total_force(i);
 
 		arma::vec new_velocity = particle_i.return_velocity() + dt * 
