@@ -64,7 +64,7 @@ int main()
 	std::ofstream outfile("simulation_data_1_particle.txt");
 	outfile << std::scientific << std::setprecision(10);
 
-	for (int i = 0; i <= 50; i++) {
+	for (int i = 0; i <= 5000; i++) {
 	    trap.evolve_RK4(dt);
 	    double z = trap.particle_collection[0].return_position()(2);  // Assuming this method exists
         z_positions.push_back(z);
@@ -77,6 +77,14 @@ int main()
 
 	outfile.close();
 
+	double charge = trap.particle_collection[0].return_charge();
+
+	double left = (charge * trap.B0 * trap.B0)/trap.particle_collection[0].return_mass();
+	double right = 4 * trap.V0 / (trap.d * trap.d);
+
+	//if left < right, the particle stays in penning trap.
+	//if left > right, particle flies out and we get unwanted results.
+	std::cout << "left : " << left << "right: " << right << std::endl; 
 	return 0;
 }
 
