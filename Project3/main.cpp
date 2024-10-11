@@ -47,5 +47,10 @@ int main()
 	std::cout << "Particle1 position after FE1: \n" << trap.particle_collection[0].return_position() << std::endl;
 	std::cout << "Particle1 velocity after FE1: \n" << trap.particle_collection[0].return_velocity() << std::endl;
 	
-	
+	std::cout << "---------- RK4 Particle 1 ----------" << "\n";
+	trap.evolve_RK4(0.1);
+	std::cout << "Particle1 position after RK4: \n" << trap.particle_collection[0].return_position() << std::endl;
+	std::cout << "Particle1 velocity after RK4: \n" << trap.particle_collection[0].return_velocity() << std::endl;
+
+
 }
