@@ -110,7 +110,7 @@ void PenningTrap::evolve_forward_Euler(double dt)
 {	
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
-		Particle particle_i = particle_collection[i];
+		Particle& particle_i = particle_collection[i];
 		arma::vec total_force_i = total_force(i);
 
 		arma::vec new_velocity = particle_i.return_velocity() + dt * 
