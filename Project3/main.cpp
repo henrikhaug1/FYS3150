@@ -13,6 +13,7 @@ int main()
 	arma::vec velocity2 = arma::vec({0, 40, 5});
 	Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
 
+
 	//std::cout << "mass : " << particle1.mass << " charge: " << particle1.charge << " velocity: "<< particle1.velocity << " position: " << particle1.position << "\n";
 	//std::cout << "mass : " << particle2.mass << " charge: " << particle2.charge << " velocity: "<< particle2.velocity << " position: " << particle2.position << "\n";
 	
@@ -36,7 +37,9 @@ int main()
 	std::cout << "\n";
 	std::cout << "The total force on particle i from the external fields:\n" << trap.total_force_external(0) << std::endl;
 	std::cout << "\n";
-	std::cout << "TThe total force on particle i from the other particles:\n " << trap.total_force_external(0) << std::endl;
+	std::cout << "The total force on particle i from the other particles:\n " << trap.total_force_particles(0) << std::endl;
+	std::cout << "\n";
+	std::cout << "The total force on particle i from the other particles and fields:\n " << trap.total_force(0) << std::endl;
 
 	//trap.evolve_forward_Euler(0.01);
 	//std::cout << particle1.position << " " << particle1.velocity << std::endl;
