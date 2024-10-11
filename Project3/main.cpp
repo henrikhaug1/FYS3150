@@ -42,15 +42,44 @@ int main()
 	std::cout << "The total force on particle i from the other particles and fields:\n " << trap.total_force(0) << std::endl;
 	std::cout << "\n";
 
+	/*
 	std::cout << "---------- Forward Euler Particle 1 ----------" << "\n";
-	trap.evolve_forward_euler(0.1);
+	trap.evolve_forward_euler(1e-6);
 	std::cout << "Particle1 position after FE1: \n" << trap.particle_collection[0].return_position() << std::endl;
 	std::cout << "Particle1 velocity after FE1: \n" << trap.particle_collection[0].return_velocity() << std::endl;
 	
 	std::cout << "---------- RK4 Particle 1 ----------" << "\n";
-	trap.evolve_RK4(0.1);
+	trap.evolve_RK4(1e-6);
 	std::cout << "Particle1 position after RK4: \n" << trap.particle_collection[0].return_position() << std::endl;
 	std::cout << "Particle1 velocity after RK4: \n" << trap.particle_collection[0].return_velocity() << std::endl;
+	*/
 
 
+	double time = 0.0;
+	double dt = 1e-6;
+	std::vector<double> z_positions;
+	std::vector<double> times;
+
+	std::ofstream outfile("simulation_data_1_particle.txt");
+
+	for (int i = 0; i <= 50; i++) {
+	    trap.evolve_RK4(dt);
+	    double z = trap.particle_collection[0].return_position()(2);  // Assuming this method exists
+        z_positions.push_back(z);
+	    times.push_back(time);
+
+	    outfile << time << "\t" << z << "\n";
+
+	    time += dt;
+	}
+
+	outfile.close();
+
+	return 0;
 }
+
+
+
+
+
+
