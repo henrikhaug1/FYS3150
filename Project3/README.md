@@ -17,10 +17,12 @@ This project is organized inside the Project3 folder in this manner:
 ### Example1: Compiling and running the whole project
 - make
 - make run_all
+- python3 plotting.py
 
-### Example2: compiling and running
+### Example2: compiling and running individually
 - make main
 - ./main
+- python3 plotting.py
 
 
 # Compiling .cpp files without using make:
