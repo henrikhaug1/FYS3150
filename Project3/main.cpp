@@ -4,6 +4,69 @@
 #include "Particle.hpp"
 #include "PenningTrap.hpp"
 
+void write_to_file(){
+
+}
+
+int main()
+{
+	arma::vec position1 = {20, 0, 20};
+	arma::vec velocity1 = {0, 25, 0};
+	Particle particle1 = Particle(1.0, 40.078, position1, velocity1);
+
+	arma::vec position2 = arma::vec({25, 25, 0});
+	arma::vec velocity2 = arma::vec({0, 40, 5});
+	Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
+
+
+	PenningTrap trap = PenningTrap();
+	trap.add_particle(particle1);
+	trap.add_particle(particle2);
+	trap.external_E_field(position1);
+
+	double time = 0.0;
+	double dt = 1e-6;
+	arma::vec z_positions;
+	std::vector<double> times;
+
+	for (int i = 0; i < 50; i++) {
+	    times.push_back(time);
+	    time += dt;
+	}
+
+	arma::vec analytical_z = trap.specific_analytical_z(particle1, times);
+
+	std::ofstream outfile1("specific_analytical_z.txt");
+	outfile1 << std::scientific << std::setprecision(10);
+
+
+	for(int i = 0; i < times.size(); i++)
+	{
+		outfile1 << times[i] << " " << analytical_z[i] << "\n";
+	}
+
+	outfile1.close();
+
+
+
+
+	arma::vec x;
+	arma::vec y;
+	trap.specific_analytical_xy(particle1, times, x, y);
+
+	std::ofstream outfile2("specific_analytical_xy.txt");
+	outfile2 << std::scientific << std::setprecision(10);
+
+
+	for(int i = 0; i < times.size(); i++)
+	{
+		outfile2 << x[i] << " " << y[i] << "\n";
+	}
+
+	outfile2.close();
+}
+
+/*
 int main()
 {
 	arma::vec position1 = {20, 0, 20};
@@ -43,7 +106,7 @@ int main()
 	std::cout << "The total force on particle i from the other particles and fields:\n " << trap.total_force(0) << std::endl;
 	std::cout << "\n";
 
-	/*
+	
 	std::cout << "---------- Forward Euler Particle 1 ----------" << "\n";
 	trap.evolve_forward_euler(1e-6);
 	std::cout << "Particle1 position after FE1: \n" << trap.particle_collection[0].return_position() << std::endl;
@@ -53,8 +116,15 @@ int main()
 	trap.evolve_RK4(1e-6);
 	std::cout << "Particle1 position after RK4: \n" << trap.particle_collection[0].return_position() << std::endl;
 	std::cout << "Particle1 velocity after RK4: \n" << trap.particle_collection[0].return_velocity() << std::endl;
-	*/
+	
 
+
+
+	arma::vec initial_positions = arma::vec(trap.particle_collection.size())
+	for(int i = 0; i < trap.particle_collection.size(); i++)
+	{
+		initial_positions.pushback(trap.particle_collection[i].return_position());
+	}
 
 	double time = 0.0;
 	double dt = 1e-6;
@@ -64,7 +134,7 @@ int main()
 	std::ofstream outfile("simulation_data_1_particle.txt");
 	outfile << std::scientific << std::setprecision(10);
 
-	for (int i = 0; i <= 5000; i++) {
+	for (int i = 0; i < 5000; i++) {
 	    trap.evolve_RK4(dt);
 	    double z = trap.particle_collection[0].return_position()(2);  // Assuming this method exists
         z_positions.push_back(z);
@@ -84,12 +154,12 @@ int main()
 
 	//if left < right, the particle stays in penning trap.
 	//if left > right, particle flies out and we get unwanted results.
-	std::cout << "left : " << left << "right: " << right << std::endl; 
+	std::cout << "left: " << left << " right: " << right << std::endl; 
 	return 0;
 }
 
 
-
+*/
 
 
 
