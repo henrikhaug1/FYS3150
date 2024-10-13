@@ -13,4 +13,5 @@ run_all: all
 
 clean:
 	rm -f main
-	rm -f simulation_data_1_particle.txt
+	rm -f specific_analytical_z.txt
+	rm -f specific_analytical_xy.txt
