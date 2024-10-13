@@ -45,6 +45,10 @@ class PenningTrap
 	// Evolve the system one time step (dt) using Runge-Kutta 4th order
 	void evolve_RK4(double dt);
 
+	arma::vec specific_analytical_z(Particle particle, arma::vec time);
+
+	void specific_analytical_xy(Particle particle, arma::vec time, arma::vec& x, arma::vec& y);
+
 };
 
 #endif
