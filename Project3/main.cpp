@@ -24,6 +24,7 @@ int main()
 	trap.add_particle(particle2);
 	trap.external_E_field(position1);
 
+	// ---------- Particle 1 - Z ---------
 	double time = 0.0;
 	double dt = 1e-6;
 	arma::vec z_positions;
@@ -47,23 +48,38 @@ int main()
 
 	outfile1.close();
 
+	// ---------- Particle 1 - XY ---------
+	arma::vec x1 = arma::vec(times.size());
+	arma::vec y1 = arma::vec(times.size());
+	trap.specific_analytical_xy(particle1, times, x1, y1);
 
-
-
-	arma::vec x;
-	arma::vec y;
-	trap.specific_analytical_xy(particle1, times, x, y);
-
-	std::ofstream outfile2("specific_analytical_xy.txt");
+	std::ofstream outfile2("specific_analytical_xy_particle1.txt");
 	outfile2 << std::scientific << std::setprecision(10);
 
 
 	for(int i = 0; i < times.size(); i++)
 	{
-		outfile2 << x[i] << " " << y[i] << "\n";
+		outfile2 << x1[i] << " " << y1[i] << "\n";
 	}
 
 	outfile2.close();
+
+	// ---------- Particle 2 - XY ---------
+
+	arma::vec x2 = arma::vec(times.size());
+	arma::vec y2 = arma::vec(times.size());
+	trap.specific_analytical_xy(particle2, times, x2, y2);
+
+	std::ofstream outfile3("specific_analytical_xy_particle2.txt");
+	outfile3 << std::scientific << std::setprecision(10);
+
+
+	for(int i = 0; i < times.size(); i++)
+	{
+		outfile3 << x2[i] << " " << y2[i] << "\n";
+	}
+
+	outfile3.close();
 }
 
 /*
