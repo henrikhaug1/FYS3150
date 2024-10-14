@@ -14,4 +14,5 @@ run_all: all
 clean:
 	rm -f main
 	rm -f specific_analytical_z.txt
-	rm -f specific_analytical_xy.txt
+	rm -f specific_analytical_xy_particle1.txt
+	rm -f specific_analytical_xy_particle2.txt
