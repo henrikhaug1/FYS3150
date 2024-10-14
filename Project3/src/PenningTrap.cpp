@@ -210,8 +210,21 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
 	double omega_0 = (particle.return_charge() * B0) / particle.return_mass();
 	double omega_z = sqrt((2 * particle.return_charge() * V0) / (particle.return_mass() * d * d));
 
-	double omega_p = (omega_0  + sqrt(omega_0 * omega_0 - 2 * omega_z * omega_z)) / 2;
-	double omega_m = - (omega_0  - sqrt(omega_0 * omega_0 - 2 * omega_z * omega_z)) / 2;
+	double discriminant_value = omega_0 * omega_0 - 2 * omega_z * omega_z;
+	std::complex<double> discriminant;
+
+	if (discriminant_value >= 0)
+	{
+	    discriminant = std::sqrt(discriminant_value);
+	} 
+
+	else
+	{
+	    discriminant = std::sqrt(std::complex<double>(discriminant_value, 0));
+	}
+
+	double omega_p = (omega_0 + discriminant.real()) / 2;
+	double omega_m = - (omega_0 - discriminant.real()) / 2;
 
 	double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
 	double A_m = - A_p;
