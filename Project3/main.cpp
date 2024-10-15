@@ -22,7 +22,10 @@ int main()
 	PenningTrap trap = PenningTrap();
 	trap.add_particle(particle1);
 	trap.add_particle(particle2);
-	trap.external_E_field(position1);
+
+	PenningTrap trap_interactions = PenningTrap(particle_interactions_in=TRUE)
+	trap_interactions.add_particle(particle1)
+	trap_interactions.add_particle(particle2)
 
 	// ---------- Particle 1 - Z ---------
 	double time = 0.0;
