@@ -11,11 +11,13 @@ const long double k_e = 1.38935333e5; // (u (𝝁m)^3) / ((𝝁s)^2 * e^2)
 
 
 // Constructor
-PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in)
+PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool particle_interactions_in, bool time_dependent_v0_in)
 {
 	B0 = B0_in;
 	V0 = V0_in;
-	d = d_in; 
+	d = d_in;
+	particle_interactions = particle_interactions_in
+	time_dependent_v0 = time_dependent_v0_in
 }
 
 
@@ -64,15 +66,10 @@ arma::vec PenningTrap::force_particle(int i, int j)
 {
 	arma::vec r_i = particle_collection[i].return_position();
 	arma::vec r_j = particle_collection[j].return_position();
-	double distance = arma::norm(r_i - r_j);
 	double q_i = particle_collection[i].return_charge();
 	double q_j = particle_collection[j].return_charge();
-
-
-	arma::vec force_vec = {r_i % r_j};
-
 	
-	arma::vec force_ij = (k_e * (q_i * q_j)  / (distance * distance * distance)) * force_vec;
+	arma::vec force_ij = k_e * q_i*q_j / ( (r_i-r_j)%(r_i-r_j) ) % ( (r_i-r_j)/abs(r_i-r_j) );
 	return force_ij;
 }
 
@@ -86,14 +83,15 @@ arma::vec PenningTrap::total_force_external(int i)
 	arma::vec external_B_i = external_B_field(particle_i.return_position());
 	arma::vec velocity_i = particle_i.return_velocity();
 
-	arma::vec F = q * external_E_i + q * (velocity_i % external_B_i);
+	arma::vec F = q * (external_E_i + arma::cross(velocity_i, external_B_i));
 	return F;
+
 }
 
 // The total force on particle_i from the other particles
 arma::vec PenningTrap::total_force_particles(int i)
 {
-	arma::vec total_force_on_i = arma::vec({0, 0, 0});
+	arma::vec total_force_on_i = arma::vec(3);
 	for(int j = 0; j < particle_collection.size(); j++)
 	{
 		if(j != i)
@@ -108,8 +106,14 @@ arma::vec PenningTrap::total_force_particles(int i)
 // The total force on particle_i from both external fields and other particles
 arma::vec PenningTrap::total_force(int i)
 {
-	arma::vec total_force;
-	total_force = total_force_particles(i) + total_force_external(i);
+	if(particle_interactions)
+	{
+		return total_force_particles(i) + total_force_external(i);
+	}
+	else
+	{
+		return total_force_external(i);
+	}
 
 	return total_force;
 }
@@ -182,6 +186,8 @@ void PenningTrap::evolve_RK4(double dt)
     }
 }
 
+
+
 arma::vec PenningTrap::specific_analytical_z(Particle particle, arma::vec time)
 {
 	arma::vec z_t = arma::vec(time.size());
@@ -204,35 +210,19 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
 	double x0 = particle.return_position()(0);
 	double v0 = particle.return_velocity()(1);
 
+	std::cout << x0 << " " << v0 << "\n";
+
 	double phi_p = 0;
 	double phi_m = 0;
 
 	double omega_0 = (particle.return_charge() * B0) / particle.return_mass();
 	double omega_z_2 = (2 * particle.return_charge() * V0) / (particle.return_mass() * d * d);
 
-	double discriminant_value = omega_0 * omega_0 - 2 * omega_z_2;
-	std::complex<double> discriminant;
+    double omega_p = (omega_0 + sqrt(omega_0 * omega_0 - 2. * omega_z_2)) / 2.;
+	double omega_m = (omega_0 - sqrt(omega_0 * omega_0 - 2. * omega_z_2)) / 2.;
 
-	if (discriminant_value >= 0)
-	{
-	    discriminant = std::sqrt(discriminant_value);
-	    double omega_p = (omega_0 + discriminant.real()) / 2;
-		double omega_m = - (omega_0 - discriminant.real()) / 2;
-
-		double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-		double A_m = - ((v0 + omega_p * x0) / (omega_m - omega_p));
-	} 
-
-	else
-	{
-	    discriminant = std::sqrt(std::complex<double>(discriminant_value, 0));
-	   	double omega_p = (omega_0 + discriminant.real()) / 2;
-		double omega_m = - (omega_0 - discriminant.real()) / 2;
-
-		double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-		double A_m = - ((v0 + omega_p * x0) / (omega_m - omega_p));
-	}
-
+	double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
+	double A_m = - ((v0 + omega_p * x0) / (omega_m - omega_p));
 
 	std::cout << "omega_0 " << omega_0 << "\n";
 	std::cout << "omega_z_2 " << omega_z_2 << "\n";
@@ -241,18 +231,12 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
 	std::cout << "A_p " << A_p << "\n";
 	std::cout << "A_m " << A_m << "\n";
 
-	// Complex number representation of i
-    std::complex<double> i(0.0, 1.0);
-    for(int t = 0; t < time.size(); t++)
+	for(int t = 0; t < time.size(); t++)
     {
-        // Compute the complex exponential for each time step
-        std::complex<double> f = A_p * std::exp(-i * (omega_p * time(t) + phi_p)) +
-                                         A_m * std::exp(-i * (omega_m * time(t) + phi_m));
-
-        // Store the real part of the complex result in f_t
-        x[t] = f.real();
-        y[t] = f.imag();
+    	x[t] = A_p*cos(omega_p*time(t)) + A_m*cos(omega_m*time(t));
+    	y[t] = -A_p*sin(omega_p*time(t)) - A_m*sin(omega_m*time(t));
     }
+
 }
 
 

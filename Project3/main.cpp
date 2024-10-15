@@ -59,7 +59,7 @@ int main()
 
 	for(int i = 0; i < times.size(); i++)
 	{
-		outfile2 << x1[i] << " " << y1[i] << "\n";
+		outfile2 << x1[i] << " " << y1[i]<< "\n";
 	}
 
 	outfile2.close();

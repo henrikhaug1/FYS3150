@@ -4,7 +4,7 @@
 #include "Particle.hpp"
 
 const long double T = 9.64852558e1; // u / ((𝝁s)^2 * e)
-const long double V = 9.64852558e7; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
+const long double V = 2.41e6; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
 
 class PenningTrap
 {
@@ -16,7 +16,7 @@ class PenningTrap
 
 
 	// Constructor
-	PenningTrap(double B0_in=T, double V0_in=25*V, double d_in=500);
+	PenningTrap(double B0_in=T, double V0_in=V, double d_in=500, bool particle_interactions_in = FALSE, bool time_dependent_v0_in = FALSE);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
