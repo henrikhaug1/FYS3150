@@ -1,89 +1,89 @@
 #include <iostream>
 #include <armadillo>
 #include <iomanip>
+#include <string>
+#include <fstream>
 #include "Particle.hpp"
 #include "PenningTrap.hpp"
 
-void write_to_file(){
+// Function to write data to file
+void write_to_file(std::string filename, arma::vec vec_x_axis, arma::vec vec_y_axis)
+{
+    int width = 30;
+    int prec = 15;
 
+    std::ofstream ofile;
+    ofile.open(filename);
+
+    ofile << std::scientific << std::setprecision(prec);
+    ofile << std::left << std::setw(width) << "x-axis" << std::setw(width) << "y-axis" << std::endl;
+
+    for (int i = 0; i < vec_x_axis.size(); i++) {
+        ofile << std::left << std::setw(width) << vec_x_axis[i]
+                           << std::setw(width) << vec_y_axis[i] << std::endl;
+    }
+
+    ofile.close();
 }
 
 int main()
 {
-	arma::vec position1 = {20, 0, 20};
-	arma::vec velocity1 = {0, 25, 0};
-	Particle particle1 = Particle(1.0, 40.078, position1, velocity1);
+    // Define particle 1 and particle 2
+    arma::vec position1 = {20, 0, 20};
+    arma::vec velocity1 = {0, 25, 0};
+    Particle particle1 = Particle(1.0, 40.078, position1, velocity1);
 
-	arma::vec position2 = arma::vec({25, 25, 0});
-	arma::vec velocity2 = arma::vec({0, 40, 5});
-	Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
+    std::cout << "charge: " << particle1.return_charge() << std::endl;
+    std::cout << "mass: " << particle1.return_mass() << std::endl;
+    std::cout << "velocity: " << particle1.return_velocity() << std::endl;
+    std::cout << "position: " << particle1.return_position() << std::endl;
 
+    arma::vec position2 = {25, 25, 0};
+    arma::vec velocity2 = {0, 40, 5};
+    Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
 
-	PenningTrap trap = PenningTrap();
-	trap.add_particle(particle1);
-	trap.add_particle(particle2);
+    // Define a PenningTrap with interactions enabled
+    PenningTrap trap(true);
+    trap.add_particle(particle1);
+    trap.add_particle(particle2);
 
-	bool particle_interactions_in;
-	PenningTrap trap_interactions = PenningTrap(particle_interactions_in=true);
-	trap_interactions.add_particle(particle1);
-	trap_interactions.add_particle(particle2);
+    // Initialize time-related variables
+    double time = 0.0;
+    double dt = 1e-6;
+    arma::vec z_positions(51);
+    arma::vec times(51);
 
-	// ---------- Particle 1 - Z ---------
-	double time = 0.0;
-	double dt = 1e-6;
-	arma::vec z_positions;
-	std::vector<double> times;
+    // Fill time values
+    for (int i = 0; i < 51; i++) {
+        times[i] = time;
+        time += dt;
+    }
 
-	for (int i = 0; i < 50; i++) {
-	    times.push_back(time);
-	    time += dt;
-	}
+    // Calculate specific analytical z-positions
+    z_positions = trap.specific_analytical_z(particle1, times);
 
-	arma::vec analytical_z = trap.specific_analytical_z(particle1, times);
-
-	std::ofstream outfile1("specific_analytical_z.txt");
-	outfile1 << std::scientific << std::setprecision(10);
-
-
-	for(int i = 0; i < times.size(); i++)
-	{
-		outfile1 << times[i] << " " << analytical_z[i] << "\n";
-	}
-
-	outfile1.close();
+    // Write to file
+    std::string filename_z = "specific_analytical_z.txt";
+    write_to_file(filename_z, times, z_positions);
 
 	// ---------- Particle 1 - XY ---------
-	arma::vec x1 = arma::vec(times.size());
-	arma::vec y1 = arma::vec(times.size());
+	arma::vec x1 = arma::vec(times.n_elem);
+	arma::vec y1 = arma::vec(times.n_elem);
+	std::string filename_xy = "specific_analytical_xy_particle1.txt";
 	trap.specific_analytical_xy(particle1, times, x1, y1);
+	write_to_file(filename_xy, x1, y1);
 
-	std::ofstream outfile2("specific_analytical_xy_particle1.txt");
-	outfile2 << std::scientific << std::setprecision(10);
-
-
-	for(int i = 0; i < times.size(); i++)
-	{
-		outfile2 << x1[i] << " " << y1[i]<< "\n";
-	}
-
-	outfile2.close();
 
 	// ---------- Particle 2 - XY ---------
 
-	arma::vec x2 = arma::vec(times.size());
-	arma::vec y2 = arma::vec(times.size());
+	arma::vec x2 = arma::vec(times.n_elem);
+	arma::vec y2 = arma::vec(times.n_elem);
+	std::string filename_xy_interactions = "specific_analytical_xy_interactions_particle1.txt";
 	trap.specific_analytical_xy(particle2, times, x2, y2);
 
-	std::ofstream outfile3("specific_analytical_xy_particle2.txt");
-	outfile3 << std::scientific << std::setprecision(10);
+	write_to_file(filename_xy_interactions, x2, y2);
 
-
-	for(int i = 0; i < times.size(); i++)
-	{
-		outfile3 << x2[i] << " " << y2[i] << "\n";
-	}
-
-	outfile3.close();
+    return 0;
 }
 
 /*
