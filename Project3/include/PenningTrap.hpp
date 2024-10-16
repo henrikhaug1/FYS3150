@@ -3,8 +3,8 @@
 
 #include "Particle.hpp"
 
-const long double T = 9.64852558e1; // u / ((𝝁s)^2 * e)
-const long double V = 2.41e6; // (u (𝝁m)^2) / ((𝝁s)^2 * e)
+const long double T = 96.4852558; // u / ((𝝁s) * e)
+const long double V = 9.64852558e7; // (u * (𝝁m)^2) / ((𝝁s)^2 * e)
 
 class PenningTrap
 {
@@ -18,7 +18,7 @@ class PenningTrap
 
 
 	// Constructor
-	PenningTrap(double B0_in=T, double V0_in=V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
+	PenningTrap(double B0_in=T, double V0_in=0.25*V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
@@ -50,6 +50,7 @@ class PenningTrap
 	arma::vec specific_analytical_z(Particle particle, arma::vec time);
 
 	void specific_analytical_xy(Particle particle, arma::vec time, arma::vec& x, arma::vec& y);
+
 
 };
 
