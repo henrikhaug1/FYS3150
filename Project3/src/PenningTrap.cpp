@@ -53,7 +53,6 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 arma::vec PenningTrap::external_B_field(arma::vec r)
 {
 	arma::vec B = arma::vec({0, 0, B0});
-
 	if(arma::norm(r) > d)
 	{
 		B = arma::vec(3, arma::fill::zeros);
@@ -188,12 +187,12 @@ void PenningTrap::evolve_RK4(double dt)
 
 arma::vec PenningTrap::specific_analytical_z(Particle particle, arma::vec time)
 {
-	arma::vec z_t = arma::vec(time.size());
+	arma::vec z_t = arma::vec(time.n_elem);
 
 	double z0 = particle.return_position()(2);
 	double omega_z = sqrt((2 * particle.return_charge() * V0) / particle.return_mass() * d * d);
 
-	for(int t = 0; t < time.size(); t++)
+	for(int t = 0; t < time.n_elem; t++)
 	{
 		z_t[t] = z0 * cos(omega_z * time(t));
 	}
@@ -203,102 +202,57 @@ arma::vec PenningTrap::specific_analytical_z(Particle particle, arma::vec time)
 
 void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma::vec& x, arma::vec& y)
 {
-	arma::vec f_t = arma::vec(time.size());
-
-	double x0 = particle.return_position()(0);
-	double v0 = particle.return_velocity()(1);
-
-	std::cout << x0 << " " << v0 << "\n";
-
-	double phi_p = 0;
-	double phi_m = 0;
-
-	double omega_0 = (particle.return_charge() * B0) / particle.return_mass();
-	double omega_z_2 = (2 * particle.return_charge() * V0) / (particle.return_mass() * d * d);
-
-    double omega_p = (omega_0 + sqrt(omega_0 * omega_0 - 2. * omega_z_2)) / 2.;
-	double omega_m = (omega_0 - sqrt(omega_0 * omega_0 - 2. * omega_z_2)) / 2.;
-
-	double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-	double A_m = - ((v0 + omega_p * x0) / (omega_m - omega_p));
-
-	std::cout << "omega_0 " << omega_0 << "\n";
-	std::cout << "omega_z_2 " << omega_z_2 << "\n";
-	std::cout << "omega_p " << omega_p << "\n";
-	std::cout << "omega_m " << omega_m << "\n";
-	std::cout << "A_p " << A_p << "\n";
-	std::cout << "A_m " << A_m << "\n";
-
-	for(int t = 0; t < time.size(); t++)
-    {
-    	x[t] = A_p*cos(omega_p*time(t)) + A_m*cos(omega_m*time(t));
-    	y[t] = -A_p*sin(omega_p*time(t)) - A_m*sin(omega_m*time(t));
-    }
-
-}
-
-
-
-/*
-arma::vec PenningTrap::specific_analytical_xy(Particle particle, arma::vec time)
-{
-    arma::vec f_t = arma::vec(time.size());
-
-    // Complex number representation of i
-    std::complex<double> i(0.0, 1.0);
+    arma::vec f_t = arma::vec(time.n_elem);
 
     double x0 = particle.return_position()(0);
     double v0 = particle.return_velocity()(1);
 
-    double psi_p = 0;
-    double psi_m = 0;
+    std::cout << x0 << " " << v0 << "\n";
 
-    // Parameters for the calculation
-    double omega_0 = (particle.return_charge() * B0) / particle.return_mass();
-    double omega_z = std::sqrt((2 * particle.return_charge() * V0) / (particle.return_mass() * d * d));
+    std::complex<double> I(0.0, 1.0);  // Imaginary unit
 
-    // Declare omega_p and omega_m as complex from the start
-    std::complex<double> omega_p;
-    std::complex<double> omega_m;
+    double charge = particle.return_charge();
+    double mass = particle.return_mass();
 
-    // No need to manually check for negative values in sqrt; let std::sqrt handle it
-    std::complex<double> sqrt_exp = std::sqrt(std::complex<double>(omega_0 * omega_0 - 2 * omega_z * omega_z, 0));
+    double omega_0 = (charge * B0) / mass;
+    std::cout << "charge: " << charge << "\n"
+              << "B0: " << B0 << "\n"
+              << "mass:" << mass << std::endl;
 
-    // Compute omega_p and omega_m as complex numbers
-    omega_p = (omega_0 + sqrt_exp) / 2.0;
-    omega_m = (omega_0 - sqrt_exp) / 2.0;
+    // Omega_z squared (could be negative inside sqrt, hence handled with complex)
+    double omega_z_2 = (2 * charge * V0) / (mass * d * d);
 
-    // Calculate A_p and A_m as complex
+    // Calculate omega_p and omega_m as complex numbers to avoid negative square root
+    std::complex<double> omega_p = (omega_0 + std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+    std::complex<double> omega_m = (omega_0 - std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+
+    // Set the phases to zero (or adjust based on need)
+    double phi_p = 0.0;
+    double phi_m = 0.0;
+
+    // Calculate coefficients A_p and A_m
     std::complex<double> A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-    std::complex<double> A_m = -A_p;
+    std::complex<double> A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
 
-    // Debugging output
     std::cout << "omega_0: " << omega_0 << "\n";
-    std::cout << "omega_z: " << omega_z << "\n";
+    std::cout << "omega_z_2: " << omega_z_2 << "\n";
     std::cout << "omega_p: " << omega_p << "\n";
     std::cout << "omega_m: " << omega_m << "\n";
     std::cout << "A_p: " << A_p << "\n";
     std::cout << "A_m: " << A_m << "\n";
 
-    // Loop through each time point and compute the real part of the complex equation
-    for (int t = 0; t < time.size(); t++)
+    // Loop over time and calculate the real part in x[t] and imaginary part in y[t]
+    for (int t = 0; t < time.n_elem; t++)
     {
-        // Compute the complex exponential for each time step
-        std::complex<double> f_complex = A_p * std::exp(-i * (omega_p * time(t) + psi_p)) +
-                                         A_m * std::exp(-i * (omega_m * time(t) + psi_m));
+        // Compute the complex f(t) based on the given formula
+        std::complex<double> f_t = A_p * std::exp(-I * (omega_p * time(t) + phi_p)) +
+                                   A_m * std::exp(-I * (omega_m * time(t) + phi_m));
 
-        // Store the real part of the complex result in f_t
-        f_t[t] = std::real(f_complex);
+        // Extract the real and imaginary parts
+        x[t] = std::real(f_t);  // Real part goes to x
+        y[t] = std::imag(f_t);  // Imaginary part goes to y
     }
-
-    return f_t;  // Return real part of the result
 }
-*/
-
-
-
-
-
 
 
 
