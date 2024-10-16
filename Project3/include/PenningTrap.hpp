@@ -13,10 +13,12 @@ class PenningTrap
 		double V0;
 		double d;
 		std::vector<Particle> particle_collection;
+		bool particle_interactions;
+		bool time_dependent_v0;
 
 
 	// Constructor
-	PenningTrap(double B0_in=T, double V0_in=V, double d_in=500, bool particle_interactions_in = FALSE, bool time_dependent_v0_in = FALSE);
+	PenningTrap(double B0_in=T, double V0_in=V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);

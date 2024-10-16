@@ -23,9 +23,10 @@ int main()
 	trap.add_particle(particle1);
 	trap.add_particle(particle2);
 
-	PenningTrap trap_interactions = PenningTrap(particle_interactions_in=TRUE)
-	trap_interactions.add_particle(particle1)
-	trap_interactions.add_particle(particle2)
+	bool particle_interactions_in;
+	PenningTrap trap_interactions = PenningTrap(particle_interactions_in=true);
+	trap_interactions.add_particle(particle1);
+	trap_interactions.add_particle(particle2);
 
 	// ---------- Particle 1 - Z ---------
 	double time = 0.0;

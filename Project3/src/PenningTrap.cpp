@@ -16,8 +16,8 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool particle_
 	B0 = B0_in;
 	V0 = V0_in;
 	d = d_in;
-	particle_interactions = particle_interactions_in
-	time_dependent_v0 = time_dependent_v0_in
+	particle_interactions = particle_interactions_in;
+	time_dependent_v0 = time_dependent_v0_in;
 }
 
 
@@ -114,8 +114,6 @@ arma::vec PenningTrap::total_force(int i)
 	{
 		return total_force_external(i);
 	}
-
-	return total_force;
 }
 
 
