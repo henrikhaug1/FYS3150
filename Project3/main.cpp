@@ -80,7 +80,7 @@ int main()
     std::string filename_z = "specific_analytical_z.txt";
     write_to_file(filename_z, times, z_positions);
 
-    // --------------- WITHOUT PARTICLE INTERACTION ---------------
+    // --------------- WITHOUT PARTICLE INTERACTION (x, y)-plane ---------------
 
 	// ---------- Particle 1 - XY ---------
 	arma::vec x1 = arma::vec(times.n_elem);
@@ -95,11 +95,10 @@ int main()
 	arma::vec y2 = arma::vec(times.n_elem);
 	std::string filename_xy2 = "specific_analytical_xy_particle2.txt";
 	trap.specific_analytical_xy(particle2, times, x2, y2);
-
 	write_to_file(filename_xy2, x2, y2);
 
 
-	// --------------- WITH INTERACTION ---------------
+	// --------------- WITH INTERACTION (x, y)-plane ---------------
 
 	// ---------- Particle 1 - XY ---------
 	arma::vec x1_interaction = arma::vec(times.n_elem);
@@ -115,10 +114,25 @@ int main()
 	arma::vec y2_interaction = arma::vec(times.n_elem);
 	std::string filename_xy2_interactions = "specific_analytical_xy_particle2_interactions.txt";
 	trap.specific_analytical_xy(particle2, times, x2_interaction, y2_interaction);
-
 	write_to_file(filename_xy2_interactions, x2_interaction, y2_interaction);
 
+    
+    // --------------- WITHOUT PARTICLE INTERACTION (x, v_x)-plane ---------------
 
+    // ---------- Particle 1 ---------
+    arma::vec x1 = arma::vec(times.n_elem);
+    arma::vec v_x1 = arma::vec(times.n_elem);
+    std::string filename_xy1 = "specific_analytical_xy_particle1.txt";
+    trap.specific_analytical_xy(particle1, times, x1, v_x1);
+    write_to_file(filename_xy1, x1, y1);
+
+
+    // ---------- Particle 2 - XY ---------
+    arma::vec x2 = arma::vec(times.n_elem);
+    arma::vec v_x2 = arma::vec(times.n_elem);
+    std::string filename_xy2 = "specific_analytical_xy_particle2.txt";
+    trap.specific_analytical_xy(particle2, times, x2, v_x2);
+    write_to_file(filename_xy2, x2, y2);
 
     return 0;
 }

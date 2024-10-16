@@ -254,6 +254,16 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     }
 }
 
+void PenningTrap::trajectories(Particle particle, arma::vec time, arma::vec& vec1, arma::vec& vec2)
+{
+
+	for(int t = 0; t < time.n_elem; t++)
+	{
+		vec1[t] = particle.return_position()(0);
+		vec2[t] = particle.return_position()(0);
+	}
+
+}
 
 
 
