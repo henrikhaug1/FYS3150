@@ -215,6 +215,7 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     double mass = particle.return_mass();
 
     double omega_0 = (charge * B0) / mass;
+
     std::cout << "charge: " << charge << "\n"
               << "B0: " << B0 << "\n"
               << "mass:" << mass << std::endl;
@@ -223,14 +224,21 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     double omega_z_2 = (2 * charge * V0) / (mass * d * d);
 
     // Calculate omega_p and omega_m as complex numbers to avoid negative square root
-    std::complex<double> omega_p = (omega_0 + std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
-    std::complex<double> omega_m = (omega_0 - std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+    //std::complex<double> omega_p = (omega_0 + std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+    //std::complex<double> omega_m = (omega_0 - std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+
+
+    double omega_p = (omega_0 + std::sqrt(omega_0 * omega_0 - 2.0 * omega_z_2)) / 2.0;
+    double omega_m = (omega_0 - std::sqrt(omega_0 * omega_0 - 2.0 * omega_z_2)) / 2.0;
 
     double phi_p = 0.0;
     double phi_m = 0.0;
 
-    std::complex<double> A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-    std::complex<double> A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
+    //std::complex<double> A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
+    //std::complex<double> A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
+
+    double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
+    double A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
 
     std::cout << "omega_0: " << omega_0 << "\n";
     std::cout << "omega_z_2: " << omega_z_2 << "\n";
@@ -250,24 +258,10 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
         y[t] = std::imag(f_t);  // Imaginary part goes to y
     }
 }
-<<<<<<< HEAD
-
-=======
-/*
-void PenningTrap::trajectories(Particle particle, arma::vec time, arma::vec& vec1, arma::vec& vec2)
-{
-
-	for(int t = 0; t < time.n_elem; t++)
-	{
-		vec1[t] = particle.return_position()(0);
-		vec2[t] = particle.return_position()(0);
-	}
-
-}
->>>>>>> 33fb3f9 (small changes dont know what)
 
 
-*/
+
+
 
 
 
