@@ -1,40 +1,60 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# ---------- Plotting z-position ----------
-time_z, z_pos = np.loadtxt("specific_analytical_z.txt", unpack=True, skiprows=1)
 
-# Create a figure for the z-position plot
-plt.figure(figsize=(10, 6))
-plt.plot(time_z, z_pos, label="z - position over 50 microseconds", color="magenta")
-plt.title("Movement of a Single Particle in Penning Trap")
-plt.xlabel("Time (microseconds)")
-plt.ylabel("z(t)")
-plt.grid(True)
-plt.tight_layout()
-plt.legend()
-plt.show()
-
-# ---------- Plotting x vs y in subplots ----------
+# ---------- Plotting specific analytical solution ----------
 x1, y1 = np.loadtxt("specific_analytical_xy_particle1.txt", unpack=True, skiprows=1)
-x2, y2 = np.loadtxt("specific_analytical_xy_particle1_interactions.txt", unpack=True, skiprows=1)
 
 fig, axs = plt.subplots(2, 1, figsize=(10, 12))
 
-
-axs[0].plot(x1, y1, label="x vs y without interaction", color="blue")
-axs[0].set_title("Trajectory of Particle 1 in x-y Plane (No Interaction)")
+axs[0].plot(x1, y1, label="Particle trajectory", color="blue")
+axs[0].set_title("Specific analytical solution of particle 1 in xy-plane")
 axs[0].set_xlabel("x Position")
 axs[0].set_ylabel("y Position")
 axs[0].grid(True)
 axs[0].legend()
 
-axs[1].plot(x2, y2, label="x vs y with interaction", color="pink")
-axs[1].set_title("Trajectory of Particle 1 in x-y Plane (With Interaction)")
-axs[1].set_xlabel("x Position")
-axs[1].set_ylabel("y Position")
+time_z, z_pos = np.loadtxt("specific_analytical_z.txt", unpack=True, skiprows=1)
+
+# Create a figure for the z-position plot
+axs[1].plot(time_z, z_pos, label="z - position over 50 microseconds", color="magenta")
+axs[1].set_title("Specific analytical solution of particle 1 in z-direction")
+axs[1].set_xlabel("Time (microseconds)")
+axs[1].set_ylabel("z(t)")
 axs[1].grid(True)
 axs[1].legend()
 
 plt.tight_layout()
+plt.savefig('Specific_particle1.png')
 plt.show()
+
+x2, y2 = np.loadtxt("specific_analytical_xy_particle2.txt", unpack=True, skiprows=1)
+
+fig, axs = plt.subplots(2, 1, figsize=(10, 12))
+
+axs[0].plot(x2, y2, label="Particle trajectory", color="blue")
+axs[0].set_title("Specific analytical solution of particle 2 in xy-plane")
+axs[0].set_xlabel("x Position")
+axs[0].set_ylabel("y Position")
+axs[0].grid(True)
+axs[0].legend()
+
+time_z_2, z_pos_2 = np.loadtxt("specific_analytical_z.txt", unpack=True, skiprows=1)
+
+# Create a figure for the z-position plot
+axs[1].plot(time_z_2, z_pos_2, label="z - position over 50 microseconds", color="magenta")
+axs[1].set_title("Specific analytical solution of particle 2 in z-direction")
+axs[1].set_xlabel("Time (microseconds)")
+axs[1].set_ylabel("z(t)")
+axs[1].grid(True)
+axs[1].legend()
+
+plt.tight_layout()
+plt.savefig('Specific_particle2.png')
+plt.show()
+
+# ---------- Plotting RK4 ----------
+
+# ---------- Plotting FWD Euler ----------
+
+# ---------- Plotting relative error ----------

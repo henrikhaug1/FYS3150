@@ -26,6 +26,18 @@ void write_to_file(std::string filename, arma::vec vec_x_axis, arma::vec vec_y_a
     ofile.close();
 }
 
+arma::vec RK4(n, dt){ //Code to evolve RK4 in time using n steps and dt timesteps
+    arma::vec pos_RK4(n, arma::fill::none);
+    arma::vec vel_RK4(n, arma::fill::none);
+    for (int i = 0; i < n; i++) {   //Loop over the chosen n
+        trap.evolve_RK4(dt);        //Evolve the system in time
+        pos_RK4(i) = trap.return_position;  //Save the positions and velocities
+        vel_RK4(i) = trap.return_velocity;
+    data = (pos_RK4, vel_RK4);
+    return data;
+    }
+}
+
 int main()
 {
     // Define particle 1 and particle 2
@@ -33,46 +45,76 @@ int main()
     arma::vec velocity1 = {0, 25, 0};
     Particle particle1 = Particle(1.0, 40.078, position1, velocity1);
 
-    std::cout << "charge: " << particle1.return_charge() << std::endl;
-    std::cout << "mass: " << particle1.return_mass() << std::endl;
-    std::cout << "velocity: " << particle1.return_velocity() << std::endl;
-    std::cout << "position: " << particle1.return_position() << std::endl;
+    // std::cout << "charge: " << particle1.return_charge() << std::endl;
+    // std::cout << "mass: " << particle1.return_mass() << std::endl;
+    // std::cout << "velocity: " << particle1.return_velocity() << std::endl;
+    // std::cout << "position: " << particle1.return_position() << std::endl;
 
     arma::vec position2 = {25, 25, 0};
     arma::vec velocity2 = {0, 40, 5};
     Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
 
+    // std::cout << "Total force particle 1: " << trap.total_force(0) << std::endl;
+    // std::cout << "Total force particle 2: " << trap.total_force(1) << std::endl;
 
-    PenningTrap trap;
+    // std::cout << "Total force particle 1 (interactions): " << trap_with_interactions.total_force(0) << std::endl;
+    // std::cout << "Total force particle 2 (interactions): " << trap_with_interactions.total_force(1) << std::endl;
+
+    // ---------------  SPECIFIC ANALYTICAL SOLUTION ---------------
+    PenningTrap trap;                //Adding the chosen particle(s) without interactions
     trap.add_particle(particle1);
-    trap.add_particle(particle2);
+    // trap.add_particle(particle2);
 
-    std::cout << "Total force particle 1: " << trap.total_force(0) << std::endl;
-    std::cout << "Total force particle 2: " << trap.total_force(1) << std::endl;
+    // PenningTrap trap;
+    // trap_with_interactions.add_particle(particle1); //Adding the chosen particle(s) with interactions
+    // trap_with_interactions.add_particle(particle2);
 
+	int n1 = 4000; //n values from task 8
+    int n2 = 8000;
+    int n3 = 16000;
+    int n4 = 32000;
 
-    bool particle_interactions_in;
-    PenningTrap trap_with_interactions(T, 0.25*V, 500, true, false);
-    trap_with_interactions.add_particle(particle1);
-    trap_with_interactions.add_particle(particle2);
+    double dt1 = 50 / n1; //Calculate step size to keep total time 50 microseconds
+    double dt2 = 50 / n2;
+    double dt3 = 50 / n3;
+    double dt4 = 50 / n4;
 
-    std::cout << "Total force particle 1 (interactions): " << trap_with_interactions.total_force(0) << std::endl;
-    std::cout << "Total force particle 2 (interactions): " << trap_with_interactions.total_force(1) << std::endl;
-
-
-
-    // Initialize time-related variables
-    double time = 0.0;
-    double dt = 1e-6;
-    arma::vec z_positions(51);
-    arma::vec times(51);
-
+    
+    arma::vec z_positions_1(n1); // Initialize time-related variables
+    arma::vec times_1(n1);
     // Fill time values
-    for (int i = 0; i < 51; i++) {
-        times[i] = time;
-        time += dt;
+    double time = 0.0; 
+    for (int i = 0; i < n1; i++) {
+        times_1[i] = time;
+        time += dt1;
     }
 
+    arma::vec z_positions_2(n2);
+    arma::vec times_2(n2);
+    double time = 0.0; 
+    for (int i = 0; i < n2; i++) {
+        times_2[i] = time;
+        time += dt1;
+    }
+
+    arma::vec z_positions_1(n3);
+    arma::vec times_3(n3);
+    double time = 0.0; 
+    for (int i = 0; i < n3; i++) {
+        times_3[i] = time;
+        time += dt3;
+    }
+
+    arma::vec z_positions_1(n4);
+    arma::vec times_4(n4);
+    double time = 0.0; 
+    for (int i = 0; i < n4; i++) {
+        times_4[i] = time;
+        time += dt4;
+    }
+
+    // ---------------  SPECIFIC ANALYTICAL SOLUTION z-plane ---------------
+    
     // Calculate specific analytical z-positions
     z_positions = trap.specific_analytical_z(particle1, times);
 
@@ -80,60 +122,41 @@ int main()
     std::string filename_z = "specific_analytical_z.txt";
     write_to_file(filename_z, times, z_positions);
 
-    // --------------- WITHOUT PARTICLE INTERACTION (x, y)-plane ---------------
+    // --------------- SPECIFIC ANALYTICAL SOLUTION (x, y)-plane ---------------
 
 	// ---------- Particle 1 - XY ---------
-	arma::vec x1 = arma::vec(times.n_elem);
-	arma::vec y1 = arma::vec(times.n_elem);
+	arma::vec x1_analytical = arma::vec(times.n_elem);
+	arma::vec y1_analytical = arma::vec(times.n_elem);
 	std::string filename_xy1 = "specific_analytical_xy_particle1.txt";
-	trap.specific_analytical_xy(particle1, times, x1, y1);
-	write_to_file(filename_xy1, x1, y1);
+	trap.specific_analytical_xy(particle1, times, x1_analytical, y1_analytical);
+	write_to_file(filename_xy1, x1_analytical, y1_analytical);
 
 
 	// ---------- Particle 2 - XY ---------
-	arma::vec x2 = arma::vec(times.n_elem);
-	arma::vec y2 = arma::vec(times.n_elem);
+	arma::vec x2_analytical = arma::vec(times.n_elem);
+	arma::vec y2_analytical = arma::vec(times.n_elem);
 	std::string filename_xy2 = "specific_analytical_xy_particle2.txt";
-	trap.specific_analytical_xy(particle2, times, x2, y2);
-	write_to_file(filename_xy2, x2, y2);
+	trap.specific_analytical_xy(particle2, times, x2_analytical, y2_analytical);
+	write_to_file(filename_xy2, x2_analytical, y2_analytical);
+
+    // --------------- SIMULATING MOVEMENTS OF THE PARTICLES ---------------
 
 
-	// --------------- WITH INTERACTION (x, y)-plane ---------------
+	// ---------------RK4 ---------------
 
-	// ---------- Particle 1 - XY ---------
-	arma::vec x1_interaction = arma::vec(times.n_elem);
-	arma::vec y1_interaction = arma::vec(times.n_elem);
-	std::string filename_xy1_interactions = "specific_analytical_xy_particle1_interactions.txt";
-	trap_with_interactions.specific_analytical_xy(particle1, times, x1_interaction, y1_interaction);
-	write_to_file(filename_xy1_interactions, x1_interaction, y1_interaction);
+    RK4_data1 = RK4(n1, dt1);
+    // RK4_data2 = RK4(n2, dt2);
+    // RK4_data3 = RK4(n3, dt3);
+    // RK4_data4 = RK4(n4, dt4);
 
+	std::string filename_RK4 = "RK4_xy_particle1.txt";  //Save the positions and velocities to file
+	write_to_file(filename_RK4, pos_RK4, vel_RK4);
 
-	
-	// ---------- Particle 2 - XY ---------
-	arma::vec x2_interaction = arma::vec(times.n_elem);
-	arma::vec y2_interaction = arma::vec(times.n_elem);
-	std::string filename_xy2_interactions = "specific_analytical_xy_particle2_interactions.txt";
-	trap.specific_analytical_xy(particle2, times, x2_interaction, y2_interaction);
-	write_to_file(filename_xy2_interactions, x2_interaction, y2_interaction);
+	// --------------- FWD EULER ---------------
 
-    /*
-    // --------------- WITHOUT PARTICLE INTERACTION (x, v_x)-plane ---------------
-
-    // ---------- Particle 1 ---------
-    arma::vec x1 = arma::vec(times.n_elem);
-    arma::vec v_x1 = arma::vec(times.n_elem);
-    std::string filename_xy1 = "specific_analytical_xy_particle1.txt";
-    trap.specific_analytical_xy(particle1, times, x1, v_x1);
-    write_to_file(filename_xy1, x1, y1);
+	// --------------- RELATIVE ERROR ---------------
 
 
-    // ---------- Particle 2 - XY ---------
-    arma::vec x2 = arma::vec(times.n_elem);
-    arma::vec v_x2 = arma::vec(times.n_elem);
-    std::string filename_xy2 = "specific_analytical_xy_particle2.txt";
-    trap.specific_analytical_xy(particle2, times, x2, v_x2);
-    write_to_file(filename_xy2, x2, y2);
-    */
     return 0;
 }
 
