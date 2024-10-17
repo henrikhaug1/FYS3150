@@ -116,7 +116,7 @@ int main()
 	trap.specific_analytical_xy(particle2, times, x2_interaction, y2_interaction);
 	write_to_file(filename_xy2_interactions, x2_interaction, y2_interaction);
 
-    
+    /*
     // --------------- WITHOUT PARTICLE INTERACTION (x, v_x)-plane ---------------
 
     // ---------- Particle 1 ---------
@@ -133,7 +133,7 @@ int main()
     std::string filename_xy2 = "specific_analytical_xy_particle2.txt";
     trap.specific_analytical_xy(particle2, times, x2, v_x2);
     write_to_file(filename_xy2, x2, y2);
-
+    */
     return 0;
 }
 
