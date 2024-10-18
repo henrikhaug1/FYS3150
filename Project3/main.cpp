@@ -255,20 +255,27 @@ int main(){
 
 
     // ---------- Error ----------
-  for (int steps : {4000, 8000, 16000, 32000})
+for (int steps : {4000, 8000, 16000, 32000})
 {
     double dt = 50.0 / steps;  
-    arma::vec time = linspace(0.0, 50.0, dt);
+    arma::vec time = arma::linspace(0.0, 50.0, steps);  // Updated time vector with correct size
 
     // Re-run RK4 and FE with new dt for current step size
-    PenningTrap trap_RK4_error, trap_FE_error;
+    PenningTrap trap_RK4_error, trap_FE_error, trap_analytical_error;
     trap_RK4_error.add_particle(particle1);
     trap_FE_error.add_particle(particle1);
+    trap_analytical_error.add_particle(particle1);
 
-    arma::vec x_RK4 = arma::vec(time.n_elem);
-    arma::vec x_FE = arma::vec(time.n_elem);
-    arma::vec relative_error_RK4 = arma::vec(time.n_elem);
-    arma::vec relative_error_FE = arma::vec(time.n_elem);
+    arma::vec x_RK4(time.n_elem);
+    arma::vec x_FE(time.n_elem);
+    arma::vec x_analytical(time.n_elem);
+    arma::vec y_analytical(time.n_elem);  // For future use if needed
+    arma::vec z_analytical(time.n_elem);  // For future use if needed
+    arma::vec relative_error_RK4(time.n_elem);
+    arma::vec relative_error_FE(time.n_elem);
+
+    // Calculate the analytical solution
+    trap_analytical_error.specific_analytical_solution(particle1, time, x_analytical, y_analytical, z_analytical);
 
     // RK4 simulation
     for (int i = 0; i < time.n_elem; i++) {
@@ -297,6 +304,6 @@ int main(){
     write_error_to_file(filename_error_FE, relative_error_FE, time);
 }
 
+return 0;
 
-    return 0;
 }
