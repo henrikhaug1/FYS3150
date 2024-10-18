@@ -27,6 +27,18 @@ void PenningTrap::add_particle(Particle p_in)
 	particle_collection.push_back(p_in);
 }
 
+//Add a random particle to trap:
+void PenningTrap::add_random_particle(int n, int charge, double mass)
+{
+	arma_rng::set_seed_random();
+	for (int i = 0; i < n; i++){
+	    vec r = vec(3).randn()*0.1*d;
+	    vec v = vec(3).randn()*0.1*d;
+	    particle_collection.push_back(Particle(charge, mass, r, v));
+	}
+}
+
+//count amount of particles within radius d
 int PenningTrap::count_particles()
 {
 	count = 0
