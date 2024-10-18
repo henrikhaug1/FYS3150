@@ -4,20 +4,29 @@ import matplotlib.pyplot as plt
 
 # ---------- Reading variables ----------
 time_analytical, x_analytical, y_analytical, z_analytical = np.loadtxt("xyz_analytical.txt", unpack=True, skiprows=1)
+time_RK4, x_RK4, y_RK4, z_RK4 = np.loadtxt("xyz_RK4.txt", unpack=True, skiprows=1)
+time_FE, x_FE, y_FE, z_FE = np.loadtxt("xyz_FE.txt", unpack=True, skiprows=1)
 
 
 
 
 
+# ---------- Plotting - z(t) ----------
 
+plt.plot(time_analytical, z_analytical, label="analytical", color="red")
+plt.plot(time_RK4, z_RK4, label="RK4", color="blue")
+plt.plot(time_FE, z_FE, label="FE", color="green")
+plt.legend()
+plt.tight_layout()
+plt.grid(True)
+plt.show()
 
-
-
-
-
-# ---------- Plotting - Specific analytical solution z(t) ----------
-
-plt.plot(x_analytical, y_analytical)
+plt.plot(x_analytical, y_analytical, label="analytical", color="red")
+plt.plot(x_RK4, y_RK4, label="RK4", color="blue")
+plt.plot(x_FE, y_FE, label="FE", color="green")
+plt.legend()
+plt.tight_layout()
+plt.grid(True)
 plt.show()
 
 """

@@ -14,4 +14,6 @@ run_all: all
 clean:
 	rm -f main
 	rm -f xyz_analytical.txt
+	rm -f xyz_RK4.txt
+	rm -f xyz_FE.txt
 
