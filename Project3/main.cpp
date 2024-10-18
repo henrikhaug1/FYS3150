@@ -104,6 +104,14 @@ int main(){
     arma::vec y_RK4_2 = arma::vec(time.n_elem);
     arma::vec z_RK4_2 = arma::vec(time.n_elem);
 
+    arma::vec x_RK4_1_velocity = arma::vec(time.n_elem);
+    arma::vec y_RK4_1_velocity = arma::vec(time.n_elem);
+    arma::vec z_RK4_1_velocity = arma::vec(time.n_elem);
+
+    arma::vec x_RK4_2_velocity = arma::vec(time.n_elem);
+    arma::vec y_RK4_2_velocity = arma::vec(time.n_elem);
+    arma::vec z_RK4_2_velocity = arma::vec(time.n_elem);
+
     for(int i = 0; i < time.n_elem; i++)
     {
         trap_RK4.evolve_RK4(dt);
@@ -114,13 +122,32 @@ int main(){
         x_RK4_2(i) = trap_RK4.particle_collection[1].return_position()(0);
         y_RK4_2(i) = trap_RK4.particle_collection[1].return_position()(1);
         z_RK4_2(i) = trap_RK4.particle_collection[1].return_position()(2);
+
+        x_RK4_1_velocity(i) = trap_RK4.particle_collection[0].return_velocity()(0);
+        y_RK4_1_velocity(i) = trap_RK4.particle_collection[0].return_velocity()(1);
+        z_RK4_1_velocity(i) = trap_RK4.particle_collection[0].return_velocity()(2);
+
+        x_RK4_2_velocity(i) = trap_RK4.particle_collection[1].return_velocity()(0);
+        y_RK4_2_velocity(i) = trap_RK4.particle_collection[1].return_velocity()(1);
+        z_RK4_2_velocity(i) = trap_RK4.particle_collection[1].return_velocity()(2);
+
+
+
     }
 
     std::string filenameRK4_1 = "xyz_RK4_1.txt";
     write_xyz_to_file(filenameRK4_1, x_RK4_1, y_RK4_1, z_RK4_1, time);
 
+    std::string filenameRK4_1_velocity = "xyz_RK4_1_velocity.txt";
+    write_xyz_to_file(filenameRK4_1_velocity, x_RK4_1_velocity, y_RK4_1_velocity, z_RK4_1_velocity, time);
+
     std::string filenameRK4_2 = "xyz_RK4_2.txt";
     write_xyz_to_file(filenameRK4_2, x_RK4_2, y_RK4_2, z_RK4_2, time);
+
+    std::string filenameRK4_2_velocity = "xyz_RK4_2_velocity.txt";
+    write_xyz_to_file(filenameRK4_2_velocity, x_RK4_2_velocity, y_RK4_2_velocity, z_RK4_2_velocity, time);
+
+
 
     
 
@@ -138,6 +165,14 @@ int main(){
     arma::vec y_RK4_interactions_2 = arma::vec(time.n_elem);
     arma::vec z_RK4_interactions_2 = arma::vec(time.n_elem);
 
+    arma::vec x_RK4_interactions_1_velocity = arma::vec(time.n_elem);
+    arma::vec y_RK4_interactions_1_velocity = arma::vec(time.n_elem);
+    arma::vec z_RK4_interactions_1_velocity = arma::vec(time.n_elem);
+
+    arma::vec x_RK4_interactions_2_velocity = arma::vec(time.n_elem);
+    arma::vec y_RK4_interactions_2_velocity = arma::vec(time.n_elem);
+    arma::vec z_RK4_interactions_2_velocity = arma::vec(time.n_elem);
+
     for(int i = 0; i < time.n_elem; i++)
     {
         trap_RK4_interactions.evolve_RK4(dt);
@@ -148,13 +183,28 @@ int main(){
         x_RK4_interactions_2(i) = trap_RK4_interactions.particle_collection[1].return_position()(0);
         y_RK4_interactions_2(i) = trap_RK4_interactions.particle_collection[1].return_position()(1);
         z_RK4_interactions_2(i) = trap_RK4_interactions.particle_collection[1].return_position()(2);
+
+        x_RK4_interactions_1_velocity(i) = trap_RK4_interactions.particle_collection[0].return_velocity()(0);
+        y_RK4_interactions_1_velocity(i) = trap_RK4_interactions.particle_collection[0].return_velocity()(1);
+        z_RK4_interactions_1_velocity(i) = trap_RK4_interactions.particle_collection[0].return_velocity()(2);
+
+        x_RK4_interactions_2_velocity(i) = trap_RK4_interactions.particle_collection[1].return_velocity()(0);
+        y_RK4_interactions_2_velocity(i) = trap_RK4_interactions.particle_collection[1].return_velocity()(1);
+        z_RK4_interactions_2_velocity(i) = trap_RK4_interactions.particle_collection[1].return_velocity()(2);
     }
 
     std::string filenameRK4_interactions_1 = "xyz_RK4_interactions_1.txt";
     write_xyz_to_file(filenameRK4_interactions_1, x_RK4_interactions_1, y_RK4_interactions_1, z_RK4_interactions_1, time);
 
+    std::string filenameRK4_interactions_1_velocity = "xyz_RK4_interactions_1_velocity.txt";
+    write_xyz_to_file(filenameRK4_interactions_1_velocity, x_RK4_interactions_1_velocity, y_RK4_interactions_1_velocity, z_RK4_interactions_1_velocity, time);
+
+
     std::string filenameRK4_interactions_2 = "xyz_RK4_interactions_2.txt";
     write_xyz_to_file(filenameRK4_interactions_2, x_RK4_interactions_2, y_RK4_interactions_2, z_RK4_interactions_2, time);
+
+    std::string filenameRK4_interactions_2_velocity = "xyz_RK4_interactions_2_velocity.txt";
+    write_xyz_to_file(filenameRK4_interactions_2_velocity, x_RK4_interactions_2_velocity, y_RK4_interactions_2_velocity, z_RK4_interactions_2_velocity, time);
 
 
     // ---------------  FE ---------------
