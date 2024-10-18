@@ -18,7 +18,7 @@ class PenningTrap
 
 
 	// Constructor
-	PenningTrap(double B0_in=T, double V0_in=0.25*V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
+	PenningTrap(double B0_in=T, double V0_in=0.025*V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
@@ -47,9 +47,8 @@ class PenningTrap
 	// Evolve the system one time step (dt) using Runge-Kutta 4th order
 	void evolve_RK4(double dt);
 
-	arma::vec specific_analytical_z(Particle particle, arma::vec time);
-
-	void specific_analytical_xy(Particle particle, arma::vec time, arma::vec& x, arma::vec& y);
+	// Specific analytical solution for z(t) and motion in (x, y)-plane
+	void specific_analytical_solution(Particle particle, arma::vec time, arma::vec& x, arma::vec& y, arma::vec& z);
 
 
 };

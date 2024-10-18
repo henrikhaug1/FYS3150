@@ -6,16 +6,12 @@ IFLAG = -Iinclude
 all: main
 
 main: 
-	$(CC) main.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main
+	$(CC) main_ny.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main
 
 run_all: all
 	./main &
 
 clean:
 	rm -f main
-	rm -f specific_analytical_z.txt
-	rm -f specific_analytical_xy_particle1.txt
-	rm -f specific_analytical_xy_particle2.txt
-	rm -f specific_analytical_xy_particle1_interactions.txt
-	rm -f specific_analytical_xy_particle2_interactions.txt
+	rm -f xyz_analytical.txt
 

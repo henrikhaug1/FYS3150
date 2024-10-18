@@ -26,17 +26,16 @@ void write_to_file(std::string filename, arma::vec vec_x_axis, arma::vec vec_y_a
     ofile.close();
 }
 
-arma::vec RK4(n, dt){ //Code to evolve RK4 in time using n steps and dt timesteps
-    arma::vec pos_RK4(n, arma::fill::none);
-    arma::vec vel_RK4(n, arma::fill::none);
+
+void RK4(double n, double dt, PenningTrap trap, arma::vec& pos_RK4, arma::vec& vel_RK4)
+{
     for (int i = 0; i < n; i++) {   //Loop over the chosen n
         trap.evolve_RK4(dt);        //Evolve the system in time
-        pos_RK4(i) = trap.return_position;  //Save the positions and velocities
-        vel_RK4(i) = trap.return_velocity;
-    data = (pos_RK4, vel_RK4);
-    return data;
+        pos_RK4(i) = trap.particle_collection[0].return_position();  //Save the positions and velocities
+        vel_RK4(i) = trap.particle_collection[0].return_velocity();
     }
 }
+
 
 int main()
 {
@@ -63,7 +62,7 @@ int main()
     // ---------------  SPECIFIC ANALYTICAL SOLUTION ---------------
     PenningTrap trap;                //Adding the chosen particle(s) without interactions
     trap.add_particle(particle1);
-    // trap.add_particle(particle2);
+    trap.add_particle(particle2);
 
     // PenningTrap trap;
     // trap_with_interactions.add_particle(particle1); //Adding the chosen particle(s) with interactions
@@ -83,44 +82,46 @@ int main()
     arma::vec z_positions_1(n1); // Initialize time-related variables
     arma::vec times_1(n1);
     // Fill time values
-    double time = 0.0; 
+    double time1 = 0.0; 
     for (int i = 0; i < n1; i++) {
-        times_1[i] = time;
-        time += dt1;
+        times_1[i] = time1;
+        time1 += dt1;
     }
 
     arma::vec z_positions_2(n2);
     arma::vec times_2(n2);
-    double time = 0.0; 
+    double time2 = 0.0; 
     for (int i = 0; i < n2; i++) {
-        times_2[i] = time;
-        time += dt1;
+        times_2[i] = time2;
+        time2 += dt1;
     }
 
-    arma::vec z_positions_1(n3);
+    arma::vec z_positions_3(n3);
     arma::vec times_3(n3);
-    double time = 0.0; 
+    double time3 = 0.0; 
     for (int i = 0; i < n3; i++) {
-        times_3[i] = time;
-        time += dt3;
+        times_3[i] = time3;
+        time3 += dt3;
     }
 
-    arma::vec z_positions_1(n4);
+    arma::vec z_positions_4(n4);
     arma::vec times_4(n4);
-    double time = 0.0; 
+    double time4 = 0.0; 
     for (int i = 0; i < n4; i++) {
-        times_4[i] = time;
-        time += dt4;
+        times_4[i] = time4;
+        time4 += dt4;
     }
 
     // ---------------  SPECIFIC ANALYTICAL SOLUTION z-plane ---------------
     
     // Calculate specific analytical z-positions
+    /*
     z_positions = trap.specific_analytical_z(particle1, times);
 
     // Write to file
     std::string filename_z = "specific_analytical_z.txt";
     write_to_file(filename_z, times, z_positions);
+
 
     // --------------- SPECIFIC ANALYTICAL SOLUTION (x, y)-plane ---------------
 
@@ -141,10 +142,12 @@ int main()
 
     // --------------- SIMULATING MOVEMENTS OF THE PARTICLES ---------------
 
-
+*/
 	// ---------------RK4 ---------------
 
-    RK4_data1 = RK4(n1, dt1);
+    arma::vec pos_RK4 = arma::vec();
+    arma::vec vel_RK4 = arma::vec();
+    RK4(n1, dt1, trap, pos_RK4, vel_RK4);
     // RK4_data2 = RK4(n2, dt2);
     // RK4_data3 = RK4(n3, dt3);
     // RK4_data4 = RK4(n4, dt4);
