@@ -27,6 +27,19 @@ void PenningTrap::add_particle(Particle p_in)
 	particle_collection.push_back(p_in);
 }
 
+int PenningTrap::count_particles()
+{
+	count = 0
+	for(int i = 0; i < particle_collection.size(), i++)
+	{
+		if(norm(particle_collection[i].return_position() < d))
+		{
+			count +=1
+		}
+	}
+	return count;
+}
+
 // External electric field at point r=(x,y,z)
 arma::vec PenningTrap::external_E_field(arma::vec r)
 {
