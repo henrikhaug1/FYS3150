@@ -15,8 +15,12 @@ clean:
 	rm -f main
 	rm -f xyz_analytical.txt
 	rm -f xyz_RK4_1.txt
+	rm -f xyz_RK4_1_velocity.txt
 	rm -f xyz_RK4_2.txt
+	rm -f xyz_RK4_2_velocity.txt
 	rm -f xyz_RK4_interactions_1.txt
+	rm -f xyz_RK4_interactions_1_velocity.txt
 	rm -f xyz_RK4_interactions_2.txt
+	rm -f xyz_RK4_interactions_2_velocity.txt
 	rm -f xyz_FE.txt
 
