@@ -63,14 +63,19 @@ arma::vec PenningTrap::external_B_field(arma::vec r)
 // Force on particle_i from particle_j
 arma::vec PenningTrap::force_particle(int i, int j)
 {
-	arma::vec r_i = particle_collection[i].return_position();
-	arma::vec r_j = particle_collection[j].return_position();
-	double q_i = particle_collection[i].return_charge();
-	double q_j = particle_collection[j].return_charge();
-	
-	arma::vec force_ij = k_e * q_i*q_j / ( (r_i-r_j)%(r_i-r_j) ) % ( (r_i-r_j)/abs(r_i-r_j) );
-	return force_ij;
+    arma::vec r_i = particle_collection[i].return_position();
+    arma::vec r_j = particle_collection[j].return_position();
+    double q_i = particle_collection[i].return_charge();
+    double q_j = particle_collection[j].return_charge();
+
+    arma::vec r_diff = r_i - r_j;
+    double distance_squared = arma::dot(r_diff, r_diff);
+
+    if (distance_squared == 0) return arma::vec(3, arma::fill::zeros); // Prevent division by zero
+
+    return k_e * q_i * q_j * r_diff / distance_squared;
 }
+
 
 // The total force on particle_i from the external fields
 arma::vec PenningTrap::total_force_external(int i)
