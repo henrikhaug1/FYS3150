@@ -34,15 +34,18 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	double y = r(1);
 	double z = r(2);
 
+
 	arma::vec e_x = {2 * x, 0, 0};
 	arma::vec e_y = {0, 2 * y, 0};
-	arma::vec e_z = {0, 0, 4.0 * z};
-	
-	arma::vec E = ( V0 / (2.0*d*d) ) * (e_z - e_x - e_y);
+	arma::vec e_z = {0, 0, 2.0 * 2 * z};
+
+	arma::vec E =  - ( V0 / (2.0*d*d) ) * (e_z - e_x - e_y);
+
 	if(arma::norm(r) > d)
 	{
 		E = arma::vec(3, arma::fill::zeros);
 	}
+
 	return E;
 } 
 
@@ -111,6 +114,8 @@ arma::vec PenningTrap::total_force(int i)
 		return total_force_external(i);
 	}
 }
+
+
 
 
 // Evolve the system one time step (dt) using Forward Euler
@@ -197,8 +202,6 @@ arma::vec PenningTrap::specific_analytical_z(Particle particle, arma::vec time)
 
 void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma::vec& x, arma::vec& y)
 {
-    arma::vec f_t = arma::vec(time.n_elem);
-
     double x0 = particle.return_position()(0);
     double v0 = particle.return_velocity()(1);
 
@@ -210,6 +213,7 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     double mass = particle.return_mass();
 
     double omega_0 = (charge * B0) / mass;
+
     std::cout << "charge: " << charge << "\n"
               << "B0: " << B0 << "\n"
               << "mass:" << mass << std::endl;
@@ -218,14 +222,21 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     double omega_z_2 = (2 * charge * V0) / (mass * d * d);
 
     // Calculate omega_p and omega_m as complex numbers to avoid negative square root
-    std::complex<double> omega_p = (omega_0 + std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
-    std::complex<double> omega_m = (omega_0 - std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+    //std::complex<double> omega_p = (omega_0 + std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+    //std::complex<double> omega_m = (omega_0 - std::sqrt(std::complex<double>(omega_0 * omega_0 - 2.0 * omega_z_2))) / 2.0;
+
+
+    double omega_p = (omega_0 + std::sqrt(omega_0 * omega_0 - 2.0 * omega_z_2)) / 2.0;
+    double omega_m = (omega_0 - std::sqrt(omega_0 * omega_0 - 2.0 * omega_z_2)) / 2.0;
 
     double phi_p = 0.0;
     double phi_m = 0.0;
 
-	std::complex<double> A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
-    std::complex<double> A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
+    //std::complex<double> A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
+    //std::complex<double> A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
+
+    double A_p = (v0 + omega_m * x0) / (omega_m - omega_p);
+    double A_m = -(v0 + omega_p * x0) / (omega_m - omega_p);
 
     std::cout << "omega_0: " << omega_0 << "\n";
     std::cout << "omega_z_2: " << omega_z_2 << "\n";
@@ -237,7 +248,9 @@ void PenningTrap::specific_analytical_xy(Particle particle, arma::vec time, arma
     // Loop over time and calculate the real part in x[t] and imaginary part in y[t]
     for (int t = 0; t < time.n_elem; t++)
     {
-        std::complex<double> f_t = A_p * std::exp(-I * (omega_p * time(t) + phi_p)) + A_m * std::exp(-I * (omega_m * time(t) + phi_m));
+        std::complex<double> f_t = A_p * std::exp(-I * (omega_p * time(t) + phi_p)) +
+                                   A_m * std::exp(-I * (omega_m * time(t) + phi_m));
+
         // Extract the real and imaginary parts
         x[t] = std::real(f_t);  // Real part goes to x
         y[t] = std::imag(f_t);  // Imaginary part goes to y
