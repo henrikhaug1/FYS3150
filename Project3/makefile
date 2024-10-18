@@ -23,4 +23,12 @@ clean:
 	rm -f xyz_RK4_interactions_2.txt
 	rm -f xyz_RK4_interactions_2_velocity.txt
 	rm -f xyz_FE.txt
+	rm -f relative_error_FE_4000.txt
+	rm -f relative_error_FE_8000.txt
+	rm -f relative_error_FE_16000.txt
+	rm -f relative_error_FE_32000.txt
+	rm -f relative_error_RK4_4000.txt
+	rm -f relative_error_RK4_8000.txt
+	rm -f relative_error_RK4_16000.txt
+	rm -f relative_error_RK4_32000.txt
 
