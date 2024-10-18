@@ -19,7 +19,15 @@ time_RK4_interactions_2_velocity, x_RK4_interactions_2_velocity, y_RK4_interacti
 
 time_FE, x_FE, y_FE, z_FE = np.loadtxt("xyz_FE.txt", unpack=True, skiprows=1)
 
+time_4000, error_RK4_4000 = np.loadtxt('relative_error_RK4_4000.txt', unpack=True, skiprows=1)
+time_8000, error_RK4_8000 = np.loadtxt('relative_error_RK4_8000.txt', unpack=True, skiprows=1)
+time_16000, error_RK4_16000 = np.loadtxt('relative_error_RK4_16000.txt', unpack=True, skiprows=1)
+time_32000, error_RK4_32000 = np.loadtxt('relative_error_RK4_32000.txt', unpack=True, skiprows=1)
 
+time_4000, error_FE_4000 = np.loadtxt('relative_error_FE_4000.txt', unpack=True, skiprows=1)
+time_8000, error_FE_8000 = np.loadtxt('relative_error_FE_8000.txt', unpack=True, skiprows=1)
+time_16000, error_FE_16000 = np.loadtxt('relative_error_FE_16000.txt', unpack=True, skiprows=1)
+time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=True, skiprows=1)
 
 
 
@@ -107,3 +115,30 @@ ax.set_zlabel('Position (z)')
 ax.legend()
 plt.tight_layout()
 plt.show()
+
+
+plt.figure()
+plt.plot(time_4000, error_RK4_4000, label="RK4, 4000 steps")
+plt.plot(time_8000, error_RK4_8000, label="RK4, 8000 steps")
+plt.plot(time_16000, error_RK4_16000, label="RK4, 16000 steps")
+plt.plot(time_32000, error_RK4_32000, label="RK4, 32000 steps")
+plt.xlabel("Time (microseconds)")
+plt.ylabel("Relative Error")
+plt.legend()
+plt.title("Relative Error of RK4 at Different Time Resolutions")
+plt.show()
+
+plt.figure()
+plt.plot(time_4000, error_FE_4000, label="RK4, 4000 steps")
+plt.plot(time_8000, error_FE_8000, label="RK4, 8000 steps")
+plt.plot(time_16000, error_FE_16000, label="RK4, 16000 steps")
+plt.plot(time_32000, error_FE_32000, label="RK4, 32000 steps")
+plt.xlabel("Time (microseconds)")
+plt.ylabel("Relative Error")
+plt.legend()
+plt.title("Relative Error of FE at Different Time Resolutions")
+plt.show()
+
+
+
+
