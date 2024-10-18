@@ -31,6 +31,28 @@ void write_xyz_to_file(std::string filename, arma::vec x, arma::vec y, arma::vec
     ofile.close();
 }
 
+// Function to write relative error to file
+void write_error_to_file(std::string filename, arma::vec error, arma::vec time)
+{
+    int width = 30;
+    int prec = 15;
+
+    std::ofstream ofile;
+    ofile.open(filename);
+
+    ofile << std::scientific << std::setprecision(prec);
+    ofile << std::left << std::setw(width) << "time"
+                       << std::setw(width) << "relative_error" << std::endl;
+
+    for (int i = 0; i < error.n_elem; i++) {
+        ofile << std::left << std::setw(width) << time[i]
+                           << std::setw(width) << error[i] << std::endl;
+    }
+
+    ofile.close();
+}
+
+
 
 void RK4(double n, double dt, PenningTrap trap, arma::vec& pos_RK4, arma::vec& vel_RK4, arma::vec& time)
 {
@@ -229,6 +251,51 @@ int main(){
 
     std::string filenameFE = "xyz_FE.txt";
     write_xyz_to_file(filenameFE, x_FE, y_FE, z_FE, time);
+
+
+
+    // ---------- Error ----------
+  for (int steps : {4000, 8000, 16000, 32000})
+{
+    double dt = 50.0 / steps;  
+    arma::vec time = linspace(0.0, 50.0, dt);
+
+    // Re-run RK4 and FE with new dt for current step size
+    PenningTrap trap_RK4_error, trap_FE_error;
+    trap_RK4_error.add_particle(particle1);
+    trap_FE_error.add_particle(particle1);
+
+    arma::vec x_RK4 = arma::vec(time.n_elem);
+    arma::vec x_FE = arma::vec(time.n_elem);
+    arma::vec relative_error_RK4 = arma::vec(time.n_elem);
+    arma::vec relative_error_FE = arma::vec(time.n_elem);
+
+    // RK4 simulation
+    for (int i = 0; i < time.n_elem; i++) {
+        trap_RK4_error.evolve_RK4(dt);
+        x_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(0);
+
+        // Relative error between analytical and RK4
+        relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
+    }
+
+    // Write RK4 error to file
+    std::string filename_error_RK4 = "relative_error_RK4_" + std::to_string(steps) + ".txt";
+    write_error_to_file(filename_error_RK4, relative_error_RK4, time);
+
+    // Forward Euler simulation
+    for (int i = 0; i < time.n_elem; i++) {
+        trap_FE_error.evolve_forward_euler(dt);
+        x_FE(i) = trap_FE_error.particle_collection[0].return_position()(0);
+
+        // Relative error between analytical and FE
+        relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
+    }
+
+    // Write FE error to file
+    std::string filename_error_FE = "relative_error_FE_" + std::to_string(steps) + ".txt";
+    write_error_to_file(filename_error_FE, relative_error_FE, time);
+}
 
 
     return 0;
