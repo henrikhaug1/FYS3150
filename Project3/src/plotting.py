@@ -117,28 +117,31 @@ plt.tight_layout()
 plt.show()
 
 
-plt.figure()
-plt.plot(time_4000, error_RK4_4000, label="RK4, 4000 steps")
-plt.plot(time_8000, error_RK4_8000, label="RK4, 8000 steps")
-plt.plot(time_16000, error_RK4_16000, label="RK4, 16000 steps")
-plt.plot(time_32000, error_RK4_32000, label="RK4, 32000 steps")
-plt.xlabel("Time (microseconds)")
-plt.ylabel("Relative Error")
-plt.legend()
-plt.title("Relative Error of RK4 at Different Time Resolutions")
-plt.show()
+fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
-plt.figure()
-plt.plot(time_4000, error_FE_4000, label="RK4, 4000 steps")
-plt.plot(time_8000, error_FE_8000, label="RK4, 8000 steps")
-plt.plot(time_16000, error_FE_16000, label="RK4, 16000 steps")
-plt.plot(time_32000, error_FE_32000, label="RK4, 32000 steps")
-plt.xlabel("Time (microseconds)")
-plt.ylabel("Relative Error")
-plt.legend()
-plt.title("Relative Error of FE at Different Time Resolutions")
-plt.show()
+# RK4 Plot
+axs[0].plot(time_4000, error_RK4_4000, label="RK4, 4000 steps", markersize=1)
+axs[0].plot(time_8000, error_RK4_8000, label="RK4, 8000 steps", markersize=1)
+axs[0].plot(time_16000, error_RK4_16000, label="RK4, 16000 steps", markersize=1)
+axs[0].plot(time_32000, error_RK4_32000, label="RK4, 32000 steps", markersize=1)
+axs[0].set_xlabel("Time (microseconds)")
+axs[0].set_ylabel("Relative Error")
+axs[0].set_yscale("log")  # Log scale for better readability
+axs[0].legend()
+axs[0].set_title("Relative Error of RK4 at Different Resolutions")
 
+# FE Plot
+axs[1].plot(time_4000, error_FE_4000, label="FE, 4000 steps")
+axs[1].plot(time_8000, error_FE_8000, label="FE, 8000 steps")
+axs[1].plot(time_16000, error_FE_16000, label="FE, 16000 steps")
+axs[1].plot(time_32000, error_FE_32000, label="FE, 32000 steps")
+axs[1].set_xlabel("Time (microseconds)")
+axs[1].set_yscale("log")  # Log scale for better readability
+axs[1].legend()
+axs[1].set_title("Relative Error of FE at Different Resolutions")
+
+plt.tight_layout()
+plt.show()
 
 
 
