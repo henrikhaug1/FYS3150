@@ -22,7 +22,10 @@ clean:
 	rm -f xyz_RK4_interactions_1_velocity.txt
 	rm -f xyz_RK4_interactions_2.txt
 	rm -f xyz_RK4_interactions_2_velocity.txt
-	rm -f xyz_FE.txt
+	rm -f xyz_FE_1.txt
+	rm -f xyz_FE_1_interactions.txt
+	rm -f xyz_FE_2.txt
+	rm -f xyz_FE_2_interactions.txt
 	rm -f relative_error_FE_4000.txt
 	rm -f relative_error_FE_8000.txt
 	rm -f relative_error_FE_16000.txt
@@ -31,5 +34,7 @@ clean:
 	rm -f relative_error_RK4_8000.txt
 	rm -f relative_error_RK4_16000.txt
 	rm -f relative_error_RK4_32000.txt
-	rm -f 8.1_z(t).pdf
+	rm -f 8.1_z_t.pdf
+	rm -f XY-Plane_without_interactions.pdf
+	rm -f XY-Plane_analytical.pdf
 
