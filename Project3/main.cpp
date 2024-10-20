@@ -232,26 +232,70 @@ int main(){
 
     // ---------------  FE ---------------
 
-    // ---------- PenningTrap - FE ----------
+    // ---------- PenningTrap - FE Without interactions ----------
 
     PenningTrap trap_FE;
     trap_FE.add_particle(particle1);
     trap_FE.add_particle(particle2);
 
-    arma::vec x_FE = arma::vec(time.n_elem);
-    arma::vec y_FE = arma::vec(time.n_elem);
-    arma::vec z_FE = arma::vec(time.n_elem);
+    arma::vec x_FE_1 = arma::vec(time.n_elem);
+    arma::vec y_FE_1 = arma::vec(time.n_elem);
+    arma::vec z_FE_1 = arma::vec(time.n_elem);
+
+    arma::vec x_FE_2 = arma::vec(time.n_elem);
+    arma::vec y_FE_2 = arma::vec(time.n_elem);
+    arma::vec z_FE_2 = arma::vec(time.n_elem);
 
     for(int i = 0; i < time.n_elem; i++)
     {
         trap_FE.evolve_RK4(dt);
-        x_FE(i) = trap_FE.particle_collection[0].return_position()(0);
-        y_FE(i) = trap_FE.particle_collection[0].return_position()(1);
-        z_FE(i) = trap_FE.particle_collection[0].return_position()(2);
+        x_FE_1(i) = trap_FE.particle_collection[0].return_position()(0);
+        y_FE_1(i) = trap_FE.particle_collection[0].return_position()(1);
+        z_FE_1(i) = trap_FE.particle_collection[0].return_position()(2);
+
+        x_FE_2(i) = trap_FE.particle_collection[1].return_position()(0);
+        y_FE_2(i) = trap_FE.particle_collection[1].return_position()(1);
+        z_FE_2(i) = trap_FE.particle_collection[1].return_position()(2);
     }
 
-    std::string filenameFE = "xyz_FE.txt";
-    write_xyz_to_file(filenameFE, x_FE, y_FE, z_FE, time);
+    std::string filenameFE_1 = "xyz_FE_1.txt";
+    write_xyz_to_file(filenameFE_1, x_FE_1, y_FE_1, z_FE_1, time);
+
+    std::string filenameFE_2 = "xyz_FE_2.txt";
+    write_xyz_to_file(filenameFE_2, x_FE_2, y_FE_2, z_FE_2, time);
+
+    //---------- PenningTrap - FE With interactions ----------
+
+    PenningTrap trap_FE_interactions(T, 0.025 * V, 500, true, false);
+    trap_FE_interactions.add_particle(particle1);
+    trap_FE_interactions.add_particle(particle2);
+
+    arma::vec x_FE_1_interactions = arma::vec(time.n_elem);
+    arma::vec y_FE_1_interactions = arma::vec(time.n_elem);
+    arma::vec z_FE_1_interactions = arma::vec(time.n_elem);
+
+    arma::vec x_FE_2_interactions = arma::vec(time.n_elem);
+    arma::vec y_FE_2_interactions = arma::vec(time.n_elem);
+    arma::vec z_FE_2_interactions = arma::vec(time.n_elem);
+
+    for(int i = 0; i < time.n_elem; i++)
+    {
+        trap_FE.evolve_RK4(dt);
+        x_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(0);
+        y_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(1);
+        z_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(2);
+
+        x_FE_2_interactions(i) = trap_FE_interactions.particle_collection[1].return_position()(0);
+        y_FE_2_interactions(i) = trap_FE_interactions.particle_collection[1].return_position()(1);
+        z_FE_2_interactions(i) = trap_FE_interactions.particle_collection[1].return_position()(2);
+    }
+
+    std::string filenameFE_1_interactions = "xyz_FE_1_interactions.txt";
+    write_xyz_to_file(filenameFE_1_interactions, x_FE_1_interactions, y_FE_1_interactions, z_FE_1_interactions, time);
+
+    std::string filenameFE_2_interactions = "xyz_FE_2_interactions.txt";
+    write_xyz_to_file(filenameFE_2_interactions, x_FE_2_interactions, y_FE_2_interactions, z_FE_2_interactions, time);
+
 
 
 
@@ -305,6 +349,9 @@ for (int i=0; i < steps.n_elem; i++)
     std::string filename_error_FE = "relative_error_FE_" + std::to_string(static_cast<int>(steps[i])) + ".txt";
     write_error_to_file(filename_error_FE, relative_error_FE, time);
 }
+
+
+
 
 return 0;
 

@@ -17,7 +17,11 @@ time_RK4_interactions_1_velocity, x_RK4_interactions_1_velocity, y_RK4_interacti
 time_RK4_interactions_2, x_RK4_interactions_2, y_RK4_interactions_2, z_RK4_interactions_2 = np.loadtxt("xyz_RK4_interactions_2.txt", unpack=True, skiprows=1)
 time_RK4_interactions_2_velocity, x_RK4_interactions_2_velocity, y_RK4_interactions_2_velocity, z_RK4_interactions_2_velocity = np.loadtxt("xyz_RK4_interactions_2.txt", unpack=True, skiprows=1)
 
-time_FE, x_FE, y_FE, z_FE = np.loadtxt("xyz_FE.txt", unpack=True, skiprows=1)
+time_FE_1, x_FE_1, y_FE_1, z_FE_1 = np.loadtxt("xyz_FE_1.txt", unpack=True, skiprows=1)
+time_FE_1_interactions, x_FE_1_interactions, y_FE_1_interactions, z_FE_1_interactions = np.loadtxt("xyz_FE_1_interactions.txt", unpack=True, skiprows=1)
+
+time_FE_2, x_FE_2, y_FE_2, z_FE_2 = np.loadtxt("xyz_FE_2.txt", unpack=True, skiprows=1)
+time_FE_2_interactions, x_FE_2_interactions, y_FE_2_interactions, z_FE_2_interactions = np.loadtxt("xyz_FE_2_interactions.txt", unpack=True, skiprows=1)
 
 time_4000, error_RK4_4000 = np.loadtxt('relative_error_RK4_4000.txt', unpack=True, skiprows=1)
 time_8000, error_RK4_8000 = np.loadtxt('relative_error_RK4_8000.txt', unpack=True, skiprows=1)
@@ -34,7 +38,7 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 # ---------- Plotting - z(t) ----------
 plt.figure(figsize=(10, 6))
 plt.plot(time_RK4_1, z_RK4_1, label="RK4", color="blue", alpha=0.7)
-plt.plot(time_FE, z_FE, label="FE", color="pink", alpha=0.5)
+plt.plot(time_FE_1, z_FE_1, label="FE", color="pink", alpha=0.5)
 plt.plot(time_analytical, z_analytical, label="analytical", color="red", alpha=0.5)
 plt.xlabel('Time in microseconds', fontsize=16)
 plt.ylabel('Position (z)', fontsize=16  )
@@ -48,20 +52,47 @@ plt.show()
 
 # ---------- Plotting - xy-plane without interactions ----------
 plt.figure(figsize=(10, 6))
-plt.plot(x_RK4_1, y_RK4_1, label="Particle 1", color="red")
-plt.plot(x_RK4_2, y_RK4_2, label="Particle 2", color="blue")
-plt.title('XY-Plane Without Interactions')
-plt.xlabel('Position (x)')
-plt.ylabel('Position (y)')
+
+plt.plot(x_RK4_1, y_RK4_1, label="Particle 1 (RK4)", color="blue")
+plt.plot(x_RK4_2, y_RK4_2, label="Particle 2 (RK4)", color="red")
+
+plt.scatter(x_FE_1, y_FE_1, label="Particle 1 (FE)", color="lightsteelblue")
+plt.scatter(x_FE_2, y_FE_2, label="Particle 2 (FE)", color="plum")
+
+plt.xlabel('Position (x)', fontsize=16)
+plt.ylabel('Position (y)', fontsize=16)
 plt.legend()
 plt.grid(True)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.tight_layout()
+plt.show()
+
+# ---------- Plotting - Single plot of analytical solution of xy-plane for particle 1 ----------
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(x_analytical, y_analytical, label = "Particle 1", color="red")
+
+plt.xlabel('Position (x)', fontsize=16)
+plt.ylabel('Position (y)', fontsize=16)
+plt.legend()
+plt.grid(True)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 plt.tight_layout()
 plt.show()
 
 # ---------- Plotting - xy-plane with interactions ----------
 plt.figure(figsize=(10, 6))
-plt.plot(x_RK4_interactions_1, y_RK4_interactions_1, label="Particle 1", color="red")
-plt.plot(x_RK4_interactions_2, y_RK4_interactions_2, label="Particle 2", color="blue")
+
+plt.plot(x_RK4_interactions_1, y_RK4_interactions_1, label="Particle 1 (RK4)", color="red")
+plt.plot(x_RK4_interactions_2, y_RK4_interactions_2, label="Particle 2 (RK4)", color="blue")
+
+plt.scatter(x_FE_1_interactions, x_FE_1_interactions, label="Particle 1 (FE)", color="red")
+plt.scatter(x_FE_2_interactions, x_FE_2_interactions, label="Particle 2 (FE)", color="blue")
+
+
 plt.title('XY-Plane With Interactions')
 plt.xlabel('Position (x)')
 plt.ylabel('Position (y)')
