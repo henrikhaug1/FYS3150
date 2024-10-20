@@ -83,10 +83,11 @@ int main(){
     arma::vec velocity2 = {0, 40, 5};
     Particle particle2 = Particle(1.0, 40.078, position2, velocity2);
 
-    // Making time 
+    // Making time
+    arma::vec steps = arma::vec({4000, 8000, 16000, 32000});
     double t = 0.0;
-    double dt = 1e-3;
     int t_max = 50;
+    double dt = t_max/steps[3];
     arma::vec time = arma::vec(t_max/dt + 1);
     for(int i = 0; i < time.n_elem; i++)
     {
@@ -255,10 +256,10 @@ int main(){
 
 
     // ---------- Error ----------
-for (int steps : {4000, 8000, 16000, 32000})
+for (int i=0; i < steps.n_elem; i++)
 {
-    double dt = 50.0 / steps;  
-    arma::vec time = arma::linspace(0.0, 50.0, steps);  // Updated time vector with correct size
+    double dt = 50.0 / steps[i];  
+    arma::vec time = arma::linspace(0.0, 50.0, steps[i]);  // Updated time vector with correct size
 
     // Re-run RK4 and FE with new dt for current step size
     PenningTrap trap_RK4_error, trap_FE_error, trap_analytical_error;
@@ -286,8 +287,9 @@ for (int steps : {4000, 8000, 16000, 32000})
         relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
     }
 
+
     // Write RK4 error to file
-    std::string filename_error_RK4 = "relative_error_RK4_" + std::to_string(steps) + ".txt";
+    std::string filename_error_RK4 = "relative_error_RK4_" + std::to_string(static_cast<int>(steps[i])) + ".txt";
     write_error_to_file(filename_error_RK4, relative_error_RK4, time);
 
     // Forward Euler simulation
@@ -300,7 +302,7 @@ for (int steps : {4000, 8000, 16000, 32000})
     }
 
     // Write FE error to file
-    std::string filename_error_FE = "relative_error_FE_" + std::to_string(steps) + ".txt";
+    std::string filename_error_FE = "relative_error_FE_" + std::to_string(static_cast<int>(steps[i])) + ".txt";
     write_error_to_file(filename_error_FE, relative_error_FE, time);
 }
 

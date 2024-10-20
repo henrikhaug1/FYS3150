@@ -33,13 +33,17 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 
 # ---------- Plotting - z(t) ----------
 plt.figure(figsize=(10, 6))
-plt.plot(time_RK4_1, z_RK4_1, label="RK4 - motion in z direction", color="blue")
-plt.title('Motion in z Direction Over Time')
-plt.xlabel('Time')
-plt.ylabel('Position (z)')
+plt.plot(time_RK4_1, z_RK4_1, label="RK4", color="blue", alpha=0.7)
+plt.plot(time_FE, z_FE, label="FE", color="pink", alpha=0.5)
+plt.plot(time_analytical, z_analytical, label="analytical", color="red", alpha=0.5)
+plt.xlabel('Time in microseconds', fontsize=16)
+plt.ylabel('Position (z)', fontsize=16  )
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.savefig("8.1_z(t).pdf")
 plt.show()
 
 # ---------- Plotting - xy-plane without interactions ----------

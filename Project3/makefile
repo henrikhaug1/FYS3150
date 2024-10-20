@@ -31,4 +31,5 @@ clean:
 	rm -f relative_error_RK4_8000.txt
 	rm -f relative_error_RK4_16000.txt
 	rm -f relative_error_RK4_32000.txt
+	rm -f 8.1_z(t).pdf
 
