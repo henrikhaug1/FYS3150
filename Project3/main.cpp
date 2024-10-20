@@ -314,8 +314,8 @@ for (int i=0; i < steps.n_elem; i++)
     arma::vec x_RK4(time.n_elem);
     arma::vec x_FE(time.n_elem);
     arma::vec x_analytical(time.n_elem);
-    arma::vec y_analytical(time.n_elem);  // For future use if needed
-    arma::vec z_analytical(time.n_elem);  // For future use if needed
+    arma::vec y_analytical(time.n_elem); 
+    arma::vec z_analytical(time.n_elem);
     arma::vec relative_error_RK4(time.n_elem);
     arma::vec relative_error_FE(time.n_elem);
 
