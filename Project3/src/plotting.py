@@ -39,15 +39,15 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 plt.figure(figsize=(10, 6))
 plt.plot(time_RK4_1, z_RK4_1, label="RK4", color="blue", alpha=0.7)
 plt.plot(time_FE_1, z_FE_1, label="FE", color="pink", alpha=0.5)
-plt.plot(time_analytical, z_analytical, label="analytical", color="red", alpha=0.5)
+plt.plot(time_analytical, z_analytical, label="Analytical", color="red", alpha=0.5)
 plt.xlabel('Time in microseconds', fontsize=16)
 plt.ylabel('Position (z)', fontsize=16  )
-plt.legend()
+plt.legend(fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
-plt.savefig("8.1_z(t).pdf")
+plt.savefig("8.1_z_t.pdf")
 plt.show()
 
 # ---------- Plotting - xy-plane without interactions ----------
@@ -61,11 +61,12 @@ plt.scatter(x_FE_2, y_FE_2, label="Particle 2 (FE)", color="plum")
 
 plt.xlabel('Position (x)', fontsize=16)
 plt.ylabel('Position (y)', fontsize=16)
-plt.legend()
+plt.legend(fontsize=16)
 plt.grid(True)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.tight_layout()
+plt.savefig("XY-Plane_without_interactions.pdf")
 plt.show()
 
 # ---------- Plotting - Single plot of analytical solution of xy-plane for particle 1 ----------
@@ -76,11 +77,12 @@ plt.plot(x_analytical, y_analytical, label = "Particle 1", color="red")
 
 plt.xlabel('Position (x)', fontsize=16)
 plt.ylabel('Position (y)', fontsize=16)
-plt.legend()
+plt.legend(fontsize=16)
 plt.grid(True)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.tight_layout()
+plt.savefig("XY-Plane_analytical.pdf")
 plt.show()
 
 # ---------- Plotting - xy-plane with interactions ----------
@@ -96,7 +98,7 @@ plt.scatter(x_FE_2_interactions, x_FE_2_interactions, label="Particle 2 (FE)", c
 plt.title('XY-Plane With Interactions')
 plt.xlabel('Position (x)')
 plt.ylabel('Position (y)')
-plt.legend()
+plt.legend(fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 plt.show()
@@ -111,6 +113,7 @@ plt.ylabel('Velocity (v_x)')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("")
 plt.show()
 
 #---------- Plotting - trajectory phase space plot with interactions ----------
