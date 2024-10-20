@@ -120,7 +120,7 @@ arma::vec PenningTrap::total_force_external(int i)
 // The total force on particle_i from the other particles
 arma::vec PenningTrap::total_force_particles(int i)
 {
-	arma::vec total_force_on_i = arma::vec(3);
+	arma::vec total_force_on_i = arma::vec(3, arma::fill::zeros);
 	for(int j = 0; j < particle_collection.size(); j++)
 	{
 		if(j != i)
@@ -158,7 +158,8 @@ void PenningTrap::evolve_forward_euler(double dt)
 
 		arma::vec new_velocity = particle_i.return_velocity() + dt * 
 									total_force_i / particle_i.return_mass();
-		arma::vec new_position = particle_i.return_position() + dt * new_velocity;
+
+		arma::vec new_position = particle_i.return_position() + dt * particle_i.return_velocity();
 
 		particle_i.set_position(new_position);
 		particle_i.set_velocity(new_velocity);

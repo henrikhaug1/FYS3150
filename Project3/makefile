@@ -37,4 +37,11 @@ clean:
 	rm -f 8.1_z_t.pdf
 	rm -f XY-Plane_without_interactions.pdf
 	rm -f XY-Plane_analytical.pdf
+	rm -f 3D.pdf
+	rm -f 3D_interactions.pdf
+	rm -f log_error.pdf
+	rm -f x_vx.pdf
+	rm -f x_vx_interactions.pdf
+	rm -f z_vz.pdf
+	rm -f z_vz_interactions.pdf
 
