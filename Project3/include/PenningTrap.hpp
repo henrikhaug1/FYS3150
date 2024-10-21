@@ -17,7 +17,7 @@ class PenningTrap
 		bool time_dependent_v0;
 		double f;
 		double omega_v;
-		double simulation_time;
+		double simulation_time = 0;
 
 
 	// Constructor

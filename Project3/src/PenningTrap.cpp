@@ -54,11 +54,6 @@ int PenningTrap::count_particles()
 	return count;
 }
 
-void PenningTrap::switch_interactions()
-{
-	particle_interactions = not particle_interactions;
-}
-
 // External electric field at point r=(x,y,z)
 arma::vec PenningTrap::external_E_field(arma::vec r)
 {
@@ -81,7 +76,10 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	if (time_dependent_v0)
 	{
     	E = E * (1. + f*cos(omega_v*simulation_time));
+    	std::cout << "f" << f << "omega_v" << omega_v << std::endl;
+
   	}
+
 
 	return E;
 }
@@ -224,6 +222,7 @@ void PenningTrap::evolve_RK4(double dt)
 
         particle_i.set_position(x_ip1);
         particle_i.set_velocity(v_ip1);
+        simulation_time += dt;
     }
 }
 
