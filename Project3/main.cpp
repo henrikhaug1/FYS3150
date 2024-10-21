@@ -202,7 +202,7 @@ int main(){
 
     //---------- PenningTrap - RK4 - With interactions----------
 
-    PenningTrap trap_RK4_interactions(T, 0.025 * V, 500, true, false);
+    PenningTrap trap_RK4_interactions(T, 0.025 * V, 500, true, false, 0., 0.);
     trap_RK4_interactions.add_particle(particle1);
     trap_RK4_interactions.add_particle(particle2);
 
@@ -292,7 +292,7 @@ int main(){
 
     //---------- PenningTrap - FE With interactions ----------
 
-    PenningTrap trap_FE_interactions(T, 0.025 * V, 500, true, false);
+    PenningTrap trap_FE_interactions(T, 0.025 * V, 500, true, false, 0., 0.);
     trap_FE_interactions.add_particle(particle1);
     trap_FE_interactions.add_particle(particle2);
 
