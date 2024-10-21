@@ -306,7 +306,7 @@ int main(){
 
     for(int i = 0; i < time.n_elem; i++)
     {
-        trap_FE.evolve_RK4(dt);
+        trap_FE_interactions.evolve_forward_euler(dt);
         x_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(0);
         y_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(1);
         z_FE_1_interactions(i) = trap_FE_interactions.particle_collection[0].return_position()(2);
