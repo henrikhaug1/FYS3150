@@ -33,6 +33,9 @@ time_8000, error_FE_8000 = np.loadtxt('relative_error_FE_8000.txt', unpack=True,
 time_16000, error_FE_16000 = np.loadtxt('relative_error_FE_16000.txt', unpack=True, skiprows=1)
 time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=True, skiprows=1)
 
+particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
+particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
+particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
 
 
 # ---------- Plotting - z(t) ----------
@@ -277,6 +280,11 @@ ax[1][1].legend(fontsize=16)
 
 plt.tight_layout()
 fig.savefig("difference_error_plot.pdf", format="pdf")
+plt.show()
+
+plt.plot(omega_v_01, particles_01)
+plt.plot(omega_v_04, particles_04)
+plt.plot(omega_v_07, particles_07)
 plt.show()
 
 

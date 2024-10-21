@@ -39,7 +39,7 @@ int main()
 	int charge = 1;
 	int t_max = 500;
 	int t = 0;
-	int n_step = 32000*500/50;
+	int n_step = 40000;
 	double dt = 500./n_step;
 
 	arma::vec f = arma::vec({0.1, 0.4, 0.7});
