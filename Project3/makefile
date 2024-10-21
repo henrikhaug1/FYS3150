@@ -44,4 +44,12 @@ clean:
 	rm -f x_vx_interactions.pdf
 	rm -f z_vz.pdf
 	rm -f z_vz_interactions.pdf
+	rm -f delta_FE_4000.txt
+	rm -f delta_FE_8000.txt
+	rm -f delta_FE_16000.txt
+	rm -f delta_FE_32000.txt
+	rm -f delta_RK4_4000.txt
+	rm -f delta_RK4_8000.txt
+	rm -f delta_RK4_16000.txt
+	rm -f delta_RK4_32000.txt
 

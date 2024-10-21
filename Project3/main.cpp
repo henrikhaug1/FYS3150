@@ -69,16 +69,12 @@ arma::vec linspace(double start, double end, double dt)
     return arma::linspace(start, end, n); 
 }
 
-arma::vec error_convergence_rate(arma::vec dt, arma::vec delta_max)
+double error_convergence_rate(arma::vec dt, arma::vec delta_max)
 {
-    arma::vec error_convergence_rate_vec(dt.n_elem);
-    error_convergence_rate_vec[0] = 0;
-
+    double r_err;
 
     for(int i = 1; i < dt.n_elem; i++)
     {
-
-        double r_err;
         double delta_max_current = delta_max[i];
         double delta_max_prev = delta_max[i-1];
         double dt_current = dt[i];
@@ -88,11 +84,9 @@ arma::vec error_convergence_rate(arma::vec dt, arma::vec delta_max)
         {
             r_err += log10(delta_max_current / delta_max_prev) / log10(dt_current / dt_prev);
         }
-
-        error_convergence_rate_vec[i] = (1/3) * r_err;
     }
 
-    return error_convergence_rate_vec;
+    return (1/3) * r_err;
 }
 
     
@@ -346,6 +340,9 @@ int main(){
         arma::vec relative_error_RK4(time.n_elem);
         arma::vec relative_error_FE(time.n_elem);
 
+        arma::vec delta_FE(time.n_elem);
+        arma::vec delta_RK4(time.n_elem);
+
         // Calculate the analytical solution
         trap_analytical_error.specific_analytical_solution(particle1, time, x_analytical, y_analytical, z_analytical);
 
@@ -356,12 +353,18 @@ int main(){
 
             // Relative error between analytical and RK4
             relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
+
+            delta_RK4(i) = std::abs(x_RK4(i) - x_analytical(i));
         }
 
 
         // Write RK4 error to file
         std::string filename_error_RK4 = "relative_error_RK4_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
         write_error_to_file(filename_error_RK4, relative_error_RK4, time);
+
+        //Write delta RK4 to file 
+        std::string filename_delta_RK4 = "delta_RK4_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
+        write_error_to_file(filename_delta_RK4, delta_RK4, time);
 
 
 
@@ -372,89 +375,106 @@ int main(){
 
             // Relative error between analytical and FE
             relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
+
+            delta_FE(i) = std::abs(x_FE(i) - x_analytical(i));
         }
 
         // Write FE error to file
         std::string filename_error_FE = "relative_error_FE_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
         write_error_to_file(filename_error_FE, relative_error_FE, time);
+
+        //Write delta FE to file 
+        std::string filename_delta_FE = "delta_FE_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
+        write_error_to_file(filename_delta_FE, delta_FE, time);
     }
 
 
-    // Error convergence rate
-
-    std::vector<std::string> filenames_FE = {"relative_error_FE_4000.txt", "relative_error_FE_8000.txt", "relative_error_FE_16000.txt", "relative_error_FE_32000.txt"};
-    std::vector<std::string> filenames_RK4 = {"relative_error_RK4_4000.txt", "relative_error_RK4_8000.txt", "relative_error_RK4_16000.txt", "relative_error_Rk4_32000.txt"};
+    std::vector<std::string> filenames_FE = {"delta_FE_4000.txt", "delta_FE_8000.txt", "delta_FE_16000.txt", "delta_FE_32000.txt"};
+    std::vector<std::string> filenames_RK4 = {"delta_RK4_4000.txt", "delta_RK4_8000.txt", "delta_RK4_16000.txt", "delta_RK4_32000.txt"};
 
     arma::vec delta_max_FE = arma::vec(4);
     arma::vec delta_max_RK4 = arma::vec(4);
 
-    for(int i = 0; i < 1; i++) // filenames_FE.size()
-    {
-        arma::vec rel_err_FE = arma::vec(time.n_elem);
-        arma::vec rel_err_RK4 = arma::vec(time.n_elem);
+    for(int i = 0; i < filenames_FE.size(); i++)
+    { 
+
+        std::vector<double> rel_err_FE_vec;
+        std::vector<double> rel_err_RK4_vec;
 
         // FE
         std::ifstream file_FE(filenames_FE[i]);
         std::string line_FE;
         std::getline(file_FE, line_FE);
 
-        while (std::getline(file_FE, line_FE)) 
+
+        while(std::getline(file_FE, line_FE)) 
         {
             std::istringstream iss(line_FE);
             double first_value, second_value;
-            rel_err_FE(i) = second_value;
+
+            // Extract both values from the line
+            if(iss >> first_value >> second_value) 
+            {
+                rel_err_FE_vec.push_back(second_value);
+            } 
+            else
+            {
+                std::cerr << "Error reading line: " << line_FE << std::endl;
+            }
         }
 
         file_FE.close();
+        arma::vec rel_err_FE(rel_err_FE_vec);
 
         // RK4
         std::ifstream file_RK4(filenames_RK4[i]);
         std::string line_RK4;
         std::getline(file_RK4, line_RK4);
 
-        while (std::getline(file_RK4, line_RK4)) 
+
+        while(std::getline(file_RK4, line_RK4)) 
         {
             std::istringstream iss(line_RK4);
             double first_value, second_value;
-            rel_err_RK4(i) = second_value;
+
+            // Extract both values from the line
+            if(iss >> first_value >> second_value) 
+            {
+                rel_err_RK4_vec.push_back(second_value);
+            } 
+            else 
+            {
+                std::cerr << "Error reading line: " << line_RK4 << std::endl;
+            }
         }
+
+        file_RK4.close();
+        arma::vec rel_err_RK4(rel_err_RK4_vec);
 
         delta_max_FE(i) = arma::max(rel_err_FE);
         delta_max_RK4(i) = arma::max(rel_err_RK4);
-
-        file_RK4.close();
-
-        
-        std::cout << filenames_FE[i] << "\n";
-        rel_err_FE.print("Relative error FE");
-        std::cout << "\n";
-
-        std::cout << filenames_RK4[i] << "\n";
-        rel_err_FE.print("Relative error FE");
-        std::cout << "\n";
-        
 
     }
 
     arma::vec dt_rel_err = arma::vec({50./4000., 50./8000., 50./16000., 50./32000.});
 
-    arma::vec error_convergance_rate_RK4 = error_convergence_rate(dt_rel_err, delta_max_RK4);
-    arma::vec error_convergance_rate_FE = error_convergence_rate(dt_rel_err, delta_max_FE);
+    //arma::vec error_convergance_rate_RK4 = error_convergence_rate(dt_rel_err, delta_max_RK4);
+    //arma::vec error_convergance_rate_FE = error_convergence_rate(dt_rel_err, delta_max_FE);
 
+    double error_convergance_rate_RK4_val = error_convergence_rate(dt_rel_err, delta_max_RK4);
+    double error_convergance_rate_FE_val = error_convergence_rate(dt_rel_err, delta_max_FE);
 
-
-    /*
+    
     delta_max_FE.print("delta max FE");
     std::cout << "\n";
     delta_max_RK4.print("delta max RK4");
     std::cout << "\n";
     dt_rel_err.print("dt relative error");
     std::cout << "\n";
-    error_convergance_rate_RK4.print("error_convergance_rate_RK4");
-    std::cout << "\n";
-    error_convergance_rate_FE.print("error_convergance_rate_FE");
-    std::cout << "\n";
-    */
+    
+    std::cout << "r_err FE: " << error_convergance_rate_FE_val << std::endl;
+    std::cout << "r_err RK4: " << error_convergance_rate_RK4_val << std::endl;
+    
 
     return 0;
 
