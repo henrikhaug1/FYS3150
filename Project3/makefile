@@ -60,4 +60,8 @@ clean:
 	rm -f XY-Plane_FE_interactions.pdf
 	rm -f XY-Plane_RK4_interactions.pdf
 	rm -f difference_error_plot.pdf
+	rm -f Particle_in_trap_at_omega_v.pdf
+	rm -f f0.1.txt
+	rm -f f0.4.txt
+	rm -f f0.7.txt
 
