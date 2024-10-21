@@ -354,7 +354,15 @@ int main(){
             // Relative error between analytical and RK4
             relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
 
-            delta_RK4(i) = std::abs(x_RK4(i) - x_analytical(i));
+            // DELTA
+            double r_analytical_x = x_analytical(i);
+            double r_analytical_y = y_analytical(i);
+            double r_analytical_z = z_analytical(i);
+            double r_RK4_x = trap_RK4_error.particle_collection[0].return_position()(0);
+            double r_RK4_y = trap_RK4_error.particle_collection[0].return_position()(1);
+            double r_RK4_z = trap_RK4_error.particle_collection[0].return_position()(2);
+            double something = ((r_analytical_x - r_RK4_x) + (r_analytical_y - r_RK4_y) + (r_analytical_z - r_RK4_z));
+            delta_RK4(i) = std::abs(something);
         }
 
 
@@ -376,7 +384,15 @@ int main(){
             // Relative error between analytical and FE
             relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
 
-            delta_FE(i) = std::abs(x_FE(i) - x_analytical(i));
+            // DELTA
+            double r_analytical_x = x_analytical(i);
+            double r_analytical_y = y_analytical(i);
+            double r_analytical_z = z_analytical(i);
+            double r_FE_x = trap_FE_error.particle_collection[0].return_position()(0);
+            double r_FE_y = trap_FE_error.particle_collection[0].return_position()(1);
+            double r_FE_z = trap_FE_error.particle_collection[0].return_position()(2);
+            double something = ((r_analytical_x - r_FE_x) + (r_analytical_y - r_FE_y) + (r_analytical_z - r_FE_z));
+            delta_FE(i) = std::abs(something);
         }
 
         // Write FE error to file
