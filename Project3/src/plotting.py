@@ -85,22 +85,36 @@ plt.tight_layout()
 plt.savefig("XY-Plane_analytical.pdf", format="pdf")
 plt.show()
 
-# ---------- Plotting - xy-plane with interactions ---------- ####STILL NEEDS WORK####
+# ---------- Plotting - xy-plane with interactions ----------
 plt.figure(figsize=(10, 6))
 
-plt.plot(x_RK4_interactions_1, y_RK4_interactions_1, label="Particle 1 (RK4)", color="red")
-plt.plot(x_RK4_interactions_2, y_RK4_interactions_2, label="Particle 2 (RK4)", color="blue")
-
-plt.scatter(x_FE_1_interactions, x_FE_1_interactions, label="Particle 1 (FE)", color="red")
-plt.scatter(x_FE_2_interactions, x_FE_2_interactions, label="Particle 2 (FE)", color="blue")
-
+plt.plot(x_RK4_interactions_1, y_RK4_interactions_1, label="Particle 1 (RK4)", color="blue")
+plt.plot(x_RK4_interactions_2, y_RK4_interactions_2, label="Particle 2 (RK4)", color="red")
 
 plt.xlabel(r'$x$ [$\mu$m]', fontsize=16)
 plt.ylabel(r'$y$ [$\mu$m]', fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("XY-Plane_RK4_interactions.pdf", format="pdf")
 plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_FE_1_interactions, y_FE_1_interactions, label="Particle 1 (FE)", color="blue")
+plt.plot(x_FE_2_interactions, y_FE_2_interactions, label="Particle 2 (FE)", color="red")
+
+plt.xlabel(r'$x$ [$\mu$m]', fontsize=16)
+plt.ylabel(r'$y$ [$\mu$m]', fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("XY-Plane_FE_interactions.pdf", format="pdf")
+plt.show()
+
 
 # ---------- Plotting - trajectory phase space plot without interactions (x, v_x) ----------
 plt.figure(figsize=(10, 6))
@@ -234,26 +248,35 @@ diff_16000 = abs(error_RK4_16000 - error_FE_16000)
 diff_32000 = abs(error_RK4_32000 - error_FE_32000)
 
 ax[0][0].plot(time_4000, diff_4000, label="steps=4000", color='blue')
-ax[0][0].set_xlabel(r'Time [$\mu$s]')
-ax[0][0].set_ylabel(r'Error')
-ax[0][0].legend(fontsize=12)
+ax[0][0].set_xlabel(r'Time [$\mu$s]', fontsize=16)
+ax[0][0].set_ylabel(r'Error', fontsize=16)
+ax[0][0].tick_params(axis='x', labelsize=16)
+ax[0][0].tick_params(axis='y', labelsize=16)
+ax[0][0].legend(fontsize=16)
 
 ax[0][1].plot(time_8000, diff_8000, label="steps=8000", color='orange')
-ax[0][1].set_xlabel(r'Time [$\mu$s]')
-ax[0][1].set_ylabel(r'Error')
-ax[0][1].legend(fontsize=12)
+ax[0][1].set_xlabel(r'Time [$\mu$s]', fontsize=16)
+ax[0][1].set_ylabel(r'Error', fontsize=16)
+ax[0][1].tick_params(axis='x', labelsize=16)
+ax[0][1].tick_params(axis='y', labelsize=16)
+ax[0][1].legend(fontsize=16)
 
 ax[1][0].plot(time_16000, diff_16000, label="steps=16000", color='green')
-ax[1][0].set_xlabel(r'Time [$\mu$s]')
-ax[1][0].set_ylabel(r'Error')
-ax[1][0].legend(fontsize=12)
+ax[1][0].set_xlabel(r'Time [$\mu$s]', fontsize=16)
+ax[1][0].set_ylabel(r'Error', fontsize=16)
+ax[1][0].tick_params(axis='x', labelsize=16)
+ax[1][0].tick_params(axis='y', labelsize=16)
+ax[1][0].legend(fontsize=16)
 
 ax[1][1].plot(time_32000, diff_32000, label="steps=32000", color='red')
-ax[1][1].set_xlabel(r'Time [$\mu$s]')
-ax[1][1].set_ylabel(r'Error')
-ax[1][1].legend(fontsize=12)
+ax[1][1].set_xlabel(r'Time [$\mu$s]', fontsize=16)
+ax[1][1].set_ylabel(r'Error', fontsize=16)
+ax[1][1].tick_params(axis='x', labelsize=16)
+ax[1][1].tick_params(axis='y', labelsize=16)
+ax[1][1].legend(fontsize=16)
 
 plt.tight_layout()
+fig.savefig("difference_error_plot.pdf", format="pdf")
 plt.show()
 
 
