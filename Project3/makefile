@@ -3,16 +3,21 @@ IFLAG = -Iinclude
 
 .PHONY: all clean
 
-all: main
+all: main main_time_dependent
 
 main: 
 	$(CC) main.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main
 
+main_time_dependent:
+	$(CC) main_time_dependent.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main_time_dependent
+
 run_all: all
 	./main &
+	./main_time_dependent &
 
 clean:
 	rm -f main
+	rm -f main_time_dependent
 	rm -f xyz_analytical.txt
 	rm -f xyz_RK4_1.txt
 	rm -f xyz_RK4_1_velocity.txt
@@ -52,4 +57,7 @@ clean:
 	rm -f delta_RK4_8000.txt
 	rm -f delta_RK4_16000.txt
 	rm -f delta_RK4_32000.txt
+	rm -f XY-Plane_FE_interactions.pdf
+	rm -f XY-Plane_RK4_interactions.pdf
+	rm -f difference_error_plot.pdf
 
