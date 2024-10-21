@@ -71,7 +71,7 @@ arma::vec linspace(double start, double end, double dt)
 
 double error_convergence_rate(arma::vec dt, arma::vec delta_max)
 {
-    double r_err;
+    double r_err = 0.0;
 
     for(int i = 1; i < dt.n_elem; i++)
     {
@@ -333,7 +333,12 @@ int main(){
         trap_analytical_error.add_particle(particle1);
 
         arma::vec x_RK4(time.n_elem);
+        arma::vec y_RK4(time.n_elem);
+        arma::vec z_RK4(time.n_elem);
         arma::vec x_FE(time.n_elem);
+        arma::vec y_FE(time.n_elem);
+        arma::vec z_FE(time.n_elem);
+
         arma::vec x_analytical(time.n_elem);
         arma::vec y_analytical(time.n_elem); 
         arma::vec z_analytical(time.n_elem);
@@ -350,19 +355,16 @@ int main(){
         for (int i = 0; i < time.n_elem; i++) {
             trap_RK4_error.evolve_RK4(dt);
             x_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(0);
+            y_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(1);
+            z_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(2);
 
             // Relative error between analytical and RK4
             relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
 
-            // DELTA
-            double r_analytical_x = x_analytical(i);
-            double r_analytical_y = y_analytical(i);
-            double r_analytical_z = z_analytical(i);
-            double r_RK4_x = trap_RK4_error.particle_collection[0].return_position()(0);
-            double r_RK4_y = trap_RK4_error.particle_collection[0].return_position()(1);
-            double r_RK4_z = trap_RK4_error.particle_collection[0].return_position()(2);
-            double something = ((r_analytical_x - r_RK4_x) + (r_analytical_y - r_RK4_y) + (r_analytical_z - r_RK4_z));
-            delta_RK4(i) = std::abs(something);
+            // DELTA            
+            arma::vec r_exact = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical_RK4 = arma::vec({x_RK4(i), y_RK4(i), z_RK4(i)});
+            delta_RK4(i) = arma::norm(r_exact - r_numerical_RK4);
         }
 
 
@@ -380,19 +382,16 @@ int main(){
         for (int i = 0; i < time.n_elem; i++) {
             trap_FE_error.evolve_forward_euler(dt);
             x_FE(i) = trap_FE_error.particle_collection[0].return_position()(0);
+            y_FE(i) = trap_FE_error.particle_collection[0].return_position()(1);
+            z_FE(i) = trap_FE_error.particle_collection[0].return_position()(2);
 
             // Relative error between analytical and FE
             relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
 
-            // DELTA
-            double r_analytical_x = x_analytical(i);
-            double r_analytical_y = y_analytical(i);
-            double r_analytical_z = z_analytical(i);
-            double r_FE_x = trap_FE_error.particle_collection[0].return_position()(0);
-            double r_FE_y = trap_FE_error.particle_collection[0].return_position()(1);
-            double r_FE_z = trap_FE_error.particle_collection[0].return_position()(2);
-            double something = ((r_analytical_x - r_FE_x) + (r_analytical_y - r_FE_y) + (r_analytical_z - r_FE_z));
-            delta_FE(i) = std::abs(something);
+            // DELTA            
+            arma::vec r_exact = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical_FE = arma::vec({x_FE(i), y_FE(i), z_FE(i)});
+            delta_FE(i) = arma::norm(r_exact - r_numerical_FE);
         }
 
         // Write FE error to file
