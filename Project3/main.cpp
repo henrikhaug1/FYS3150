@@ -71,22 +71,14 @@ arma::vec linspace(double start, double end, double dt)
 
 double error_convergence_rate(arma::vec dt, arma::vec delta_max)
 {
-    double r_err = 0.0;
+    double r_err = 0.0; 
 
-    for(int i = 1; i < dt.n_elem; i++)
+    for(int k = 1; k <= 3; k++)
     {
-        double delta_max_current = delta_max[i];
-        double delta_max_prev = delta_max[i-1];
-        double dt_current = dt[i];
-        double dt_prev = dt[i-1];
-
-        for(int k = 1; k <= 3; k++)
-        {
-            r_err += log10(delta_max_current / delta_max_prev) / log10(dt_current / dt_prev);
-        }
+        r_err += log10(delta_max[k] / delta_max[k-1]) / log10(dt[k] / dt[k-1]);
     }
 
-    return (1/3) * r_err;
+    return (1./3.) * r_err;
 }
 
     
@@ -416,7 +408,14 @@ int main(){
             y_RK4(i) = trap_RK4_delta.particle_collection[0].return_position()(1);
             z_RK4(i) = trap_RK4_delta.particle_collection[0].return_position()(2);
 
-            delta_RK4(i) = std::sqrt((x_analytical(i) - x_RK4(i)) * (x_analytical(i) - x_RK4(i)) + (y_analytical(i) - y_RK4(i)) * (y_analytical(i) - y_RK4(i)) + (z_analytical(i) - z_RK4(i)) * (z_analytical(i) - z_RK4(i)));
+            arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical = arma::vec({x_RK4(i), y_RK4(i), z_RK4(i)});
+            delta_RK4(i) = arma::norm(r_analytical - r_numerical);
+
+            //delta_RK4(i) = std::sqrt((x_analytical(i) - x_RK4(i)) * (x_analytical(i) - x_RK4(i)) + 
+                                     //(y_analytical(i) - y_RK4(i)) * (y_analytical(i) - y_RK4(i)) + 
+                                     //(z_analytical(i) - z_RK4(i)) * (z_analytical(i) - z_RK4(i)));
+
             
         }
 
@@ -428,17 +427,36 @@ int main(){
             y_FE(i) = trap_FE_delta.particle_collection[0].return_position()(1);
             z_FE(i) = trap_FE_delta.particle_collection[0].return_position()(2);
 
-            delta_FE(i) = std::sqrt((x_analytical(i) - x_FE(i)) * (x_analytical(i) - x_FE(i)) + (y_analytical(i) - y_FE(i)) * (y_analytical(i) - y_FE(i)) + (z_analytical(i) - z_FE(i)) * (z_analytical(i) - z_FE(i))) ;
+            arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical = arma::vec({x_FE(i), y_FE(i), z_FE(i)});
+            delta_FE(i) = arma::norm(r_analytical - r_numerical);
+
+            //delta_FE(i) = std::sqrt((x_analytical(i) - x_FE(i)) * (x_analytical(i) - x_FE(i)) + 
+                                    //(y_analytical(i) - y_FE(i)) * (y_analytical(i) - y_FE(i)) + 
+                                    //(z_analytical(i) - z_FE(i)) * (z_analytical(i) - z_FE(i)));
         
         }
 
         delta_max_FE[j] = arma::max(delta_FE);
         delta_max_RK4[j] = arma::max(delta_RK4);
+
+        std::cout << "FE             RK4\n";
+        for(int i = 0; i < 10; i++)
+        {
+            std::cout << delta_FE(i) << "    " << delta_RK4(i) << std::endl;
+        }
+
     }
 
     delta_max_FE.print("Delta max FE");
     delta_max_RK4.print("Delta max RK4");
 
+
+    double r_err_FE = error_convergence_rate(dt_delta, delta_max_FE);
+    double r_err_RK4 = error_convergence_rate(dt_delta, delta_max_RK4);
+
+    std::cout << "r_err_FE: " << r_err_FE << std::endl;
+    std::cout << "r_err_RK4: " << r_err_RK4 << std::endl;
 
     return 0;
 

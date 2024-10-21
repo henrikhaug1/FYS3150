@@ -168,36 +168,37 @@ void PenningTrap::evolve_forward_euler(double dt)
 		arma::vec total_force_i = total_force(i);
 
 		arma::vec new_velocity = particle_i.return_velocity() + dt * 
-									total_force_i / particle_i.return_mass();
+								 total_force_i / particle_i.return_mass();
 
 		arma::vec new_position = particle_i.return_position() + dt * particle_i.return_velocity();
 
 		particle_i.set_position(new_position);
 		particle_i.set_velocity(new_velocity);
-		
 
 	}	
 }
 
-
+/*
 // Evolve the system one time step (dt) using Runge-Kutta 4th order
-
 void PenningTrap::evolve_RK4(double dt)
 {
     for(int i = 0; i < particle_collection.size(); i++)
-    {
+    {	
         Particle& particle_i = particle_collection[i];
         arma::vec initial_position = particle_i.return_position();
         arma::vec initial_velocity = particle_i.return_velocity();
         arma::vec total_force_i = total_force(i);
+
+        arma::vec temp_position;
+        arma::vec temp_velocity;
 
         // k1
         arma::vec k_x1 = dt * initial_velocity;
         arma::vec k_v1 = dt * (total_force_i / particle_i.return_mass());
 
         // k2
-        arma::vec temp_position = initial_position + 0.5 * k_x1;
-        arma::vec temp_velocity = initial_velocity + 0.5 * k_v1;
+        temp_position = initial_position + 0.5 * k_x1;
+        temp_velocity = initial_velocity + 0.5 * k_v1;
         arma::vec total_force_k2 = total_force(i); 
         arma::vec k_x2 = dt * temp_velocity;
         arma::vec k_v2 = dt * (total_force_k2 / particle_i.return_mass());
@@ -222,6 +223,61 @@ void PenningTrap::evolve_RK4(double dt)
 
         particle_i.set_position(x_ip1);
         particle_i.set_velocity(v_ip1);
+
+        simulation_time += dt;
+    }
+}
+*/
+void PenningTrap::evolve_RK4(double dt)
+{
+    for(int i = 0; i < particle_collection.size(); i++)
+    {	
+        Particle& particle_i = particle_collection[i];
+        arma::vec initial_position = particle_i.return_position();
+        arma::vec initial_velocity = particle_i.return_velocity();
+        arma::vec total_force_i = total_force(i);
+
+        arma::vec temp_position;
+        arma::vec temp_velocity;
+
+        // k1
+        arma::vec k_x1 = dt * initial_velocity;
+        arma::vec k_v1 = dt * (total_force_i / particle_i.return_mass());
+
+        // k2
+        temp_position = initial_position + 0.5 * k_x1;
+        temp_velocity = initial_velocity + 0.5 * k_v1;
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
+        arma::vec total_force_k2 = total_force(i); 
+        arma::vec k_x2 = dt * temp_velocity;
+        arma::vec k_v2 = dt * (total_force_k2 / particle_i.return_mass());
+
+        // k3
+        temp_position = initial_position + 0.5 * k_x2;
+        temp_velocity = initial_velocity + 0.5 * k_v2;
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
+        arma::vec total_force_k3 = total_force(i); 
+        arma::vec k_x3 = dt * temp_velocity;
+        arma::vec k_v3 = dt * (total_force_k3 / particle_i.return_mass());
+
+        // k4
+        temp_position = initial_position + k_x3;
+        temp_velocity = initial_velocity + k_v3;
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
+        arma::vec total_force_k4 = total_force(i); 
+        arma::vec k_x4 = dt * temp_velocity;
+        arma::vec k_v4 = dt * (total_force_k4 / particle_i.return_mass());
+
+        // Final updates
+        arma::vec x_ip1 = initial_position + (1.0 / 6.0) * (k_x1 + 2 * k_x2 + 2 * k_x3 + k_x4);
+        arma::vec v_ip1 = initial_velocity + (1.0 / 6.0) * (k_v1 + 2 * k_v2 + 2 * k_v3 + k_v4);
+
+        particle_i.set_position(x_ip1);
+        particle_i.set_velocity(v_ip1);
+
         simulation_time += dt;
     }
 }
