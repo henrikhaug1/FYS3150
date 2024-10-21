@@ -92,7 +92,6 @@ double error_convergence_rate(arma::vec dt, arma::vec delta_max)
     
 
 int main(){
-
     // ---------- Particle 1 ----------
     arma::vec position1 = {20, 0, 20};
     arma::vec velocity1 = {0, 25, 0};
@@ -333,38 +332,23 @@ int main(){
         trap_analytical_error.add_particle(particle1);
 
         arma::vec x_RK4(time.n_elem);
-        arma::vec y_RK4(time.n_elem);
-        arma::vec z_RK4(time.n_elem);
         arma::vec x_FE(time.n_elem);
-        arma::vec y_FE(time.n_elem);
-        arma::vec z_FE(time.n_elem);
-
         arma::vec x_analytical(time.n_elem);
-        arma::vec y_analytical(time.n_elem); 
-        arma::vec z_analytical(time.n_elem);
+
         arma::vec relative_error_RK4(time.n_elem);
         arma::vec relative_error_FE(time.n_elem);
-
-        arma::vec delta_FE(time.n_elem);
-        arma::vec delta_RK4(time.n_elem);
 
         // Calculate the analytical solution
         trap_analytical_error.specific_analytical_solution(particle1, time, x_analytical, y_analytical, z_analytical);
 
-        // RK4 simulation
-        for (int i = 0; i < time.n_elem; i++) {
+        // ----- RK4 simulation -----
+        for(int i = 0; i < time.n_elem; i++) 
+        {
             trap_RK4_error.evolve_RK4(dt);
             x_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(0);
-            y_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(1);
-            z_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(2);
-
+         
             // Relative error between analytical and RK4
             relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
-
-            // DELTA            
-            arma::vec r_exact = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
-            arma::vec r_numerical_RK4 = arma::vec({x_RK4(i), y_RK4(i), z_RK4(i)});
-            delta_RK4(i) = arma::norm(r_exact - r_numerical_RK4);
         }
 
 
@@ -372,124 +356,89 @@ int main(){
         std::string filename_error_RK4 = "relative_error_RK4_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
         write_error_to_file(filename_error_RK4, relative_error_RK4, time);
 
-        //Write delta RK4 to file 
-        std::string filename_delta_RK4 = "delta_RK4_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
-        write_error_to_file(filename_delta_RK4, delta_RK4, time);
 
-
-
-        // Forward Euler simulation
+        // ----- FE simulation -----
         for (int i = 0; i < time.n_elem; i++) {
             trap_FE_error.evolve_forward_euler(dt);
             x_FE(i) = trap_FE_error.particle_collection[0].return_position()(0);
-            y_FE(i) = trap_FE_error.particle_collection[0].return_position()(1);
-            z_FE(i) = trap_FE_error.particle_collection[0].return_position()(2);
+       
 
             // Relative error between analytical and FE
             relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
-
-            // DELTA            
-            arma::vec r_exact = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
-            arma::vec r_numerical_FE = arma::vec({x_FE(i), y_FE(i), z_FE(i)});
-            delta_FE(i) = arma::norm(r_exact - r_numerical_FE);
         }
 
         // Write FE error to file
         std::string filename_error_FE = "relative_error_FE_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
         write_error_to_file(filename_error_FE, relative_error_FE, time);
-
-        //Write delta FE to file 
-        std::string filename_delta_FE = "delta_FE_" + std::to_string(static_cast<int>(steps[j])) + ".txt";
-        write_error_to_file(filename_delta_FE, delta_FE, time);
     }
 
 
-    std::vector<std::string> filenames_FE = {"delta_FE_4000.txt", "delta_FE_8000.txt", "delta_FE_16000.txt", "delta_FE_32000.txt"};
-    std::vector<std::string> filenames_RK4 = {"delta_RK4_4000.txt", "delta_RK4_8000.txt", "delta_RK4_16000.txt", "delta_RK4_32000.txt"};
 
+    // ---------- Error convergence rate ----------
     arma::vec delta_max_FE = arma::vec(4);
     arma::vec delta_max_RK4 = arma::vec(4);
 
-    for(int i = 0; i < filenames_FE.size(); i++)
-    { 
+    arma::vec dt_delta = arma::vec({50./4000., 50./8000., 50./16000., 50./32000.});
 
-        std::vector<double> rel_err_FE_vec;
-        std::vector<double> rel_err_RK4_vec;
+    for (int j=0; j < steps.n_elem; j++)
+    {
+        double dt = dt_delta[j];
+        arma::vec time = linspace(0.0, 50.0, dt);  // Updated time vector with correct size
 
-        // FE
-        std::ifstream file_FE(filenames_FE[i]);
-        std::string line_FE;
-        std::getline(file_FE, line_FE);
+        // Re-run RK4 and FE with new dt for current step size
+        PenningTrap trap_RK4_delta, trap_FE_delta, trap_analytical_delta;
+        trap_RK4_delta.add_particle(particle1);
+        trap_FE_delta.add_particle(particle1);
+        trap_analytical_delta.add_particle(particle1);
 
+        arma::vec x_RK4(time.n_elem);
+        arma::vec y_RK4(time.n_elem);
+        arma::vec z_RK4(time.n_elem);
 
-        while(std::getline(file_FE, line_FE)) 
-        {
-            std::istringstream iss(line_FE);
-            double first_value, second_value;
+        arma::vec x_FE(time.n_elem);
+        arma::vec y_FE(time.n_elem);
+        arma::vec z_FE(time.n_elem);
 
-            // Extract both values from the line
-            if(iss >> first_value >> second_value) 
-            {
-                rel_err_FE_vec.push_back(second_value);
-            } 
-            else
-            {
-                std::cerr << "Error reading line: " << line_FE << std::endl;
-            }
+        arma::vec x_analytical(time.n_elem);
+        arma::vec y_analytical(time.n_elem); 
+        arma::vec z_analytical(time.n_elem);
+
+        arma::vec delta_FE(time.n_elem);
+        arma::vec delta_RK4(time.n_elem);
+
+        // Calculate the analytical solution
+        trap_analytical_delta.specific_analytical_solution(particle1, time, x_analytical, y_analytical, z_analytical);
+
+        // ----- RK4 -----
+        for (int i = 0; i < time.n_elem; i++) {
+            trap_RK4_delta.evolve_RK4(dt);
+            x_RK4(i) = trap_RK4_delta.particle_collection[0].return_position()(0);
+            y_RK4(i) = trap_RK4_delta.particle_collection[0].return_position()(1);
+            z_RK4(i) = trap_RK4_delta.particle_collection[0].return_position()(2);
+
+            delta_RK4(i) = std::sqrt((x_analytical(i) - x_RK4(i)) * (x_analytical(i) - x_RK4(i)) + (y_analytical(i) - y_RK4(i)) * (y_analytical(i) - y_RK4(i)) + (z_analytical(i) - z_RK4(i)) * (z_analytical(i) - z_RK4(i)));
+            
         }
 
-        file_FE.close();
-        arma::vec rel_err_FE(rel_err_FE_vec);
 
-        // RK4
-        std::ifstream file_RK4(filenames_RK4[i]);
-        std::string line_RK4;
-        std::getline(file_RK4, line_RK4);
+        // ----- FE -----
+        for (int i = 0; i < time.n_elem; i++) {
+            trap_FE_delta.evolve_forward_euler(dt);
+            x_FE(i) = trap_FE_delta.particle_collection[0].return_position()(0);
+            y_FE(i) = trap_FE_delta.particle_collection[0].return_position()(1);
+            z_FE(i) = trap_FE_delta.particle_collection[0].return_position()(2);
 
-
-        while(std::getline(file_RK4, line_RK4)) 
-        {
-            std::istringstream iss(line_RK4);
-            double first_value, second_value;
-
-            // Extract both values from the line
-            if(iss >> first_value >> second_value) 
-            {
-                rel_err_RK4_vec.push_back(second_value);
-            } 
-            else 
-            {
-                std::cerr << "Error reading line: " << line_RK4 << std::endl;
-            }
+            delta_FE(i) = std::sqrt((x_analytical(i) - x_FE(i)) * (x_analytical(i) - x_FE(i)) + (y_analytical(i) - y_FE(i)) * (y_analytical(i) - y_FE(i)) + (z_analytical(i) - z_FE(i)) * (z_analytical(i) - z_FE(i))) ;
+        
         }
 
-        file_RK4.close();
-        arma::vec rel_err_RK4(rel_err_RK4_vec);
-
-        delta_max_FE(i) = arma::max(rel_err_FE);
-        delta_max_RK4(i) = arma::max(rel_err_RK4);
-
+        delta_max_FE[j] = arma::max(delta_FE);
+        delta_max_RK4[j] = arma::max(delta_RK4);
     }
 
-    arma::vec dt_rel_err = arma::vec({50./4000., 50./8000., 50./16000., 50./32000.});
+    delta_max_FE.print("Delta max FE");
+    delta_max_RK4.print("Delta max RK4");
 
-    //arma::vec error_convergance_rate_RK4 = error_convergence_rate(dt_rel_err, delta_max_RK4);
-    //arma::vec error_convergance_rate_FE = error_convergence_rate(dt_rel_err, delta_max_FE);
-
-    double error_convergance_rate_RK4_val = error_convergence_rate(dt_rel_err, delta_max_RK4);
-    double error_convergance_rate_FE_val = error_convergence_rate(dt_rel_err, delta_max_FE);
-
-    
-    delta_max_FE.print("delta max FE");
-    std::cout << "\n";
-    delta_max_RK4.print("delta max RK4");
-    std::cout << "\n";
-    dt_rel_err.print("dt relative error");
-    std::cout << "\n";
-    
-    std::cout << "r_err FE: " << error_convergance_rate_FE_val << std::endl;
-    std::cout << "r_err RK4: " << error_convergance_rate_RK4_val << std::endl;
-    
 
     return 0;
 
