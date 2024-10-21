@@ -11,13 +11,15 @@ const long double k_e = 1.38935333e5; // (u (𝝁m)^3) / ((𝝁s)^2 * e^2)
 
 
 // Constructor
-PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool particle_interactions_in, bool time_dependent_v0_in)
+PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool particle_interactions_in, bool time_dependent_v0_in, double f_in, double omega_v_in)
 {
 	B0 = B0_in;
 	V0 = V0_in;
 	d = d_in;
 	particle_interactions = particle_interactions_in;
 	time_dependent_v0 = time_dependent_v0_in;
+	f = f_in;
+	omega_v = omega_v_in;
 }
 
 
@@ -52,6 +54,11 @@ int PenningTrap::count_particles()
 	return count;
 }
 
+void switch_interactions()
+{
+	particle_interactions = not particle_interactions;
+}
+
 // External electric field at point r=(x,y,z)
 arma::vec PenningTrap::external_E_field(arma::vec r)
 {
@@ -71,8 +78,14 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 		E = arma::vec(3, arma::fill::zeros);
 	}
 
+	if (time_dependent_v0)
+	{
+    	E = E * (1. + f*cos(omega_v*simulation_time));
+  	}
+
 	return E;
-} 
+}
+
 
 // External magnetic field at point r=(x,y,z)
 arma::vec PenningTrap::external_B_field(arma::vec r)

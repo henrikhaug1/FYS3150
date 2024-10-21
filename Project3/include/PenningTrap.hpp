@@ -15,10 +15,13 @@ class PenningTrap
 		std::vector<Particle> particle_collection;
 		bool particle_interactions;
 		bool time_dependent_v0;
+		double f;
+		double omega_v;
+		double simulation_time;
 
 
 	// Constructor
-	PenningTrap(double B0_in=T, double V0_in=0.025*V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false);
+	PenningTrap(double B0_in=T, double V0_in=0.025*V, double d_in=500, bool particle_interactions_in = false, bool time_dependent_v0_in = false, double f=0., double omega_v=0.);
 
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
@@ -26,6 +29,8 @@ class PenningTrap
 	void add_random_particle(int n, int charge, double mass);
 
 	int count_particles();
+
+	void switch_interactions();
 
 	// External electric field at point r=(x,y,z)
 	arma::vec external_E_field(arma::vec r);  
