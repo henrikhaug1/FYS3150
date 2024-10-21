@@ -243,7 +243,7 @@ plt.tight_layout()
 fig.savefig("log_error.pdf", format="pdf")
 plt.show()
 
-#Error difference plot
+#---------- Error difference plot ----------
 fig, ax = plt.subplots(2, 2, figsize=(12, 8))
 diff_4000 = abs(error_RK4_4000 - error_FE_4000)
 diff_8000 = abs(error_RK4_8000 - error_FE_8000)
@@ -282,9 +282,17 @@ plt.tight_layout()
 fig.savefig("difference_error_plot.pdf", format="pdf")
 plt.show()
 
-plt.plot(omega_v_01, particles_01)
-plt.plot(omega_v_04, particles_04)
-plt.plot(omega_v_07, particles_07)
+#---------- plot of particles left in trap ----------
+plt.plot(omega_v_01, particles_01, label="f=0.1")
+plt.plot(omega_v_04, particles_04, label="f=0.4")
+plt.plot(omega_v_07, particles_07, label="f=0.7")
+plt.xlabel(r"$\omega_v$", fontsize=16)
+plt.ylabel(r'Particles left in trap', fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.tight_layout()
+plt.savefig("Particle_in_trap_at_omega_v.pdf", format="pdf")
 plt.show()
 
 

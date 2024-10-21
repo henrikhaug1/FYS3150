@@ -45,7 +45,7 @@ int main()
 	arma::vec f = arma::vec({0.1, 0.4, 0.7});
 	arma::vec omega_v = linspace(0.2, 2.5, 0.02);
 
-	arma::vec particles_outside_trap = arma::vec(omega_v.n_elem);
+	arma::vec particles_inside_trap = arma::vec(omega_v.n_elem);
 
 	for(int i = 0; i < f.n_elem; i++)
 	{
@@ -60,12 +60,12 @@ int main()
 				trap.evolve_RK4(dt);
 			}
 
-			particles_outside_trap[j] = trap.count_particles();
+			particles_inside_trap[j] = trap.count_particles();
 
 		}
 
-		std::string filename_particles_outside = "f" + std::to_string(f[i]) + ".txt";
-		write_to_file(filename_particles_outside, particles_outside_trap, omega_v);
+		std::string filename_particles_inside = "f" + std::to_string(static_cast<int>(f[i])) + ".txt";
+		write_to_file(filename_particles_inside, particles_inside_trap, omega_v);
 }
 
 return 0;
