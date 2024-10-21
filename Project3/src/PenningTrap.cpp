@@ -54,7 +54,7 @@ int PenningTrap::count_particles()
 	return count;
 }
 
-void switch_interactions()
+void PenningTrap::switch_interactions()
 {
 	particle_interactions = not particle_interactions;
 }
