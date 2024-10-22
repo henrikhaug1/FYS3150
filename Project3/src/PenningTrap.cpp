@@ -68,14 +68,17 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	arma::vec e_z = {0, 0, 2.0*2*z};
 
 	arma::vec E;
+	double V0_t
 	
 	if (arma::norm(r) > d)
     {
         E = arma::vec(3, arma::fill::zeros);
     }
+
     else 
     {
-	    double V0_t = V0;
+	    V0_t = V0;
+
 	    if (time_dependent_v0)
 	    {
 	        V0_t = V0 * (1. + f * cos(omega_v * simulation_time));
@@ -110,7 +113,7 @@ arma::vec PenningTrap::force_particle(int i, int j)
     arma::vec r_diff = r_i - r_j;
     double distance_squared = arma::dot(r_diff, r_diff);
 
-    if (distance_squared == 0) return arma::vec(3, arma::fill::zeros); // Prevent division by zero
+    if (distance_squared == 0) return arma::vec(3, arma::fill::zeros);
 
     return k_e * q_i * q_j * r_diff / distance_squared;
 }
@@ -168,10 +171,8 @@ void PenningTrap::evolve_forward_euler(double dt)
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
 		Particle& particle_i = particle_collection[i];
-		//arma::vec total_force_i = total_force(i);
 
 		arma::vec new_velocity = particle_i.return_velocity() + dt * total_force(i) / particle_i.return_mass();
-
 		arma::vec new_position = particle_i.return_position() + dt * particle_i.return_velocity();
 
 		particle_i.set_position(new_position);
