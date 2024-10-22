@@ -35,7 +35,7 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 
 #particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
 #particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
-particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
+#particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
 
 
 # ---------- Plotting - z(t) ----------
@@ -304,7 +304,7 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_04.pdf", format="pdf")
 plt.show()
-"""
+
 plt.plot(omega_v_07, particles_07, label=r'f = 0.7 [$\mu$m] ')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
@@ -314,6 +314,6 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_07.pdf", format="pdf")
 plt.show()
-
+"""
 
 
