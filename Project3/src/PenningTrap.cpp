@@ -168,10 +168,9 @@ void PenningTrap::evolve_forward_euler(double dt)
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
 		Particle& particle_i = particle_collection[i];
-		arma::vec total_force_i = total_force(i);
+		//arma::vec total_force_i = total_force(i);
 
-		arma::vec new_velocity = particle_i.return_velocity() + dt * 
-								 total_force_i / particle_i.return_mass();
+		arma::vec new_velocity = particle_i.return_velocity() + dt * total_force(i) / particle_i.return_mass();
 
 		arma::vec new_position = particle_i.return_position() + dt * particle_i.return_velocity();
 
@@ -248,14 +247,14 @@ void PenningTrap::evolve_RK4(double dt)
         Particle& particle_i = particle_collection[i];
         arma::vec initial_position = particle_i.return_position();
         arma::vec initial_velocity = particle_i.return_velocity();
-        arma::vec total_force_i = total_force(i);
+        //arma::vec total_force_i = total_force(i);
 
         arma::vec temp_position;
         arma::vec temp_velocity;
 
         // k1
-        arma::vec k_x1 = dt * initial_velocity;
-        arma::vec k_v1 = dt * (total_force_i / particle_i.return_mass());
+        arma::vec k_x1 = dt * particle_i.return_velocity();
+        arma::vec k_v1 = dt * (total_force(i) / particle_i.return_mass());
 
         // k2
         temp_position = initial_position + 0.5 * k_x1;
