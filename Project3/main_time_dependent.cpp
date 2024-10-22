@@ -105,7 +105,7 @@ int main()
 		write_to_file(filename_particles_inside, particles_inside_trap, omega_v);
 	}
 
-return 0;
+	return 0;
 }
 
 

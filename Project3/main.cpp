@@ -410,13 +410,7 @@ int main(){
 
             arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
             arma::vec r_numerical = arma::vec({x_RK4(i), y_RK4(i), z_RK4(i)});
-            delta_RK4(i) = arma::norm(r_analytical - r_numerical);
-
-            //delta_RK4(i) = std::sqrt((x_analytical(i) - x_RK4(i)) * (x_analytical(i) - x_RK4(i)) + 
-                                     //(y_analytical(i) - y_RK4(i)) * (y_analytical(i) - y_RK4(i)) + 
-                                     //(z_analytical(i) - z_RK4(i)) * (z_analytical(i) - z_RK4(i)));
-
-            
+            delta_RK4(i) = arma::norm(r_analytical - r_numerical);   
         }
 
 
@@ -430,22 +424,11 @@ int main(){
             arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
             arma::vec r_numerical = arma::vec({x_FE(i), y_FE(i), z_FE(i)});
             delta_FE(i) = arma::norm(r_analytical - r_numerical);
-
-            //delta_FE(i) = std::sqrt((x_analytical(i) - x_FE(i)) * (x_analytical(i) - x_FE(i)) + 
-                                    //(y_analytical(i) - y_FE(i)) * (y_analytical(i) - y_FE(i)) + 
-                                    //(z_analytical(i) - z_FE(i)) * (z_analytical(i) - z_FE(i)));
         
         }
 
         delta_max_FE[j] = arma::max(delta_FE);
         delta_max_RK4[j] = arma::max(delta_RK4);
-
-        std::cout << "FE             RK4\n";
-        for(int i = 0; i < 10; i++)
-        {
-            std::cout << delta_FE(i) << "    " << delta_RK4(i) << std::endl;
-        }
-
     }
 
     delta_max_FE.print("Delta max FE");
@@ -455,8 +438,8 @@ int main(){
     double r_err_FE = error_convergence_rate(dt_delta, delta_max_FE);
     double r_err_RK4 = error_convergence_rate(dt_delta, delta_max_RK4);
 
-    std::cout << "r_err_FE: " << r_err_FE << std::endl;
-    std::cout << "r_err_RK4: " << r_err_RK4 << std::endl;
+    std::cout << "Error convergence rate FE: " << r_err_FE << std::endl;
+    std::cout << "Error convergence rate RK4: " << r_err_RK4 << std::endl;
 
     return 0;
 
