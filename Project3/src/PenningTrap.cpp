@@ -201,11 +201,8 @@ void PenningTrap::evolve_RK4(double dt)
         // k2
         temp_position = initial_position + 0.5 * k_x1;
         temp_velocity = initial_velocity + 0.5 * k_v1;
-<<<<<<< HEAD
-=======
         particle_i.set_position(temp_position);
         particle_i.set_velocity(temp_velocity);
->>>>>>> 84ed713 (changes)
         arma::vec total_force_k2 = total_force(i); 
         arma::vec k_x2 = dt * temp_velocity;
         arma::vec k_v2 = dt * (total_force_k2 / particle_i.return_mass());
@@ -235,7 +232,6 @@ void PenningTrap::evolve_RK4(double dt)
         particle_i.set_position(x_ip1);
         particle_i.set_velocity(v_ip1);
 
-<<<<<<< HEAD
         simulation_time += dt;
     }
 }
