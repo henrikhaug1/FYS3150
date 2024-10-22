@@ -47,7 +47,7 @@ int PenningTrap::count_particles()
 	int count = 0;
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
-		if(arma::norm(particle_collection[i].return_position() < d))
+		if(arma::norm(particle_collection[i].return_position()) < d)
 		{
 			count +=1;
 		}
@@ -58,38 +58,16 @@ int PenningTrap::count_particles()
 // External electric field at point r=(x,y,z)
 arma::vec PenningTrap::external_E_field(arma::vec r)
 {
-	double x = r(0);
-	double y = r(1);
-	double z = r(2);
-
-
-	arma::vec e_x = {2*x, 0, 0};
-	arma::vec e_y = {0, 2*y, 0};
-	arma::vec e_z = {0, 0, 2.0*2*z};
-
-	arma::vec E;
-	double V0_t
-	
-	if (arma::norm(r) > d)
+    if (time_dependent_v0)
     {
-        E = arma::vec(3, arma::fill::zeros);
+        //std::cout << time << std::endl;
+        double V = V0*(1+f*cos(omega_v*simulation_time));
+        return V/(d*d) * arma::vec(" 1 1 -2") % r;
     }
-
-    else 
-    {
-	    V0_t = V0;
-
-	    if (time_dependent_v0)
-	    {
-	        V0_t = V0 * (1. + f * cos(omega_v * simulation_time));
-	    }
-    
-    E = -(V0_t / (2.0 * d * d)) * (e_z - e_x - e_y); 
-	}
-
-	return E;
+    else{
+        return V0/(d*d) * arma::vec(" 1 1 -2") % r;
+    }
 }
-
 
 // External magnetic field at point r=(x,y,z)
 arma::vec PenningTrap::external_B_field(arma::vec r)

@@ -5,15 +5,16 @@ IFLAG = -Iinclude
 
 all: main main_time_dependent
 
-main: 
+main: main.cpp src/Particle.cpp src/PenningTrap.cpp
 	$(CC) main.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main
 
-main_time_dependent:
+main_time_dependent: main_time_dependent.cpp src/Particle.cpp src/PenningTrap.cpp
 	$(CC) main_time_dependent.cpp src/Particle.cpp src/PenningTrap.cpp $(IFLAG) -larmadillo -o main_time_dependent
 
 run_all: all
 	./main &
 	./main_time_dependent &
+
 
 clean:
 	rm -f main
