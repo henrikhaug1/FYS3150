@@ -57,4 +57,5 @@ clean:
 	rm -f f0.1.txt
 	rm -f f0.4.txt
 	rm -f f0.7.txt
+	rm -f relative_error.pdf
 

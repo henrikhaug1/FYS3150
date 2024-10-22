@@ -35,7 +35,7 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 
 #particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
 #particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
-particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
+#particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
 
 
 # ---------- Plotting - z(t) ----------
@@ -214,33 +214,31 @@ plt.show()
 fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
 # RK4 Plot
-axs[0].plot(time_4000, error_RK4_4000, label="4000 steps")
-axs[0].plot(time_8000, error_RK4_8000, label="8000 steps")
-axs[0].plot(time_16000, error_RK4_16000, label="16000 steps")
-axs[0].plot(time_32000, error_RK4_32000, label="32000 steps")
+axs[0].plot(time_4000, np.log10(error_RK4_4000), label="4000 steps")
+axs[0].plot(time_8000, np.log10(error_RK4_8000), label="8000 steps")
+axs[0].plot(time_16000, np.log10(error_RK4_16000), label="16000 steps")
+axs[0].plot(time_32000, np.log10(error_RK4_32000), label="32000 steps")
+
 axs[0].set_xlabel(r'Time [$\mu$s]', fontsize=16)
-axs[0].set_ylabel(r'log(Error)', fontsize=16)
-axs[0].set_yscale("log")  # Log scale for better readability
+axs[0].set_ylabel(r'log Error', fontsize=16)
 axs[0].tick_params(axis='x', labelsize=14)
 axs[0].tick_params(axis='y', labelsize=14)
-axs[0].legend(loc="upper left", fontsize=10)
-axs[0].text(23, 1000, "Runge Kutta 4", fontsize=16)
+axs[0].legend(loc="upper left", fontsize=14)
+axs[0].set_title("Runge Kutta 4", fontsize=16)
 
 # FE Plot
-axs[1].plot(time_4000, error_FE_4000, label="4000 steps")
-axs[1].plot(time_8000, error_FE_8000, label="8000 steps")
-axs[1].plot(time_16000, error_FE_16000, label="16000 steps")
-axs[1].plot(time_32000, error_FE_32000, label="32000 steps")
+axs[1].plot(time_4000, np.log10(error_FE_4000), label="4000 steps")
+axs[1].plot(time_8000, np.log10(error_FE_8000), label="8000 steps")
+axs[1].plot(time_16000, np.log10(error_FE_16000), label="16000 steps")
+axs[1].plot(time_32000, np.log10(error_FE_32000), label="32000 steps")
 axs[1].set_xlabel(r'Time [$\mu$s]', fontsize=16)
-axs[1].set_yscale("log")  # Log scale for better readability
 axs[1].tick_params(axis='x', labelsize=14)
 axs[1].tick_params(axis='y', labelsize=14)
-axs[1].text(23, 1000, "Forward Euler", fontsize=16)
-
-axs[1].legend(loc="upper left", fontsize=10)
+axs[1].set_title("Forward Euler", fontsize=16)
+axs[1].legend(loc="upper left", fontsize=14)
 
 plt.tight_layout()
-fig.savefig("log_error.pdf", format="pdf")
+fig.savefig("relative_error.pdf", format="pdf")
 plt.show()
 
 #---------- Error difference plot ----------
@@ -304,7 +302,7 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_04.pdf", format="pdf")
 plt.show()
-"""
+
 plt.plot(omega_v_07, particles_07, label=r'f = 0.7 [$\mu$m] ')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
@@ -314,6 +312,6 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_07.pdf", format="pdf")
 plt.show()
-
+"""
 
 

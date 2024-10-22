@@ -96,6 +96,7 @@ int main(){
 
     // Making time
     arma::vec steps = arma::vec({4000, 8000, 16000, 32000});
+    
     double t = 0.0;
     int t_max = 50;
     double dt = t_max/steps[3];
@@ -105,6 +106,8 @@ int main(){
         time(i) = t;
         t += dt;
     }
+    
+
 
     // ---------------  SPECIFIC ANALYTICAL SOLUTION ---------------
 
@@ -315,7 +318,7 @@ int main(){
     for (int j=0; j < steps.n_elem; j++)
     {
         double dt = 50.0 / steps[j];  
-        arma::vec time = arma::linspace(0.0, 50.0, steps[j]);  // Updated time vector with correct size
+        arma::vec time = arma::regspace(0.0, dt, 50.0);  // Updated time vector with correct size
 
         // Re-run RK4 and FE with new dt for current step size
         PenningTrap trap_RK4_error, trap_FE_error, trap_analytical_error;
@@ -324,8 +327,16 @@ int main(){
         trap_analytical_error.add_particle(particle1);
 
         arma::vec x_RK4(time.n_elem);
+        arma::vec y_RK4(time.n_elem);
+        arma::vec z_RK4(time.n_elem);
+
         arma::vec x_FE(time.n_elem);
+        arma::vec y_FE(time.n_elem);
+        arma::vec z_FE(time.n_elem);
+
         arma::vec x_analytical(time.n_elem);
+        arma::vec y_analytical(time.n_elem);
+        arma::vec z_analytical(time.n_elem);
 
         arma::vec relative_error_RK4(time.n_elem);
         arma::vec relative_error_FE(time.n_elem);
@@ -338,9 +349,16 @@ int main(){
         {
             trap_RK4_error.evolve_RK4(dt);
             x_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(0);
-         
+            y_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(1);
+            z_RK4(i) = trap_RK4_error.particle_collection[0].return_position()(2);
+
+
+            arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical = arma::vec({x_RK4(i), y_RK4(i), z_RK4(i)});
+
             // Relative error between analytical and RK4
-            relative_error_RK4(i) = std::abs(x_RK4(i) - x_analytical(i)) / std::abs(x_analytical(i));
+            relative_error_RK4(i) = arma::norm(r_analytical - r_numerical) / arma::norm(r_analytical);
+         
         }
 
 
@@ -353,10 +371,15 @@ int main(){
         for (int i = 0; i < time.n_elem; i++) {
             trap_FE_error.evolve_forward_euler(dt);
             x_FE(i) = trap_FE_error.particle_collection[0].return_position()(0);
-       
+            y_FE(i) = trap_FE_error.particle_collection[0].return_position()(1);
+            z_FE(i) = trap_FE_error.particle_collection[0].return_position()(2);
+
+
+            arma::vec r_analytical = arma::vec({x_analytical(i), y_analytical(i), z_analytical(i)});
+            arma::vec r_numerical = arma::vec({x_FE(i), y_FE(i), z_FE(i)});
 
             // Relative error between analytical and FE
-            relative_error_FE(i) = std::abs(x_FE(i) - x_analytical(i)) / std::abs(x_analytical(i));
+            relative_error_FE(i) = arma::norm(r_analytical - r_numerical) / arma::norm(r_analytical);
         }
 
         // Write FE error to file
@@ -375,7 +398,7 @@ int main(){
     for (int j=0; j < steps.n_elem; j++)
     {
         double dt = dt_delta[j];
-        arma::vec time = linspace(0.0, 50.0, dt);  // Updated time vector with correct size
+        arma::vec time = arma::regspace(0.0, dt, 50.0);  // Updated time vector with correct size
 
         // Re-run RK4 and FE with new dt for current step size
         PenningTrap trap_RK4_delta, trap_FE_delta, trap_analytical_delta;
