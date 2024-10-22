@@ -34,42 +34,42 @@ arma::vec linspace(double start, double end, double dt)
 
 
 int main()
-{
-	// ---------- particles still in trap after 500 microseconds for f = 0.1, 0.4, 0.7----------
-/*
+{	/*
 	double mass = 40.078;
 	int charge = 1;
 	int t_max = 500;
 	int n_step = 40000;
-	double dt = 500./n_step;
+	double dt = 500. / n_step;
 
-	arma::vec f = arma::vec({0.1, 0.4, 0.7});
-	arma::vec omega_v = linspace(0.2, 2.5, 0.02);
+	arma::vec f = {0.1, 0.4, 0.7};  // More compact syntax
+	arma::vec omega_v = arma::regspace(0.2, 0.02, 2.5);  // Corrected linspace
 
-	arma::vec particles_inside_trap = arma::vec(omega_v.n_elem);
+	arma::vec particles_inside_trap(omega_v.n_elem);
 
-	for(int i = 0; i < f.n_elem; i++)
-	{
-		for(int j = 0; j < omega_v.n_elem; j ++)
-		{
-			std::cout << "hei " << j << std::endl;
-			PenningTrap trap = PenningTrap(T, 0.025 * V, 500, false, true, f[i], omega_v[j]);
-			trap.add_random_particle(100, charge, mass);
+	for (int i = 0; i < f.n_elem; i++) {
+	    for (int j = 0; j < omega_v.n_elem; j++) {
+	        std::cout << "Starting omega_v index " << j << std::endl;
 
-			for(int k = 0; k < n_step; k++)
-			{
-				trap.evolve_RK4(dt);
-			}
+	        PenningTrap trap = PenningTrap(T, 0.025 * V, 500, false, true, f[i], omega_v[j]);
+	        trap.add_random_particle(100, charge, mass);
 
-			particles_inside_trap[j] = trap.count_particles();
+	        for (int k = 0; k < n_step; k++) {
+	            trap.change_time(k * dt);
+	            trap.evolve_RK4(dt);
+	            }
+	        
 
-		}
+	        particles_inside_trap[j] = trap.count_particles();  // Record particle count
+	    }
 
-		std::string filename_particles_inside = "f" + std::to_string(static_cast<double>(f[i])) + ".txt";
-		write_to_file(filename_particles_inside, particles_inside_trap, omega_v);
-
+	    std::string filename_particles_inside = "f" + std::to_string(f[i]) + ".txt";
+	    write_to_file(filename_particles_inside, particles_inside_trap, omega_v);  // Ensure format is correct
 	}
+
+	return 0;
+}
 */
+
 // ---------- fine grained - without columb interactions ----------
 double mass = 40.078;
 int charge = 1;
@@ -78,7 +78,7 @@ int n_step = 40000;
 double dt = 500. / n_step;
 
 arma::vec f = {0.7};  // More compact syntax
-arma::vec omega_v = arma::regspace(0.2, 0.02, 2.5);  // Corrected linspace
+arma::vec omega_v = arma::regspace(1.1, 0.002, 1.7);  // Corrected linspace
 
 arma::vec particles_inside_trap(omega_v.n_elem);
 
@@ -86,24 +86,12 @@ for (int i = 0; i < f.n_elem; i++) {
     for (int j = 0; j < omega_v.n_elem; j++) {
         std::cout << "Starting omega_v index " << j << std::endl;
 
-        PenningTrap trap = PenningTrap(T, 0.025 * V, 500, false, true, f[i], omega_v[j]);
+        PenningTrap trap = PenningTrap(T, 0.025 * V, 500, true, true, f[i], omega_v[j]);
         trap.add_random_particle(100, charge, mass);  // Add 100 particles
 
         for (int k = 0; k < n_step; k++) {
             trap.change_time(k * dt);  // Assuming this is necessary
             trap.evolve_RK4(dt);
-
-            // Print every 1000 steps instead of every step
-            if (k % 1000 == 0) {
-                trap.particle_collection[0].return_position().print(std::to_string(k) + " position");
-                trap.particle_collection[0].return_velocity().print(std::to_string(k) + " velocity");
-            }
-
-            // Optional early exit condition
-            if (trap.count_particles() == 0) {
-                std::cout << "All particles have left the trap at step " << k << std::endl;
-                break;
-            }
         }
 
         particles_inside_trap[j] = trap.count_particles();  // Record particle count
@@ -115,8 +103,6 @@ for (int i = 0; i < f.n_elem; i++) {
 
 	return 0;
 }
-
-
 
 
 
