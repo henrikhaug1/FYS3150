@@ -37,6 +37,7 @@ void PenningTrap::add_random_particle(int n, int charge, double mass)
 	    arma::vec r = arma::vec(3).randn()*0.1*d;
 	    arma::vec v = arma::vec(3).randn()*0.1*d;
 	    particle_collection.push_back(Particle(charge, mass, r, v));
+
 	}
 }
 
@@ -46,7 +47,7 @@ int PenningTrap::count_particles()
 	int count = 0;
 	for(int i = 0; i < particle_collection.size(); i++)
 	{
-		if(norm(particle_collection[i].return_position() < d))
+		if(arma::norm(particle_collection[i].return_position() < d))
 		{
 			count +=1;
 		}
@@ -62,24 +63,26 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 	double z = r(2);
 
 
-	arma::vec e_x = {2 * x, 0, 0};
-	arma::vec e_y = {0, 2 * y, 0};
-	arma::vec e_z = {0, 0, 2.0 * 2 * z};
+	arma::vec e_x = {2*x, 0, 0};
+	arma::vec e_y = {0, 2*y, 0};
+	arma::vec e_z = {0, 0, 2.0*2*z};
 
-	arma::vec E =  - ( V0 / (2.0*d*d) ) * (e_z - e_x - e_y);
-
-	if(arma::norm(r) > d)
-	{
-		E = arma::vec(3, arma::fill::zeros);
+	arma::vec E;
+	
+	if (arma::norm(r) > d)
+    {
+        E = arma::vec(3, arma::fill::zeros);
+    }
+    else 
+    {
+	    double V0_t = V0;
+	    if (time_dependent_v0)
+	    {
+	        V0_t = V0 * (1. + f * cos(omega_v * simulation_time));
+	    }
+    
+    E = -(V0_t / (2.0 * d * d)) * (e_z - e_x - e_y); 
 	}
-
-	if (time_dependent_v0)
-	{
-    	E = E * (1. + f*cos(omega_v*simulation_time));
-    	std::cout << "f" << f << "omega_v" << omega_v << std::endl;
-
-  	}
-
 
 	return E;
 }
@@ -199,6 +202,11 @@ void PenningTrap::evolve_RK4(double dt)
         // k2
         temp_position = initial_position + 0.5 * k_x1;
         temp_velocity = initial_velocity + 0.5 * k_v1;
+<<<<<<< HEAD
+=======
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
+>>>>>>> 84ed713 (changes)
         arma::vec total_force_k2 = total_force(i); 
         arma::vec k_x2 = dt * temp_velocity;
         arma::vec k_v2 = dt * (total_force_k2 / particle_i.return_mass());
@@ -206,6 +214,8 @@ void PenningTrap::evolve_RK4(double dt)
         // k3
         temp_position = initial_position + 0.5 * k_x2;
         temp_velocity = initial_velocity + 0.5 * k_v2;
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
         arma::vec total_force_k3 = total_force(i); 
         arma::vec k_x3 = dt * temp_velocity;
         arma::vec k_v3 = dt * (total_force_k3 / particle_i.return_mass());
@@ -213,6 +223,8 @@ void PenningTrap::evolve_RK4(double dt)
         // k4
         temp_position = initial_position + k_x3;
         temp_velocity = initial_velocity + k_v3;
+        particle_i.set_position(temp_position);
+        particle_i.set_velocity(temp_velocity);
         arma::vec total_force_k4 = total_force(i); 
         arma::vec k_x4 = dt * temp_velocity;
         arma::vec k_v4 = dt * (total_force_k4 / particle_i.return_mass());
@@ -224,6 +236,7 @@ void PenningTrap::evolve_RK4(double dt)
         particle_i.set_position(x_ip1);
         particle_i.set_velocity(v_ip1);
 
+<<<<<<< HEAD
         simulation_time += dt;
     }
 }
@@ -319,6 +332,11 @@ void PenningTrap::specific_analytical_solution(Particle particle, arma::vec time
         y[t] = std::imag(f_t);  // Imaginary part goes to y
         z[t] = z0 * cos(omega_z * time(t));
     }
+}
+
+void PenningTrap::change_time(double t)
+{
+	simulation_time = t;
 }
 
 

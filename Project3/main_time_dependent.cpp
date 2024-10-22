@@ -40,7 +40,6 @@ int main()
 	double mass = 40.078;
 	int charge = 1;
 	int t_max = 500;
-	int t = 0;
 	int n_step = 40000;
 	double dt = 500./n_step;
 
@@ -76,12 +75,11 @@ int main()
 	double mass = 40.078;
 	int charge = 1;
 	int t_max = 500;
-	int t = 0;
 	int n_step = 40000;
 	double dt = 500./n_step;
 
 	arma::vec f = arma::vec({0.7});
-	arma::vec omega_v = linspace(0.02, 2.5, 0.02);
+	arma::vec omega_v = linspace(0.2, 2.5, 0.02);
 
 	arma::vec particles_inside_trap = arma::vec(omega_v.n_elem);
 
@@ -95,6 +93,7 @@ int main()
 
 			for(int k = 0; k < n_step; k++)
 			{
+				trap.change_time(k*dt);
 				trap.evolve_RK4(dt);
 			}
 
@@ -108,3 +107,9 @@ int main()
 
 return 0;
 }
+
+
+
+
+
+

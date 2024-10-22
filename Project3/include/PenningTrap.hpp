@@ -26,11 +26,11 @@ class PenningTrap
 	// Add a particle to the trap
 	void add_particle(Particle p_in);
 
+	// Add random particles to trap
 	void add_random_particle(int n, int charge, double mass);
 
+	// count amount of particles within a radius (inside trap)
 	int count_particles();
-
-	void switch_interactions();
 
 	// External electric field at point r=(x,y,z)
 	arma::vec external_E_field(arma::vec r);  
@@ -58,6 +58,8 @@ class PenningTrap
 
 	// Specific analytical solution for z(t) and motion in (x, y)-plane
 	void specific_analytical_solution(Particle particle, arma::vec time, arma::vec& x, arma::vec& y, arma::vec& z);
+
+	void change_time(double t);
 
 
 };

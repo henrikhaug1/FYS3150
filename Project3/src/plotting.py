@@ -33,15 +33,15 @@ time_8000, error_FE_8000 = np.loadtxt('relative_error_FE_8000.txt', unpack=True,
 time_16000, error_FE_16000 = np.loadtxt('relative_error_FE_16000.txt', unpack=True, skiprows=1)
 time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=True, skiprows=1)
 
-particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
-particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
+#particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
+#particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
 particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
 
 
 # ---------- Plotting - z(t) ----------
 plt.figure(figsize=(10, 6))
 plt.plot(time_RK4_1, z_RK4_1, label="RK4", color="blue", alpha=0.7)
-plt.plot(time_FE_1, z_FE_1, label="FE", color="pink", alpha=0.5)
+plt.plot(time_FE_1, z_FE_1, label="FE", color="green", alpha=0.5)
 plt.plot(time_analytical, z_analytical, label="Analytical", color="red", alpha=0.5)
 plt.xlabel(r'Time [$\mu$s]', fontsize=16)
 plt.ylabel(r'$z$ [$\mu$m]', fontsize=16)
@@ -283,6 +283,7 @@ fig.savefig("difference_error_plot.pdf", format="pdf")
 plt.show()
 
 #---------- plot of particles left in trap ----------
+"""
 plt.plot(omega_v_01, particles_01, label=r'f = 0.1 [$\mu$m]')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
@@ -303,7 +304,7 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_04.pdf", format="pdf")
 plt.show()
-
+"""
 plt.plot(omega_v_07, particles_07, label=r'f = 0.7 [$\mu$m] ')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
