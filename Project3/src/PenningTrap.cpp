@@ -90,10 +90,11 @@ arma::vec PenningTrap::force_particle(int i, int j)
 
     arma::vec r_diff = r_i - r_j;
     double distance_squared = arma::dot(r_diff, r_diff);
+	double distance = std::sqrt(distance_squared);
 
     if (distance_squared == 0) return arma::vec(3, arma::fill::zeros);
-
-    return k_e * q_i * q_j * r_diff / distance_squared;
+	
+    return k_e * q_i * q_j * r_diff / (distance_squared * distance);
 }
 
 
@@ -141,8 +142,6 @@ arma::vec PenningTrap::total_force(int i)
 }
 
 
-
-
 // Evolve the system one time step (dt) using Forward Euler
 void PenningTrap::evolve_forward_euler(double dt)
 {	
@@ -159,92 +158,212 @@ void PenningTrap::evolve_forward_euler(double dt)
 	}	
 }
 
+// void PenningTrap::evolve_RK4(double dt)
+// {
+// 	n = particle_collection.size() //Amount of particles
+// 	arma::vec initial_position(n);
+// 	arma::vec initial_velocity(n);
+
+// 	arma::vec position1(n);
+// 	arma::vec velocity1(n);
+// 	arma::vec position2(n);
+// 	arma::vec velocity2(n);
+// 	arma::vec position3(n);
+// 	arma::vec velocity3(n);
+// 	arma::vec position4(n);
+// 	arma::vec velocity4(n);
+
+// 	arma::vec k_r1(n);
+// 	arma::vec k_r2(n);
+// 	arma::vec k_r3(n);
+// 	arma::vec k_r4(n);
+
+// 	arma::vec k_v1(n);
+// 	arma::vec k_v2(n);
+// 	arma::vec k_v3(n);
+// 	arma::vec k_v4(n);
+
+// 	arma::vec total_force_k1(n);
+// 	arma::vec total_force_k2(n);
+// 	arma::vec total_force_k3(n);
+// 	arma::vec total_force_k4(n);
+	
+//     for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		Particle& particle_i = particle_collection[i];
+// 		const arma::vec initial_position(i) = particle_i.return_position();   //Finds their initial positions
+// 		const arma::vec initial_velocity(i) = particle_i.return_velocity();
+
+//         // k1
+// 		total_force_k1(i) = total_force(i);			//Calculates k1 for all particles
+// 		k_r1(i) = dt * initial_velocity(i);
+// 		k_v1(i) = dt * (total_force_k1(i) / particle_i.return_mass());
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)  //Loops over all the particles
+// 	{
+// 		position1(i) = initial_position(i) + 0.5 * k_r1(i);		//Calculates their new positions using k1
+// 		velocity1(i) = initial_velocity(i) + 0.5 * k_v1(i);
+
+// 		particle_i.set_position(position1(i));
+// 		particle_i.set_velocity(velocity1(i)); 
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		// k2
+// 		total_force_k2(i) = total_force(i);  
+// 		k_r2(i) = dt * initial_velocity(i);
+// 		k_v2(i) = dt * (total_force_k2(i) / particle_i.return_mass());  // Use total_force_k2
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		position2(i) = initial_position(i) + 0.5 * k_r2(i);
+// 		velocity2(i) = initial_velocity(i) + 0.5 * k_v2(i);
+
+// 		particle_i.set_position(position2(i));
+// 		particle_i.set_velocity(velocity2(i));
+// 	}
+// 		// k3
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		total_force_k3(i) = total_force(i);
+// 		k_r3(i) = dt * initial_velocity(i);  
+// 		k_v3(i) = dt * (total_force_k3(i) / particle_i.return_mass());
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		position3(i) = initial_position(i) + k_r3(i);
+// 		velocity3(i) = initial_velocity(i) + k_v3(i);
+
+// 		particle_i.set_position(position3(i));
+// 		particle_i.set_velocity(velocity3(i));
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {	
+// 		total_force_k4(i) = total_force(i); 
+// 		k_r4(i) = dt * velocity4(i);
+// 		k_v4(i) = dt * (total_force_k4(i) / particle_i.return_mass());
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {
+// 		position4(i) = initial_position(i) + k_r4(i);
+// 		velocity4(i) = initial_velocity(i) + k_v4(i);
+
+// 		particle_i.set_position(position4(i));
+// 		particle_i.set_velocity(velocity4(i));		
+// 	}
+// 	for(int i = 0; i < particle_collection.size(); i++)	//Loops over all particles
+//     {
+//         // Final updates
+//         arma::vec r_ip1 = initial_position + (1.0 / 6.0) * (k_r1 + 2 * k_r2 + 2 * k_r3 + k_r4);
+//         arma::vec v_ip1 = initial_velocity + (1.0 / 6.0) * (k_v1 + 2 * k_v2 + 2 * k_v3 + k_v4);
+
+//         particle_i.set_position(r_ip1);
+//         particle_i.set_velocity(v_ip1);
+
+//         simulation_time += dt;
+//     }
+// }
 void PenningTrap::evolve_RK4(double dt)
 {
-    for(int i = 0; i < particle_collection.size(); i++)
-    {	
+    int n = particle_collection.size(); // Amount of particles
+    
+    arma::mat initial_positions(3, n);  // Assuming 3D positions
+    arma::mat initial_velocities(3, n); // Assuming 3D velocities
+
+    arma::mat k_r1(3, n);
+    arma::mat k_r2(3, n);
+    arma::mat k_r3(3, n);
+    arma::mat k_r4(3, n);
+
+    arma::mat k_v1(3, n);
+    arma::mat k_v2(3, n);
+    arma::mat k_v3(3, n);
+    arma::mat k_v4(3, n);
+
+    arma::mat total_force_k1(3, n);
+    arma::mat total_force_k2(3, n);
+    arma::mat total_force_k3(3, n);
+    arma::mat total_force_k4(3, n);
+    
+    for(int i = 0; i < n; i++) { // Initial positions and velocities
         Particle& particle_i = particle_collection[i];
-        const arma::vec initial_position = particle_i.return_position();
-        const arma::vec initial_velocity = particle_i.return_velocity();
+        initial_positions.col(i) = particle_i.return_position();
+        initial_velocities.col(i) = particle_i.return_velocity();
+    }
 
-        arma::vec temp_position1;
-        arma::vec temp_velocity1;
-        arma::vec temp_position2;
-        arma::vec temp_velocity2;
-        arma::vec temp_position3;
-        arma::vec temp_velocity3;
-        arma::vec temp_position4;
-        arma::vec temp_velocity4;
+    // k1
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        total_force_k1.col(i) = total_force(i); // Calculates k1 for all particles
+        k_r1.col(i) = dt * initial_velocities.col(i);
+        k_v1.col(i) = dt * (total_force_k1.col(i) / particle_i.return_mass());
+    }
 
-        arma::vec k_r1;
-        arma::vec k_r2;
-        arma::vec k_r3;
-        arma::vec k_r4;
+    // k2
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        arma::vec position1 = initial_positions.col(i) + 0.5 * k_r1.col(i);
+        arma::vec velocity1 = initial_velocities.col(i) + 0.5 * k_v1.col(i);
 
-        arma::vec k_v1;
-        arma::vec k_v2;
-        arma::vec k_v3;
-        arma::vec k_v4;
+        particle_i.set_position(position1);
+        particle_i.set_velocity(velocity1);
+    }
 
-        arma::vec total_force_k1;
-        arma::vec total_force_k2;
-        arma::vec total_force_k3;
-        arma::vec total_force_k4;
+    // Evaluate force again after intermediate state update
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        total_force_k2.col(i) = total_force(i);
+        k_r2.col(i) = dt * (initial_velocities.col(i) + 0.5 * k_v1.col(i));
+        k_v2.col(i) = dt * (total_force_k2.col(i) / particle_i.return_mass());
+    }
+  
+    // k3
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        arma::vec position2 = initial_positions.col(i) + 0.5 * k_r2.col(i);
+        arma::vec velocity2 = initial_velocities.col(i) + 0.5 * k_v2.col(i);
 
-        // k1
-		total_force_k1 = total_force(i);
-		k_r1 = dt * initial_velocity;
-		k_v1 = dt * (total_force_k1 / particle_i.return_mass());
+        particle_i.set_position(position2);
+        particle_i.set_velocity(velocity2);
+    }
 
-		// k2
-		temp_position1 = initial_position + 0.5 * k_r1;
-		temp_velocity1 = initial_velocity + 0.5 * k_v1;
+    // Evaluate force again after intermediate state update
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        total_force_k3.col(i) = total_force(i);
+        k_r3.col(i) = dt * (initial_velocities.col(i) + 0.5 * k_v2.col(i));
+        k_v3.col(i) = dt * (total_force_k3.col(i) / particle_i.return_mass());
+    }
 
-		particle_i.set_position(temp_position1);
-		particle_i.set_velocity(temp_velocity1); 
+    // k4
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        arma::vec position3 = initial_positions.col(i) + k_r3.col(i);
+        arma::vec velocity3 = initial_velocities.col(i) + k_v3.col(i);
 
-		total_force_k2 = total_force(i);  // Fix typo here
-		k_r2 = dt * temp_velocity1;
-		k_v2 = dt * (total_force_k2 / particle_i.return_mass());  // Use total_force_k2
+        particle_i.set_position(position3);
+        particle_i.set_velocity(velocity3);
+    }
 
-		particle_i.set_position(initial_position);
-		particle_i.set_velocity(initial_velocity);
+    // Evaluate force again after intermediate state update
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        total_force_k4.col(i) = total_force(i);
+        k_r4.col(i) = dt * (initial_velocities.col(i) + k_v3.col(i));
+        k_v4.col(i) = dt * (total_force_k4.col(i) / particle_i.return_mass());
+    }
 
-		// k3
-		temp_position2 = initial_position + 0.5 * k_r2;
-		temp_velocity2 = initial_velocity + 0.5 * k_v2;
-
-		particle_i.set_position(temp_position2);
-		particle_i.set_velocity(temp_velocity2);
-
-		total_force_k3 = total_force(i);
-		k_r3 = dt * temp_velocity2;  // Fix here (was temp_velocity3)
-		k_v3 = dt * (total_force_k3 / particle_i.return_mass());
-
-		particle_i.set_position(initial_position);
-		particle_i.set_velocity(initial_velocity);
-
-		// k4
-		temp_position4 = initial_position + k_r3;
-		temp_velocity4 = initial_velocity + k_v3;
-
-		particle_i.set_position(temp_position4);
-		particle_i.set_velocity(temp_velocity4);
-
-		total_force_k4 = total_force(i); 
-		k_r4 = dt * temp_velocity4;
-		k_v4 = dt * (total_force_k4 / particle_i.return_mass());
-
-
-        // Final updates
-        arma::vec r_ip1 = initial_position + (1.0 / 6.0) * (k_r1 + 2 * k_r2 + 2 * k_r3 + k_r4);
-        arma::vec v_ip1 = initial_velocity + (1.0 / 6.0) * (k_v1 + 2 * k_v2 + 2 * k_v3 + k_v4);
+    // Final updates
+    for(int i = 0; i < n; i++) {
+        Particle& particle_i = particle_collection[i];
+        arma::vec r_ip1 = initial_positions.col(i) + (1.0 / 6.0) * (k_r1.col(i) + 2 * k_r2.col(i) + 2 * k_r3.col(i) + k_r4.col(i));
+        arma::vec v_ip1 = initial_velocities.col(i) + (1.0 / 6.0) * (k_v1.col(i) + 2 * k_v2.col(i) + 2 * k_v3.col(i) + k_v4.col(i));
 
         particle_i.set_position(r_ip1);
         particle_i.set_velocity(v_ip1);
-
-        simulation_time += dt;
     }
+
+    simulation_time += dt;
 }
 
 
