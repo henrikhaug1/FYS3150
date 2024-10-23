@@ -63,11 +63,6 @@ void RK4(double n, double dt, PenningTrap trap, arma::vec& pos_RK4, arma::vec& v
     }
 }
 
-arma::vec linspace(double start, double end, double dt)
-{
-    int n = static_cast<int>((end - start) / dt);
-    return arma::linspace(start, end, n); 
-}
 
 double error_convergence_rate(arma::vec dt, arma::vec delta_max)
 {
