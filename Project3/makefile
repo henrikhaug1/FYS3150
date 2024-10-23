@@ -1,4 +1,4 @@
-CC = g++-14
+CC = g++
 IFLAG = -Iinclude
 
 .PHONY: all clean

@@ -33,9 +33,11 @@ time_8000, error_FE_8000 = np.loadtxt('relative_error_FE_8000.txt', unpack=True,
 time_16000, error_FE_16000 = np.loadtxt('relative_error_FE_16000.txt', unpack=True, skiprows=1)
 time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=True, skiprows=1)
 
-#particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
-#particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
-#particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
+particles_01_non, omega_v_01_non = np.loadtxt('f_non_interact0.100000.txt', unpack=True, skiprows=1)
+particles_01_interact, omega_v_01_interact = np.loadtxt('f_interact0.100000.txt', unpack=True, skiprows=1)
+particles_01, omega_v_01 = np.loadtxt('f0.100000.txt', unpack=True, skiprows=1)
+particles_04, omega_v_04 = np.loadtxt('f0.400000.txt', unpack=True, skiprows=1)
+particles_07, omega_v_07 = np.loadtxt('f0.700000.txt', unpack=True, skiprows=1)
 
 
 # ---------- Plotting - z(t) ----------
@@ -64,7 +66,7 @@ plt.scatter(x_FE_2, y_FE_2, label="Particle 2 (FE)", color="plum")
 
 plt.xlabel(r'$x$ [$\mu$m]', fontsize=16)
 plt.ylabel(r'$y$ [$\mu$m]', fontsize=16)
-plt.legend(fontsize=16)
+plt.legend(fontsize=16, loc='lower right')
 plt.grid(True)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
@@ -80,7 +82,7 @@ plt.plot(x_analytical, y_analytical, label = "Particle 1", color="red")
 
 plt.xlabel(r'$x$ [$\mu$m]', fontsize=16)
 plt.ylabel(r'$y$ [$\mu$m]', fontsize=16)
-plt.legend(fontsize=16)
+plt.legend(fontsize=16, loc='lower right')
 plt.grid(True)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
@@ -176,8 +178,6 @@ plt.savefig("z_vz_interactions.pdf", format="pdf")
 plt.show()
 
 
-
-
 # ---------- 3D Plotting - Without Interactions ----------
 fig = plt.figure(figsize=(12, 8))
 ax = fig.add_subplot(111, projection='3d')
@@ -223,7 +223,7 @@ axs[0].set_xlabel(r'Time [$\mu$s]', fontsize=16)
 axs[0].set_ylabel(r'log Error', fontsize=16)
 axs[0].tick_params(axis='x', labelsize=14)
 axs[0].tick_params(axis='y', labelsize=14)
-axs[0].legend(loc="upper left", fontsize=14)
+axs[0].legend(loc="lower right", fontsize=14)
 axs[0].set_title("Runge Kutta 4", fontsize=16)
 
 # FE Plot
@@ -235,7 +235,7 @@ axs[1].set_xlabel(r'Time [$\mu$s]', fontsize=16)
 axs[1].tick_params(axis='x', labelsize=14)
 axs[1].tick_params(axis='y', labelsize=14)
 axs[1].set_title("Forward Euler", fontsize=16)
-axs[1].legend(loc="upper left", fontsize=14)
+axs[1].legend(loc="lower right", fontsize=14)
 
 plt.tight_layout()
 fig.savefig("relative_error.pdf", format="pdf")
@@ -279,9 +279,9 @@ ax[1][1].legend(fontsize=16)
 plt.tight_layout()
 fig.savefig("difference_error_plot.pdf", format="pdf")
 plt.show()
-
 #---------- plot of particles left in trap ----------
-"""
+# First plot
+plt.figure()
 plt.plot(omega_v_01, particles_01, label=r'f = 0.1 [$\mu$m]')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
@@ -292,7 +292,8 @@ plt.tight_layout()
 plt.savefig("Particle_f_01.pdf", format="pdf")
 plt.show()
 
-
+# Second plot
+plt.figure()
 plt.plot(omega_v_04, particles_04, label=r'f = 0.4 [$\mu$m]')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
@@ -303,7 +304,9 @@ plt.tight_layout()
 plt.savefig("Particle_f_04.pdf", format="pdf")
 plt.show()
 
-plt.plot(omega_v_07, particles_07, label=r'f = 0.7 [$\mu$m] ')
+# Third plot
+plt.figure()
+plt.plot(omega_v_07, particles_07, label=r'f = 0.7 [$\mu$m]')
 plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
 plt.ylabel(r'Particles left in trap', fontsize=16)
 plt.xticks(fontsize=16)
@@ -312,6 +315,17 @@ plt.legend(fontsize=16)
 plt.tight_layout()
 plt.savefig("Particle_f_07.pdf", format="pdf")
 plt.show()
-"""
 
-
+# Fourth plot with both
+plt.figure()
+plt.plot(omega_v_01_interact, particles_01_interact, label=r'Interactions')
+plt.plot(omega_v_01_non, particles_01_non, label=r'No interactions')
+plt.xlabel(r"$\omega_v$ [Mhz]", fontsize=16)
+plt.ylabel(r'Particles left in trap', fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.grid()
+plt.tight_layout()
+plt.savefig("Particle_f_01_both.pdf", format="pdf")
+plt.show()
