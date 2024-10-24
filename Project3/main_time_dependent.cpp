@@ -65,7 +65,7 @@ int main()
     // ---------- fine grained - without columb interactions ----------
 */
     arma::vec f_fine = {0.1};  
-    arma::vec omega_v_fine = arma::regspace(1.1, 0.002, 1.7);   
+    arma::vec omega_v_fine = arma::regspace(1.1, 0.002, 1.6);   
     //omega_v_fine = arma::regspace(1.1, 0.01, 1.7);  //Example to run fast
 
     arma::vec particles_inside_trap_fine(omega_v_fine.n_elem);

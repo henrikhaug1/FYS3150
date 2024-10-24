@@ -60,7 +60,6 @@ arma::vec PenningTrap::external_E_field(arma::vec r)
 {
     if (time_dependent_v0)
     {
-        //std::cout << time << std::endl;
         double V = V0*(1+f*cos(omega_v*simulation_time));
         return V/(d*d) * arma::vec(" 1 1 -2") % r;
     }
