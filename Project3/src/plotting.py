@@ -36,8 +36,8 @@ time_32000, error_FE_32000 = np.loadtxt('relative_error_FE_32000.txt', unpack=Tr
 particles_07_non, omega_v_07_non = np.loadtxt('txt_files/f_fine_non_interaction_0.700000.txt', unpack=True, skiprows=1)
 particles_07_interaction, omega_v_07_interaction = np.loadtxt('txt_files/f_fine_interaction_0.700000.txt', unpack=True, skiprows=1)
 
-#particles_01_non, omega_v_01_non = np.loadtxt('txt_files/f_fine_non_interaction_0.100000.txt', unpack=True, skiprows=1)
-#particles_01_interaction, omega_v_01_interaction = np.loadtxt('txt_files/f_fine_interaction_0.100000.txt', unpack=True, skiprows=1)
+particles_01_non, omega_v_01_non = np.loadtxt('txt_files/f_fine_non_interaction_0.100000.txt', unpack=True, skiprows=1)
+particles_01_interaction, omega_v_01_interaction = np.loadtxt('txt_files/f_fine_interaction_0.100000.txt', unpack=True, skiprows=1)
 
 particles_01, omega_v_01 = np.loadtxt('txt_files/f0.100000.txt', unpack=True, skiprows=1)
 particles_04, omega_v_04 = np.loadtxt('txt_files/f0.400000.txt', unpack=True, skiprows=1)
@@ -343,7 +343,7 @@ plt.grid()
 plt.tight_layout()
 plt.savefig("Particle_f_07_both.pdf", format="pdf")
 plt.show()
-"""
+
 # Fourth plot with both for f=0.1
 plt.figure()
 plt.plot(omega_v_01_interaction, particles_01_interaction, label=r'Interactions')
@@ -357,4 +357,3 @@ plt.grid()
 plt.tight_layout()
 plt.savefig("Particle_f_01_both.pdf", format="pdf")
 plt.show()
-"""

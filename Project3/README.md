@@ -17,7 +17,7 @@ This project is organized inside the Project3 folder in this manner:
 - To make main_time_dependent, you first have to run ./main because main_time_dependent is also dependent on the .txt files made my main.cpp
 - make clean (clean all executables, plots and .txt files except the computationally heavy files located in the txt_files folder.)
 
-### Example1: Compiling and running the whole project (however it is strongly recommended to use provided .txt files for plotting instead of making your own for main_time_dependent.cpp!)
+### Example1: Compiling and running the whole project (however it is strongly recommended to use provided .txt files for plotting instead of making your own by running main_time_dependent.cpp!)
 
 - make
 - make run_all
