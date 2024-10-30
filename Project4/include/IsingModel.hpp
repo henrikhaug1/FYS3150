@@ -13,17 +13,28 @@ class IsingModel
         double J;  // Coupling constant
         arma::Mat<int> spins;  // matrix for spin configuration
 
+        double average_energy;
+        double average_magnetisation;
+        double specific_heat;
+        double susceptibility;
+
     // Constructor
     IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0);
 
+    double delta_energy(int i, int j);
+
+    void monte_carlo_step();
+
+    void metropolis(int num_steps);
+
     // Function that returns the total energy of the system
-    double total_energy(const arma::Mat<int>& spins);
+    double total_energy();
 
     // Function that returns the energy per spin
     double energy_per_spin();
 
     // Function that returns the total magnetisation of the system
-    double magnetisation(const arma::Mat<int>& spins);
+    double magnetisation();
 
     // Function that returns the magnetisation per spin
     double magnetisation_per_spin();

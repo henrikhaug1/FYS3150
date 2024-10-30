@@ -9,46 +9,122 @@ IsingModel::IsingModel(int L_in, double temp_in, double J_in)
 
 }
 
-double IsingModel::total_energy(const arma::Mat<int>& spins) {
-    double E = 0.0;
+double IsingModel::delta_energy(int i, int j)
+{
+	int left = spins(i, (j - 1 + L) % L);
+    int right = spins(i, (j + 1) % L);
+    int up = spins((i - 1 + L) % L, j);
+    int down = spins((i + 1) % L, j);
 
-    for (int k = 0; k < L; k++) {
-        for (int l = 0; l < L; l++) {
-            int spin = spins(k, l);
-            int neighbor_sum = spins((k + 1) % L, l) +  // Right neighbor
-                               spins((k - 1 + L) % L, l) +  // Left neighbor
-                               spins(k, (l + 1) % L) +  // Down neighbor
-                               spins(k, (l - 1 + L) % L);  // Up neighbor
+    int s = spins(i, j);
+    int sum_neighbors = left + right + up + down;
 
-            E -= J * spin * neighbor_sum;
+    // Energy change if spin at (i, j) is flipped
+    return 2.0 * s * sum_neighbors;
+}
+
+void IsingModel::monte_carlo_step()
+{
+	static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist_pos(0, L - 1);
+    std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
+
+    for (int n = 0; n < L * L; n++)
+    {
+        int i = dist_pos(rng);
+        int j = dist_pos(rng);
+
+        double dE = delta_energy(i, j);
+
+        if (dE <= 0)
+        {
+            spins(i, j) *= -1; // Flip spin
+        }
+        else
+        {
+            double p = std::exp(-dE / T);
+            if (dist_prob(rng) < p)
+            {
+                spins(i, j) *= -1; // Flip spin
+            }
+        }
+    }
+}
+
+void IsingModel::metropolis(int num_steps)
+{
+    int equilibration_steps = num_steps / 10; // 10% of steps for equilibration
+    int total_steps = equilibration_steps + num_steps;
+
+    double E_sum = 0.0;
+    double E2_sum = 0.0;
+    double M_sum = 0.0;
+    double M2_sum = 0.0;
+    double specific_heat;
+    double susceptibility;
+
+    for (int step = 0; step < total_steps; step++)
+    {
+        monte_carlo_step();
+
+        if (step >= equilibration_steps)
+        {
+            double E = total_energy();
+            double M = magnetisation();
+
+            E_sum += E;
+            E2_sum += E * E;
+            M_sum += M;
+            M2_sum += M * M;
         }
     }
 
-    return E / 2.0;
+    int N = num_steps;
+    double average_energy = E_sum / N;
+    double average_magnetization = M_sum / N;
+    double E_mean = average_energy;
+    double E2_mean = E2_sum / N;
+    double M_mean = average_magnetization;
+    double M2_mean = M2_sum / N;
+
+    // Compute specific heat and susceptibility
+    specific_heat = (E2_mean - E_mean * E_mean) / (T * T);
+    susceptibility = (M2_mean - M_mean * M_mean) / T;
 }
+
+
+double IsingModel::total_energy()
+{
+	double E = 0.0;
+    for (int i = 0; i < L; i++)
+    {
+        for (int j = 0; j < L; j++)
+        {
+            int s = spins(i, j);
+            int right = spins(i, (j + 1) % L);
+            int down = spins((i + 1) % L, j);
+
+            E -= s * (right + down);
+        }
+    }
+    return E;
+}
+
 
 double IsingModel::energy_per_spin()
 {
-	return total_energy(spins) / (L * L);
+	return total_energy() / (L * L);
 }
 
-double IsingModel::magnetisation(const arma::Mat<int>& spins)
+double IsingModel::magnetisation()
 {
-	int sum = 0;
-	for (int i = 0; i < L; i++)
-	{
-		for(int j = 0; j < L; j++)
-		{
-			sum += spins(i, j);
-		}
-		
-	}
-	return sum;
+    int M = arma::accu(spins);
+    return static_cast<double>(M);
 }
 
 double IsingModel::magnetisation_per_spin()
 {
-	return magnetisation(spins) / (L * L);
+	return magnetisation() / (L * L);
 }
 
 
@@ -71,7 +147,7 @@ double IsingModel::partition_function()
         }
         
         // Calculate energy for the current configuration
-        double E = total_energy(spin_config);
+        double E = total_energy();
         Z += std::exp(-beta * E);
     }
     return Z;
@@ -81,7 +157,7 @@ double IsingModel::partition_function()
 double IsingModel::probability_state()
 {
 	double beta = 1/(k_b * T);
-	double E = total_energy(spins);
+	double E = total_energy();
 	double Z = partition_function();
 
 	double probability = (1.0 / Z) * exp(-beta * E);
