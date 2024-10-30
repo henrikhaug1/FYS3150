@@ -3,6 +3,7 @@
 
 #include <armadillo>
 
+const long double k_b = 1.0; //1.380649e-23;
 
 class IsingModel
 {
@@ -12,11 +13,24 @@ class IsingModel
         double J;  // Coupling constant
         arma::Mat<int> spins;  // matrix for spin configuration
 
-    //constructor
+    // Constructor
     IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0);
 
-    //function that returns the total energy of the system
+    // Function that returns the total energy of the system
     double total_energy(const arma::Mat<int>& spins);
+
+    // Function that returns the energy per spin
+    double energy_per_spin();
+
+    // Function that returns the total magnetisation of the system
+    double magnetisation(const arma::Mat<int>& spins);
+
+    // Function that returns the magnetisation per spin
+    double magnetisation_per_spin();
+
+    double partition_function();
+
+    double probability_state();
 
 };
 
