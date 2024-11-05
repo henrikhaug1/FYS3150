@@ -10,11 +10,11 @@ int main()
     IsingModel model(L, T);
     model.metropolis(num_steps);
 
-    std::cout << "Temperature: " << T << std::endl;
-    std::cout << "Energy per Spin: " << model.energy_per_spin() << std::endl;
-    std::cout << "Average Magnetization per Spin: " << model.magnetisation_per_spin() << std::endl;
-	std::cout << "partition_function" << model.partition_function() << std::endl;
-	std::cout << "probability_state" << model.probability_state() << std::endl;
+	std::cout << "Temperature: " << T << std::endl;
+	std::cout << "Average Energy per Spin: " << model.average_energy << std::endl;
+	std::cout << "Average Magnetization per Spin: " << model.average_magnetisation << std::endl;
+	std::cout << "Specific Heat per Spin: " << model.specific_heat << std::endl;
+	std::cout << "Susceptibility per Spin: " << model.susceptibility << std::endl;
 
 
     return 0;
