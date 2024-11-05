@@ -157,7 +157,7 @@ double IsingModel::partition_function()
         Z += std::exp(-beta * E);
     }
 
-    spins = original_spins; // Restore the original spins
+    spins = original_spins; // Restore original spins
     return Z;
 }
 
