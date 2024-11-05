@@ -20,7 +20,7 @@ double IsingModel::delta_energy(int i, int j)
     int sum_neighbors = left + right + up + down;
 
     // Energy change if spin at (i, j) is flipped
-    return 2.0 * s * sum_neighbors;
+    return 2.0 * J * s * sum_neighbors;
 }
 
 void IsingModel::monte_carlo_step()
@@ -60,8 +60,6 @@ void IsingModel::metropolis(int num_steps)
     double E2_sum = 0.0;
     double M_sum = 0.0;
     double M2_sum = 0.0;
-    double specific_heat;
-    double susceptibility;
 
     for (int step = 0; step < total_steps; step++)
     {
@@ -69,42 +67,46 @@ void IsingModel::metropolis(int num_steps)
 
         if (step >= equilibration_steps)
         {
-            double E = total_energy();
+            double E = total_energy(spins);
             double M = magnetisation();
 
             E_sum += E;
             E2_sum += E * E;
-            M_sum += M;
+            M_sum += std::abs(M); // Use absolute value if needed
             M2_sum += M * M;
         }
     }
 
     int N = num_steps;
-    double average_energy = E_sum / N;
-    double average_magnetization = M_sum / N;
-    double E_mean = average_energy;
+    double E_mean = E_sum / N;
     double E2_mean = E2_sum / N;
-    double M_mean = average_magnetization;
+    double M_mean = M_sum / N;
     double M2_mean = M2_sum / N;
 
-    // Compute specific heat and susceptibility
-    specific_heat = (E2_mean - E_mean * E_mean) / (T * T);
-    susceptibility = (M2_mean - M_mean * M_mean) / T;
+    // Normalize by the number of spins
+    int num_spins = L * L;
+
+    // Assign to class variables
+    average_energy = E_mean / num_spins;
+    average_magnetisation = M_mean / num_spins;
+    specific_heat = (E2_mean - E_mean * E_mean) / (T * T * num_spins);
+    susceptibility = (M2_mean - M_mean * M_mean) / (T * num_spins);
 }
 
 
-double IsingModel::total_energy()
+
+double IsingModel::total_energy(const arma::Mat<int>& spin_config)
 {
-	double E = 0.0;
+    double E = 0.0;
     for (int i = 0; i < L; i++)
     {
         for (int j = 0; j < L; j++)
         {
-            int s = spins(i, j);
-            int right = spins(i, (j + 1) % L);
-            int down = spins((i + 1) % L, j);
+            int s = spin_config(i, j);
+            int right = spin_config(i, (j + 1) % L);
+            int down = spin_config((i + 1) % L, j);
 
-            E -= s * (right + down);
+            E -= J * s * (right + down);
         }
     }
     return E;
@@ -113,7 +115,7 @@ double IsingModel::total_energy()
 
 double IsingModel::energy_per_spin()
 {
-	return total_energy() / (L * L);
+	return total_energy(spins) / (L * L);
 }
 
 double IsingModel::magnetisation()
@@ -131,9 +133,10 @@ double IsingModel::magnetisation_per_spin()
 double IsingModel::partition_function()
 {
     double Z = 0.0;
-    int num_states = std::pow(2, L * L);
-    arma::Mat<int> spin_config = spins;
-    double beta = 1.0 / T; // Since k_b = 1.0
+    int num_states = 1 << (L * L);
+    arma::Mat<int> original_spins = spins; // Save the original spins
+    arma::Mat<int> spin_config(L, L);
+    double beta = 1.0 / T;
 
     for (int state = 0; state < num_states; state++)
     {
@@ -142,22 +145,28 @@ double IsingModel::partition_function()
         {
             for (int j = 0; j < L; j++)
             {
-                spin_config(i, j) = ((state >> (i * L + j)) & 1) ? 1 : -1;
+                int bit_index = i * L + j;
+                spin_config(i, j) = ((state >> bit_index) & 1) ? 1 : -1;
             }
         }
-        
+
+        spins = spin_config; // Temporarily set spins to the new configuration
+
         // Calculate energy for the current configuration
-        double E = total_energy();
+        double E = total_energy(spins);
         Z += std::exp(-beta * E);
     }
+
+    spins = original_spins; // Restore the original spins
     return Z;
 }
+
 
 
 double IsingModel::probability_state()
 {
 	double beta = 1/(k_b * T);
-	double E = total_energy();
+	double E = total_energy(spins);
 	double Z = partition_function();
 
 	double probability = (1.0 / Z) * exp(-beta * E);
