@@ -59,7 +59,7 @@ void IsingModel::monte_carlo_step()
     }
 }
 
-void IsingModel::metropolis(int num_steps)
+void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies)
 {
     int equilibration_steps = num_steps / 10; // 10% of steps for equilibration
     int total_steps = equilibration_steps + num_steps;
@@ -69,19 +69,33 @@ void IsingModel::metropolis(int num_steps)
     double M_sum = 0.0;
     double M2_sum = 0.0;
 
+    energies.clear();
+    cumulative_energies.clear();
+
+    int num_spins = L * L;
+
     for (int step = 0; step < total_steps; step++)
     {
         monte_carlo_step();
 
+        double E = total_energy(spins);
+
         if (step >= equilibration_steps)
         {
-            double E = total_energy(spins);
             double M = magnetisation();
 
             E_sum += E;
             E2_sum += E * E;
-            M_sum += std::abs(M); // Use absolute value if needed
+            M_sum += std::abs(M);
             M2_sum += M * M;
+
+            int N = step - equilibration_steps + 1;
+
+            double E_per_spin = E / num_spins;
+            double avg_E_per_spin = (E_sum / N) / num_spins;
+            
+            energies.push_back(E_per_spin);
+            cumulative_energies.push_back(avg_E_per_spin);
         }
     }
 
@@ -90,9 +104,6 @@ void IsingModel::metropolis(int num_steps)
     double E2_mean = E2_sum / N;
     double M_mean = M_sum / N;
     double M2_mean = M2_sum / N;
-
-    // Normalize by the number of spins
-    int num_spins = L * L;
 
     // Assign to class variables
     average_energy = E_mean / num_spins;
