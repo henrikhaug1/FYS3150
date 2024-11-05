@@ -28,7 +28,7 @@ class IsingModel
     void metropolis(int num_steps);
 
     // Function that returns the total energy of the system
-    double total_energy();
+    double total_energy(const arma::Mat<int>& spin_config);
 
     // Function that returns the energy per spin
     double energy_per_spin();
