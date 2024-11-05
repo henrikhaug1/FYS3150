@@ -106,7 +106,8 @@ double IsingModel::total_energy(const arma::Mat<int>& spin_config)
             int right = spin_config(i, (j + 1) % L);
             int down = spin_config((i + 1) % L, j);
 
-            E -= J * s * (right + down);
+            // Only summing over right and down neighbours to avoid double counting
+            E -= J * s * (right + down); 
         }
     }
     return E;
@@ -133,7 +134,7 @@ double IsingModel::magnetisation_per_spin()
 double IsingModel::partition_function()
 {
     double Z = 0.0;
-    int num_states = 1 << (L * L);
+    int num_states = 1 << (L * L); //bitwise operation equivalent to 2^(L*L)
     arma::Mat<int> original_spins = spins; // Save the original spins
     arma::Mat<int> spin_config(L, L);
     double beta = 1.0 / T;
