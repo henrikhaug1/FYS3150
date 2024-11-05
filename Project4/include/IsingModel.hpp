@@ -25,7 +25,7 @@ class IsingModel
 
     void monte_carlo_step();
 
-    void metropolis(int num_steps);
+    void metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies);
 
     // Function that returns the total energy of the system
     double total_energy(const arma::Mat<int>& spin_config);
