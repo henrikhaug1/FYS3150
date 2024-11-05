@@ -19,7 +19,7 @@ class IsingModel
         double susceptibility;
 
     // Constructor
-    IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0);
+    IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0, bool ordered=false);
 
     double delta_energy(int i, int j);
 

@@ -1,11 +1,19 @@
 #include <iostream>
 #include "IsingModel.hpp"
 
-IsingModel::IsingModel(int L_in, double temp_in, double J_in)
+IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
     : L(L_in), T(temp_in), J(J_in), spins(L_in, L_in)
 {
-	//initialize spins
-	spins.imbue([]() { return arma::randi<int>(arma::distr_param(0, 1)) * 2 - 1; });
+    if (ordered)
+    {
+        // Initialize spins to all +1 (ordered state)
+        spins.ones();
+    }
+    else
+    {
+        // Initialize spins randomly to +1 or -1 (unordered state)
+        spins.imbue([]() { return arma::randi<int>(arma::distr_param(0, 1)) * 2 - 1; });
+    }
 
 }
 
