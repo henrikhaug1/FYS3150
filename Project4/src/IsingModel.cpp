@@ -99,11 +99,14 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
         }
     }
 
-    int N = num_steps;
+    int N = num_steps * num_spins;
     double E_mean = E_sum / N;
-    double E2_mean = E2_sum / N;
+    double E2_mean = E2_sum / (N*N);
     double M_mean = M_sum / N;
-    double M2_mean = M2_sum / N;
+    double M2_mean = M2_sum / (N*N);
+
+    std::cout << "E_mean " << E_mean << std::endl;
+    std::cout << "E2_mean " << E2_mean << std::endl;
 
     // Assign to class variables
     average_energy = E_mean / num_spins;

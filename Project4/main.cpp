@@ -7,9 +7,9 @@
 
 int main()
 {
-    //---------- L = 5 ----------
-    int L = 5;           // Lattice size
-    double T = 1.0;      // Temperature
+    //---------- L = 2 ----------
+    int L = 2;           // Lattice size
+    double T = 1;      // Temperature
     int num_steps = 10000;  // Number of Monte Carlo cycles
     double J = 1.0;
 
@@ -28,6 +28,7 @@ int main()
     std::cout << "Average Magnetization per Spin (Ordered): " << model_ordered.average_magnetisation << std::endl;
     std::cout << "Specific Heat per Spin (Ordered): " << model_ordered.specific_heat << std::endl;
     std::cout << "Susceptibility per Spin (Ordered): " << model_ordered.susceptibility << std::endl;
+    std::cout << "\n";
 
     // Unordered initial state
     IsingModel model_unordered(L, T, J, false); // 'false' for unordered state
@@ -71,7 +72,7 @@ int main()
         outfile_ordered << "i " << std::setw(width) << "e_i " << std::setw(width) << "cumulative e" << "\n";
         for (size_t i = 0; i < energies_ordered.size(); ++i)
         {
-            outfile_ordered << i + 1 << std::setw(width) << energies_ordered[i] << std::setw(width) << cumulative_energies_ordered[i] << "\n";
+            outfile_ordered << i << std::setw(width) << energies_ordered[i] << std::setw(width) << cumulative_energies_ordered[i] << "\n";
         }
         outfile_ordered.close();
 
@@ -80,7 +81,7 @@ int main()
         outfile_unordered << "i " << std::setw(width) << "e_i " << std::setw(width) << "cumulative e" << "\n";
         for (size_t i = 0; i < energies_unordered.size(); ++i)
         {
-            outfile_unordered << i + 1 << std::setw(width) << energies_unordered[i] << std::setw(width) << cumulative_energies_unordered[i] << "\n";
+            outfile_unordered << i << std::setw(width) << energies_unordered[i] << std::setw(width) << cumulative_energies_unordered[i] << "\n";
         }
         outfile_unordered.close();
 
