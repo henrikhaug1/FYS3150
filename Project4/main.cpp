@@ -21,6 +21,7 @@ int main()
 
     // Ordered initial state
     IsingModel model_ordered(L, T, J, true); // 'true' for ordered state
+    model_ordered.spins.print();
     model_ordered.metropolis(num_steps, energies_ordered, cumulative_energies_ordered);
 
     std::cout << "Temperature: " << T << std::endl;
@@ -29,6 +30,8 @@ int main()
     std::cout << "Specific Heat per Spin (Ordered): " << model_ordered.specific_heat << std::endl;
     std::cout << "Susceptibility per Spin (Ordered): " << model_ordered.susceptibility << std::endl;
     std::cout << "\n";
+
+    model_ordered.spins.print();
 
     // Unordered initial state
     IsingModel model_unordered(L, T, J, false); // 'false' for unordered state

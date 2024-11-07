@@ -72,7 +72,7 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
     energies.clear();
     cumulative_energies.clear();
 
-    int num_spins = L * L;
+    int N = L * L;
 
     for (int step = 0; step < total_steps; step++)
     {
@@ -89,30 +89,30 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
             M_sum += std::abs(M);
             M2_sum += M * M;
 
-            int N = step - equilibration_steps + 1;
+            int N_eq = step - equilibration_steps + 1;
 
-            double E_per_spin = E / num_spins;
-            double avg_E_per_spin = (E_sum / N) / num_spins;
+            double E_per_spin = E / N;
+            double avg_E_per_spin = (E_sum / N_eq) / N;
             
             energies.push_back(E_per_spin);
             cumulative_energies.push_back(avg_E_per_spin);
         }
     }
 
-    int N = num_steps * num_spins;
-    double E_mean = E_sum / N;
-    double E2_mean = E2_sum / (N*N);
-    double M_mean = M_sum / N;
-    double M2_mean = M2_sum / (N*N);
+    double E_mean = E_sum / total_steps;
+    double E2_mean = E2_sum / total_steps;
+    double M_mean = M_sum / total_steps;
+    double M2_mean = M2_sum / total_steps;
 
     std::cout << "E_mean " << E_mean << std::endl;
     std::cout << "E2_mean " << E2_mean << std::endl;
 
     // Assign to class variables
-    average_energy = E_mean / num_spins;
-    average_magnetisation = M_mean / num_spins;
-    specific_heat = (E2_mean - E_mean * E_mean) / (T * T * num_spins);
-    susceptibility = (M2_mean - M_mean * M_mean) / (T * num_spins);
+    average_energy = E_mean / N;
+    average_magnetisation = M_mean / N;
+
+    specific_heat = (E2_mean - E_mean * E_mean) / (T * T * N);
+    susceptibility = (M2_mean - M_mean * M_mean) / (T * N);
 }
 
 
