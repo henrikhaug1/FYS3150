@@ -1,7 +1,9 @@
 #ifndef __IsingModel_hpp__
 #define __IsingModel_hpp__
 
+#include <iostream>
 #include <armadillo>
+#include <vector>
 
 const long double k_b = 1.0; //1.380649e-23;
 
@@ -22,6 +24,8 @@ class IsingModel
     IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0, bool ordered=false);
 
     double delta_energy(int i, int j);
+
+    //std::vector<double> delta_energy_big(int i, int j);
 
     void monte_carlo_step();
 

@@ -75,7 +75,7 @@ int main()
         outfile_ordered << "i " << std::setw(width) << "e_i " << std::setw(width) << "cumulative e" << "\n";
         for (size_t i = 0; i < energies_ordered.size(); ++i)
         {
-            outfile_ordered << i << std::setw(width) << energies_ordered[i] << std::setw(width) << cumulative_energies_ordered[i] << "\n";
+            outfile_ordered << i + 1 << std::setw(width) << energies_ordered[i] << std::setw(width) << cumulative_energies_ordered[i] << "\n";
         }
         outfile_ordered.close();
 
@@ -84,11 +84,24 @@ int main()
         outfile_unordered << "i " << std::setw(width) << "e_i " << std::setw(width) << "cumulative e" << "\n";
         for (size_t i = 0; i < energies_unordered.size(); ++i)
         {
-            outfile_unordered << i << std::setw(width) << energies_unordered[i] << std::setw(width) << cumulative_energies_unordered[i] << "\n";
+            outfile_unordered << i + 1 << std::setw(width) << energies_unordered[i] << std::setw(width) << cumulative_energies_unordered[i] << "\n";
         }
         outfile_unordered.close();
 
     }
+
+
+
+    // ---------- estimate probability function ----------
+
+    L = 20;           // Lattice size
+    Temp = {1.0, 2.4};     // Temperature
+    num_steps = 10000;  // Number of Monte Carlo cycles
+    J = 1.0;
+
+    IsingModel model_estimate_pdf();
+    
+    
 
     return 0;
 }

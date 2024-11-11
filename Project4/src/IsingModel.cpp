@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "IsingModel.hpp"
 
 IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
@@ -27,9 +28,105 @@ double IsingModel::delta_energy(int i, int j)
     int s = spins(i, j);
     int sum_neighbors = left + right + up + down;
 
-    // Energy change if spin at (i, j) is flipped
     return 2.0 * J * s * sum_neighbors;
 }
+/*
+std::vector<double> IsingModel::delta_energy_big(int i, int j)
+{
+
+    int left = spins(i, (j - 1 + L) % L);
+    int right = spins(i, (j + 1) % L);
+    int up = spins((i - 1 + L) % L, j);
+    int down = spins((i + 1) % L, j);
+
+    std::vector<int> positions = {left, right, up, down};
+    int count_neg = 0;
+
+    for(int k = 0; k < 4; k++)
+    {
+        if( positions[k] < 0)
+        {
+            count_neg += 1;
+        }
+    }
+
+    std::vector<double> possible_dE = {-8*J, -4*J, 0, 4*J, 8*J};
+    std::vector<double> possible_boltzman_fac = {std::exp(-possible_dE[0]/T), std::exp(-possible_dE[1]/T), 1, std::exp(-possible_dE[3]/T), std::exp(-possible_dE[4]/T)};
+
+
+    double dE;
+    double boltzman_fac;
+    if(count_neg == 4)
+    {
+        dE = possible_dE[0];
+        boltzman_fac = possible_boltzman_fac[0];
+    }
+    else if(count_neg == 3)
+    {
+        dE = possible_dE[1];
+        boltzman_fac = possible_boltzman_fac[1];
+    }
+    else if(count_neg == 2)
+    {
+        dE = possible_dE[2];
+        boltzman_fac = possible_boltzman_fac[2];
+    }
+    else if(count_neg == 1)
+    {
+        dE = possible_dE[3];
+        boltzman_fac = possible_boltzman_fac[3];
+    }
+    else if(count_neg == 0)
+    {
+        dE = possible_dE[4];
+        boltzman_fac = possible_boltzman_fac[4];
+    }
+
+    return {dE, boltzman_fac};
+}
+*/
+/*
+void IsingModel::monte_carlo_step()
+{
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist_pos(0, L - 1);
+    std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
+
+    double dE;
+    double boltzman_fac;
+
+    for (int n = 0; n < L * L; n++)
+    {
+        int i = dist_pos(rng);
+        int j = dist_pos(rng);
+
+        if(L > 2)
+        {
+            // dE = delta_energy_small(i, j);
+            // boltzman_fac = std::exp(-dE/T);
+            std::vector dE_boltzman = delta_energy_big(i, j);
+            dE = dE_boltzman[0];
+            boltzman_fac = dE_boltzman[1];
+            
+        }
+        else
+        {
+            dE = delta_energy_small(i, j);
+            boltzman_fac = std::exp(-dE/T);
+            
+        }
+
+        if (dE <= 0)
+        {
+            spins(i, j) *= -1; // Flip spin
+        }
+        else if(dist_prob(rng) < boltzman_fac)
+        {
+            spins(i, j) *= -1; // Flip spin
+        }
+    }
+}
+*/
 
 void IsingModel::monte_carlo_step()
 {
@@ -58,6 +155,8 @@ void IsingModel::monte_carlo_step()
         }
     }
 }
+
+
 
 void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies)
 {
@@ -99,10 +198,10 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
         }
     }
 
-    double E_mean = E_sum / total_steps;
-    double E2_mean = E2_sum / total_steps;
-    double M_mean = M_sum / total_steps;
-    double M2_mean = M2_sum / total_steps;
+    double E_mean = E_sum / num_steps;
+    double E2_mean = E2_sum / num_steps;
+    double M_mean = M_sum / num_steps;
+    double M2_mean = M2_sum / num_steps;
 
     std::cout << "E_mean " << E_mean << std::endl;
     std::cout << "E2_mean " << E2_mean << std::endl;

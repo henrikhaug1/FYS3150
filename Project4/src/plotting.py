@@ -18,7 +18,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
 
-plt.plot(np.log10(t1_ordered_i), t1_ordered_cum_e, '-', linewidth=2.0, color='#377eb8', label='$T=1.0$ $J/k_{B}$, onordered')
+plt.plot(np.log10(t1_ordered_i), t1_ordered_cum_e, '-', linewidth=2.0, color='#377eb8', label='$T=1.0$ $J/k_{B}$, ordered')
 plt.plot(np.log10(t1_unordered_i), t1_unordered_cum_e, '-', linewidth=2.0, color='#4daf4a', label='$T=1.0$ $J/k_{B}$, unordered')
 plt.plot(np.log10(t2_4_ordered_i), t2_4_ordered_cum_e, '-', linewidth=2.0, color='#e41a1c', label='$T=2.4$ $J/k_{B}$, ordered')
 plt.plot(np.log10(t2_4_unordered_i), t2_4_unordered_cum_e, '-', linewidth=2.0, color='#984ea3', label='$T=2.4$ $J/k_{B}$, unordered')
