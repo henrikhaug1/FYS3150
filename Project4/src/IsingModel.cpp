@@ -158,7 +158,7 @@ void IsingModel::monte_carlo_step()
 
 
 
-void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies)
+void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& energy_samples)
 {
     int equilibration_steps = num_steps / 10; // 10% of steps for equilibration
     int total_steps = equilibration_steps + num_steps;
@@ -191,6 +191,7 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
             int N_eq = step - equilibration_steps + 1;
 
             double E_per_spin = E / N;
+            energy_samples.push_back(E_per_spin);
             double avg_E_per_spin = (E_sum / N_eq) / N;
             
             energies.push_back(E_per_spin);
@@ -296,3 +297,12 @@ double IsingModel::probability_state()
 	return probability;
 
 }
+
+
+
+
+
+
+
+
+

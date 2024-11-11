@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-t1_ordered_i, t1_ordered_e, t1_ordered_cum_e = np.loadtxt("energy_L20_T1.000000_ordered.txt", skiprows=1, unpack=True)
-t1_unordered_i, t1_unordered_e, t1_unordered_cum_e = np.loadtxt("energy_L20_T1.000000_unordered.txt", skiprows=1, unpack=True)
-t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e = np.loadtxt("energy_L20_T2.400000_ordered.txt", skiprows=1, unpack=True)
-t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e = np.loadtxt("energy_L20_T2.400000_unordered.txt", skiprows=1, unpack=True)
+t1_ordered_i, t1_ordered_e, t1_ordered_cum_e, t1_ordered_sample = np.loadtxt("energy_L20_T1.000000_ordered.txt", unpack=True)
+t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_sample = np.loadtxt("energy_L20_T1.000000_unordered.txt", unpack=True)
+t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_sample = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
+t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_sample = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
 
 plt.plot(np.log10(t1_ordered_i), t1_ordered_e, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, ordered')
@@ -27,4 +27,27 @@ plt.ylabel("Cumulative Energy", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
+plt.show()
+
+
+
+bins = 50 
+
+plt.figure(figsize=(12, 6))
+
+# Histogram for T = 1.0
+plt.subplot(1, 2, 1)
+plt.hist(t1_unordered_sample, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
+plt.title('Energy Distribution at T = 1.0')
+plt.xlabel('Energy per Spin $\epsilon$')
+plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
+
+# Histogram for T = 2.4
+plt.subplot(1, 2, 2)
+plt.hist(t2_4_unordered_sample, bins=bins, density=True, alpha=0.7, color='red', edgecolor='black')
+plt.title('Energy Distribution at T = 2.4')
+plt.xlabel('Energy per Spin $\epsilon$')
+plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
+
+plt.tight_layout()
 plt.show()
