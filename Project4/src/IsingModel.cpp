@@ -170,6 +170,7 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
 
     energies.clear();
     cumulative_energies.clear();
+    energy_samples.clear();
 
     int N = L * L;
 
@@ -297,12 +298,5 @@ double IsingModel::probability_state()
 	return probability;
 
 }
-
-
-
-
-
-
-
 
 
