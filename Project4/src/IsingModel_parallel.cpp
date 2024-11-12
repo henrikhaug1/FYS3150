@@ -1,0 +1,246 @@
+#include <iostream>
+#include <vector>
+#include <omp.h>
+#include "IsingModel.hpp"
+
+IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
+    : L(L_in), T(temp_in), J(J_in), spins(L_in, L_in)
+{
+    if (ordered)
+    {
+        // Initialize spins to all +1 (ordered state)
+        spins.ones();
+    }
+    else
+    {
+        // Initialize spins randomly to +1 or -1 (unordered state)
+        spins.imbue([]() { return arma::randi<int>(arma::distr_param(0, 1)) * 2 - 1; });
+    }
+
+}
+
+double IsingModel::delta_energy(int i, int j)
+{
+	int left = spins(i, (j - 1 + L) % L);
+    int right = spins(i, (j + 1) % L);
+    int up = spins((i - 1 + L) % L, j);
+    int down = spins((i + 1) % L, j);
+
+    int s = spins(i, j);
+    int sum_neighbors = left + right + up + down;
+
+    return 2.0 * J * s * sum_neighbors;
+}
+
+
+void IsingModel::monte_carlo_step()
+{
+    #pragma omp parallel
+    {
+    	static std::mt19937 rng(std::random_device{}() + omp_get_thread_num()); // Ensures unique RNG for all threads
+        std::uniform_int_distribution<int> dist_pos(0, L - 1);
+        std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
+
+        #pragma omp for
+        for (int n = 0; n < L * L; n++)
+        {
+            int i, j;
+
+            #pragma omp critical
+            {
+                i = dist_pos(rng);
+                j = dist_pos(rng);
+            }
+
+            double dE = delta_energy(i, j);
+
+            double prob;
+            #pragma omp critical
+            {
+                prob = dist_prob(rng);
+            }
+
+            if (dE <= 0 || prob < std::exp(-dE/T))
+            {
+                #pragma omp critical
+                {
+                    spins(i, j) *= -1;
+                }
+            }
+            
+        }
+    }
+}
+
+
+
+void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& energy_samples)
+{
+    int equilibration_steps = num_steps / 10; // 10% of steps for equilibration
+    int total_steps = equilibration_steps + num_steps;
+
+    double E_sum = 0.0;
+    double E2_sum = 0.0;
+    double M_sum = 0.0;
+    double M2_sum = 0.0;
+
+    energies.clear();
+    cumulative_energies.clear();
+    energy_samples.clear();
+
+    int N = L * L;
+
+
+    for (int step = 0; step < total_steps; step++)
+    {
+        monte_carlo_step();
+
+        if (step >= equilibration_steps)
+        {
+            double E = total_energy(spins);
+            double M = magnetisation();
+
+            #pragma omp atomic
+            E_sum += E;
+
+            #pragma omp atomic
+            E2_sum += E * E;
+
+            #pragma omp atomic
+            M_sum += std::abs(M);
+
+            #pragma omp atomic
+            M2_sum += M * M;
+
+            int N_eq = step - equilibration_steps + 1;
+            double E_per_spin = E / N;
+            double avg_E_per_spin = (E_sum / N_eq) / N;
+
+            #pragma omp critical
+            {
+                energy_samples.push_back(E_per_spin);
+                energies.push_back(E_per_spin);
+                cumulative_energies.push_back(avg_E_per_spin);
+            }
+        }
+    }
+
+    double E_mean = E_sum / num_steps;
+    double E2_mean = E2_sum / num_steps;
+    double M_mean = M_sum / num_steps;
+    double M2_mean = M2_sum / num_steps;
+
+    std::cout << "E_mean " << E_mean << std::endl;
+    std::cout << "E2_mean " << E2_mean << std::endl;
+
+    // Assign to class variables
+    average_energy = E_mean / N;
+    average_magnetisation = M_mean / N;
+
+    specific_heat = (E2_mean - E_mean * E_mean) / (T * T * N);
+    susceptibility = (M2_mean - M_mean * M_mean) / (T * N);
+}
+
+
+
+double IsingModel::total_energy(const arma::Mat<int>& spin_config)
+{
+    double E = 0.0;
+    #pragma omp parallel for reduction(+:E)
+    for (int i = 0; i < L; i++)
+    {
+        for (int j = 0; j < L; j++)
+        {
+            int s = spin_config(i, j);
+            int right = spin_config(i, (j + 1) % L);
+            int down = spin_config((i + 1) % L, j);
+
+            // Only summing over right and down neighbours to avoid double counting
+            E -= J * s * (right + down); 
+        }
+    }
+    return E;
+}
+
+
+double IsingModel::energy_per_spin()
+{
+	return total_energy(spins) / (L * L);
+}
+
+double IsingModel::magnetisation()
+{
+    int M = 0;
+    #pragma omp parallel for reduction(+:M)
+    for(int i = 0; i < L; i++)
+    {
+        for(int j = 0; j < L; j++)
+        {
+            M += spins(i, j);
+        }
+    }
+    return static_cast<double>(M);
+}
+
+double IsingModel::magnetisation_per_spin()
+{
+	return magnetisation() / (L * L);
+}
+
+
+double IsingModel::partition_function()
+{
+    double Z = 0.0;
+    int num_states = 1 << (L * L); //bitwise operation equivalent to 2^(L*L)
+    arma::Mat<int> original_spins = spins; // Save the original spins
+    arma::Mat<int> spin_config(L, L);
+    double beta = 1.0 / T;
+
+    for (int state = 0; state < num_states; state++)
+    {
+        // Set spin configuration for each possible state
+        for (int i = 0; i < L; i++)
+        {
+            for (int j = 0; j < L; j++)
+            {
+                int bit_index = i * L + j;
+                spin_config(i, j) = ((state >> bit_index) & 1) ? 1 : -1;
+            }
+        }
+
+        spins = spin_config; // Temporarily set spins to the new configuration
+
+        // Calculate energy for the current configuration
+        double E = total_energy(spins);
+        Z += std::exp(-beta * E);
+    }
+
+    spins = original_spins; // Restore original spins
+    return Z;
+}
+
+
+
+double IsingModel::probability_state()
+{
+	double beta = 1/(k_b * T);
+	double E = total_energy(spins);
+	double Z = partition_function();
+
+	double probability = (1.0 / Z) * exp(-beta * E);
+
+	return probability;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
