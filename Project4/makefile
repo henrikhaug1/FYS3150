@@ -1,12 +1,17 @@
 CC = c++-14
-IFLAG = -Iinclude
+FLAGS = -Iinclude -larmadillo
+OMPFLAGS = -fopenmp
 
 .PHONY: all clean
 
-all: main
+all: main main_parallel
 
 main: main.cpp src/IsingModel.cpp
-	$(CC) main.cpp src/IsingModel.cpp $(IFLAG) -larmadillo -o main
+	$(CC) main.cpp src/IsingModel.cpp $(IFLAG) -o main
+
+main_parallel: main_parallel.cpp src/IsingModel_parallel.cpp
+	$(CC) main_parallel.cpp src/IsingModel_parallel.cpp $(FLAGS) $(OMPFLAGS) -o main_parallel
+
 
 run_all: all
 	./main &
@@ -14,6 +19,7 @@ run_all: all
 
 clean:
 	rm -f main
+	rm -f main_parallel
 	rm -f energy_L20_T1.000000_ordered.txt
 	rm -f energy_L20_T1.000000_unordered.txt
 	rm -f energy_L20_T2.400000_ordered.txt
