@@ -2,7 +2,7 @@
 #include <vector>
 #include "IsingModel.hpp"
 
-IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool order ed)
+IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
     : L(L_in), T(temp_in), J(J_in), spins(L_in, L_in)
 {
     if (ordered)
