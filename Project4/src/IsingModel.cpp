@@ -2,7 +2,7 @@
 #include <vector>
 #include "IsingModel.hpp"
 
-IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
+IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool order ed)
     : L(L_in), T(temp_in), J(J_in), spins(L_in, L_in)
 {
     if (ordered)
@@ -85,52 +85,56 @@ std::vector<double> IsingModel::delta_energy_big(int i, int j)
     return {dE, boltzman_fac};
 }
 */
-/*
+
+
 void IsingModel::monte_carlo_step()
 {
     static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> dist_pos(0, L - 1);
     std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
 
-    double dE;
-    double boltzman_fac;
-
     for (int n = 0; n < L * L; n++)
     {
+        // 1. Sample a candidate x' according to the proposal pdf T(x_i → x')
         int i = dist_pos(rng);
         int j = dist_pos(rng);
 
-        if(L > 2)
-        {
-            // dE = delta_energy_small(i, j);
-            // boltzman_fac = std::exp(-dE/T);
-            std::vector dE_boltzman = delta_energy_big(i, j);
-            dE = dE_boltzman[0];
-            boltzman_fac = dE_boltzman[1];
-            
-        }
-        else
-        {
-            dE = delta_energy_small(i, j);
-            boltzman_fac = std::exp(-dE/T);
-            
-        }
+        // In this case, the proposal distribution T(x_i → x') is uniform
+        // over all possible spins, so T(x_i → x') = 1 / (L * L)
 
-        if (dE <= 0)
+        // 2. Calculate the acceptance probability A(x_i → x')
+        double dE = delta_energy(i, j);
+
+        // Compute p(x') and p(x_i)
+        // Since p(x) ∝ exp(-E / T), the ratio p(x') / p(x_i) = exp(-ΔE / T)
+        double p_ratio = std::exp(-dE / T);
+
+        // Compute T(x_i → x') and T(x' → x_i)
+        // Since the proposal distribution is symmetric:
+        double T_forward = 1.0 / (L * L);  // T(x_i → x')
+        double T_backward = 1.0 / (L * L); // T(x' → x_i)
+
+        // Calculate the acceptance probability
+        double acceptance_ratio = (p_ratio * T_backward) / T_forward;
+        double acceptance_prob = std::min(1.0, acceptance_ratio);
+
+        // 3. Generate a random number r from U(0,1)
+        double r = dist_prob(rng);
+
+        // 4. Accept or reject the proposed move
+        if (r <= acceptance_prob)
         {
-            spins(i, j) *= -1; // Flip spin
+            spins(i, j) *= -1; // Accept: flip the spin
         }
-        else if(dist_prob(rng) < boltzman_fac)
-        {
-            spins(i, j) *= -1; // Flip spin
-        }
+        // Else, reject: do nothing (spins(i, j) remains unchanged)
     }
 }
-*/
 
+
+/*
 void IsingModel::monte_carlo_step()
 {
-	static std::mt19937 rng(std::random_device{}());
+    static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> dist_pos(0, L - 1);
     std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
 
@@ -155,6 +159,8 @@ void IsingModel::monte_carlo_step()
         }
     }
 }
+*/
+
 
 
 
@@ -178,10 +184,9 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
     {
         monte_carlo_step();
 
-        double E = total_energy(spins);
-
         if (step >= equilibration_steps)
         {
+            double E = total_energy(spins);
             double M = magnetisation();
 
             E_sum += E;
@@ -194,7 +199,7 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
             double E_per_spin = E / N;
             energy_samples.push_back(E_per_spin);
             double avg_E_per_spin = (E_sum / N_eq) / N;
-            
+
             energies.push_back(E_per_spin);
             cumulative_energies.push_back(avg_E_per_spin);
         }

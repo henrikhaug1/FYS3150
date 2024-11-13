@@ -130,7 +130,7 @@ int main()
         // ---------- L = {40, 60, 80, 100} ----------
 
     std::vector<int> lattice_sizes = {40, 60, 80, 100};
-    double dt = 0.001;
+    double dt = 0.01;
     arma::vec temperature = arma::regspace(2.1, dt, 2.4 + dt);
     temperature.print();
 
@@ -143,7 +143,7 @@ int main()
         std::vector<double> sp_heat;
         std::vector<double> sus;
 
-        for (int j = 0; j <= temperature.n_elem; j++)
+        for (int j = 0; j < temperature.n_elem; j++)
         {    
             IsingModel model_many = IsingModel(lattice_sizes[i], temperature[j], J, false);
             std::vector<double> energies;

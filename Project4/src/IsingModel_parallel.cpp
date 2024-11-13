@@ -37,7 +37,7 @@ void IsingModel::monte_carlo_step()
 {
     #pragma omp parallel
     {
-    	static std::mt19937 rng(std::random_device{}() + omp_get_thread_num()); // Ensures unique RNG for all threads
+    	std::mt19937 rng(std::random_device{}() + omp_get_thread_num()); // Ensures unique RNG for all threads
         std::uniform_int_distribution<int> dist_pos(0, L - 1);
         std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
 
@@ -45,21 +45,18 @@ void IsingModel::monte_carlo_step()
         for (int n = 0; n < L * L; n++)
         {
             int i, j;
+            double prob;
 
             #pragma omp critical
             {
                 i = dist_pos(rng);
                 j = dist_pos(rng);
+                prob = dist_prob(rng);
             }
 
             double dE = delta_energy(i, j);
 
-            double prob;
-            #pragma omp critical
-            {
-                prob = dist_prob(rng);
-            }
-
+           
             if (dE <= 0 || prob < std::exp(-dE/T))
             {
                 #pragma omp critical
@@ -90,7 +87,6 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
 
     int N = L * L;
 
-
     for (int step = 0; step < total_steps; step++)
     {
         monte_carlo_step();
@@ -100,28 +96,19 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
             double E = total_energy(spins);
             double M = magnetisation();
 
-            #pragma omp atomic
             E_sum += E;
-
-            #pragma omp atomic
             E2_sum += E * E;
-
-            #pragma omp atomic
             M_sum += std::abs(M);
-
-            #pragma omp atomic
             M2_sum += M * M;
 
             int N_eq = step - equilibration_steps + 1;
-            double E_per_spin = E / N;
-            double avg_E_per_spin = (E_sum / N_eq) / N;
 
-            #pragma omp critical
-            {
-                energy_samples.push_back(E_per_spin);
-                energies.push_back(E_per_spin);
-                cumulative_energies.push_back(avg_E_per_spin);
-            }
+            double E_per_spin = E / N;
+            energy_samples.push_back(E_per_spin);
+            double avg_E_per_spin = (E_sum / N_eq) / N;
+            
+            energies.push_back(E_per_spin);
+            cumulative_energies.push_back(avg_E_per_spin);
         }
     }
 
@@ -129,9 +116,6 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
     double E2_mean = E2_sum / num_steps;
     double M_mean = M_sum / num_steps;
     double M2_mean = M2_sum / num_steps;
-
-    std::cout << "E_mean " << E_mean << std::endl;
-    std::cout << "E2_mean " << E2_mean << std::endl;
 
     // Assign to class variables
     average_energy = E_mean / N;
@@ -170,6 +154,7 @@ double IsingModel::energy_per_spin()
 
 double IsingModel::magnetisation()
 {
+    /*
     int M = 0;
     #pragma omp parallel for reduction(+:M)
     for(int i = 0; i < L; i++)
@@ -179,6 +164,8 @@ double IsingModel::magnetisation()
             M += spins(i, j);
         }
     }
+    */
+    double M = arma::accu(spins);
     return static_cast<double>(M);
 }
 
