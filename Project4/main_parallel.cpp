@@ -20,20 +20,31 @@ void write_to_file_energy(std::string filename, std::vector<double> energies, st
 
 }
 
-void write_to_file_8(std::string filename, std::vector<double> list)
+void write_to_file_8(std::string filename, arma::vec temperature, std::vector<double> eps, std::vector<double> mag, std::vector<double> heat_cap, std::vector<double> sus)
 {
-
-    int width = 10;
-    int prec = 15;
+    int width = 15;  
+    int prec = 8;     
 
     std::ofstream outfile(filename);
-    for (size_t i = 0; i < list.size(); ++i)
-    {
-        outfile << i << std::setw(width) << list[i] <<"\n";
-    }
-    outfile.close();
 
+    outfile << std::left << std::setw(width) << "Temperature"
+            << std::setw(width) << "Energy"
+            << std::setw(width) << "Magnetization"
+            << std::setw(width) << "Heat Capacity"
+            << std::setw(width) << "Susceptibility" << "\n";
+
+    for (size_t i = 0; i < temperature.n_elem; ++i)
+    {
+        outfile << std::left << std::setw(width) << std::setprecision(prec) << temperature[i]
+                << std::setw(width) << std::setprecision(prec) << eps[i]
+                << std::setw(width) << std::setprecision(prec) << mag[i] 
+                << std::setw(width) << std::setprecision(prec) << heat_cap[i]
+                << std::setw(width) << std::setprecision(prec) << sus[i] << "\n";
+    }
+
+    outfile.close();
 }
+
 
 
 
@@ -114,6 +125,43 @@ int main()
         std::string filename_unordered = "energy_L" + std::to_string(L) + "_T" + std::to_string(T_local) + "_unordered.txt";
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
 
+    }
+
+        // ---------- L = {40, 60, 80, 100} ----------
+
+    std::vector<int> lattice_sizes = {40, 60, 80, 100};
+    double dt = 0.001;
+    arma::vec temperature = arma::regspace(2.1, dt, 2.4 + dt);
+    temperature.print();
+
+    omp_set_num_threads(4);
+    #pragma omp parallel for
+    for(int i = 0; i < lattice_sizes.size(); i++)
+    {
+        std::vector<double> av_energy;
+        std::vector<double> av_magnetisation;
+        std::vector<double> sp_heat;
+        std::vector<double> sus;
+
+        for (int j = 0; j <= temperature.n_elem; j++)
+        {    
+            IsingModel model_many = IsingModel(lattice_sizes[i], temperature[j], J, false);
+            std::vector<double> energies;
+            std::vector<double> cumulative_energies;
+            std::vector<double> energy_samples;
+
+
+            model_many.metropolis(temperature.n_elem, energies, cumulative_energies, energy_samples);
+
+            av_energy.push_back(model_many.average_energy);
+            av_magnetisation.push_back(model_many.average_magnetisation);
+            sp_heat.push_back(model_many.specific_heat);
+            sus.push_back(model_many.susceptibility);
+
+        }
+
+        std::string filename = "L" + std::to_string(lattice_sizes[i]) + "_func_of_temp.txt";
+        write_to_file_8(filename, temperature, av_energy, av_magnetisation, sp_heat, sus);
     }
 
     return 0;

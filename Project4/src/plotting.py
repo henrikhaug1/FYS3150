@@ -6,6 +6,10 @@ t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_sample = np.loa
 t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_sample = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
 t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_sample = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
+temp40, energy40, magnetization40, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
+temp60, energy60, magnetization60, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
+temp80, energy80, magnetization80, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
+temp100, energy100, magnetization100, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
 
 plt.plot(np.log10(t1_ordered_i), t1_ordered_e, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, ordered')
 plt.plot(np.log10(t1_unordered_i), t1_unordered_e, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, unordered')
@@ -51,3 +55,63 @@ plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
 
 plt.tight_layout()
 plt.show()
+
+
+plt.plot(temp40, energy40, label="L=40")
+plt.plot(temp40, energy60, label="L=60")
+plt.plot(temp40, energy80, label="L=80")
+plt.plot(temp40, energy100, label="L=100")
+plt.xlabel("Temperature", fontsize=16)
+plt.ylabel("Expected Energy", fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.show()
+
+plt.plot(temp40, magnetization40, label="L=40")
+plt.plot(temp40, magnetization60, label="L=60")
+plt.plot(temp40, magnetization80, label="L=80")
+plt.plot(temp40, magnetization100, label="L=100")
+plt.xlabel("Temperature", fontsize=16)
+plt.ylabel("Expected magnetization", fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.show()
+
+
+plt.plot(temp40, heat_cap40, label="L=40")
+plt.plot(temp40, heat_cap60, label="L=60")
+plt.plot(temp40, heat_cap80, label="L=80")
+plt.plot(temp40, heat_cap100, label="L=100")
+plt.xlabel("Temperature", fontsize=16)
+plt.ylabel("Expected heat capacity", fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.show()
+
+
+plt.plot(temp40, sus40, label="L=40")
+plt.plot(temp40, sus60, label="L=60")
+plt.plot(temp40, sus80, label="L=80")
+plt.plot(temp40, sus100, label="L=100")
+plt.xlabel("Temperature", fontsize=16)
+plt.ylabel("Expected Susceptibility", fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+

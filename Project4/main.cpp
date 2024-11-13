@@ -19,22 +19,6 @@ void write_to_file_energy(std::string filename, std::vector<double> energies, st
 
 }
 
-void write_to_file_8(std::string filename, std::vector<double> list)
-{
-
-    int width = 10;
-    int prec = 15;
-
-    std::ofstream outfile(filename);
-    for (size_t i = 0; i < list.size(); ++i)
-    {
-        outfile << i << std::setw(width) << list[i] <<"\n";
-    }
-    outfile.close();
-
-}
-
-
 
 
 int main()
@@ -112,7 +96,7 @@ int main()
         std::string filename_unordered = "energy_L" + std::to_string(L) + "_T" + std::to_string(T) + "_unordered.txt";
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
 
-    }
+
 
     return 0;
 }
