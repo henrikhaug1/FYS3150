@@ -117,9 +117,10 @@ int main()
         std::vector<double> energies;
         std::vector<double> cumulative_energies;
         std::vector<double> energy_samples;
+        std::vector<double> magnetisation;
 
 
-        model_many.metropolis(temperature2.n_elem, energies, cumulative_energies, energy_samples);
+        model_many.metropolis(temperature2.n_elem, energies, cumulative_energies, magnetisation);
 
         av_energy.push_back(model_many.average_energy);
         av_magnetisation.push_back(model_many.average_magnetisation);
@@ -148,26 +149,26 @@ int main()
         // Vectors to store energies for ordered and unordered states
         energies_ordered.clear();
         cumulative_energies_ordered.clear();
-        energy_samples_ordered.clear();
+        magnetisations_ordered.clear();
 
         energies_unordered.clear();
         cumulative_energies_unordered.clear();
-        energy_samples_unordered.clear();
+        magnetisations_unordered.clear();
 
         // Ordered initial state
         IsingModel ordered_model(L, T, J, true);
-        ordered_model.metropolis(num_steps, energies_ordered, cumulative_energies_ordered, energy_samples_ordered);
+        ordered_model.metropolis(num_steps, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
 
         // Unordered initial state
         IsingModel unordered_model(L, T, J, false);
-        unordered_model.metropolis(num_steps, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
+        unordered_model.metropolis(num_steps, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
 
         // Save energy data to files for plotting
         std::string filename_ordered = "energy_L" + std::to_string(L) + "_T" + std::to_string(T) + "_ordered.txt";
-        write_to_file_energy(filename_ordered, energies_ordered, cumulative_energies_ordered, energy_samples_ordered);
+        write_to_file_energy(filename_ordered, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
 
         std::string filename_unordered = "energy_L" + std::to_string(L) + "_T" + std::to_string(T) + "_unordered.txt";
-        write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
+        write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
     
     }
     
@@ -190,10 +191,10 @@ int main()
             IsingModel model_many = IsingModel(lattice_sizes[i], temperature[j], J, false);
             std::vector<double> energies;
             std::vector<double> cumulative_energies;
-            std::vector<double> energy_samples;
+            std::vector<double> magnetisation;
 
 
-            model_many.metropolis(temperature.n_elem, energies, cumulative_energies, energy_samples);
+            model_many.metropolis(temperature.n_elem, energies, cumulative_energies, magnetisation);
 
             av_energy.push_back(model_many.average_energy);
             av_magnetisation.push_back(model_many.average_magnetisation);

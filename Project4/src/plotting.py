@@ -15,7 +15,7 @@ temp100, energy100, magnetization100, heat_cap100, sus100 = np.loadtxt("L100_fun
 
 
 
-"""
+
 plt.plot(np.log10(t1_ordered_i), t1_ordered_e, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, ordered')
 plt.plot(np.log10(t1_unordered_i), t1_unordered_e, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, unordered')
 plt.plot(np.log10(t2_4_ordered_i), t2_4_ordered_e, '-', color='#e41a1c', alpha=0.4, linewidth=1.0, label='$T=2.4$ $J/k_{B}$, ordered')
@@ -37,7 +37,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
-"""
+
 
 
 bins = 50 
@@ -46,14 +46,14 @@ plt.figure(figsize=(12, 6))
 
 # Histogram for T = 1.0
 plt.subplot(1, 2, 1)
-plt.hist(t1_unordered_sample, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
+plt.hist(t1_unordered_e, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
 plt.title('Energy Distribution at T = 1.0')
 plt.xlabel('Energy per Spin $\epsilon$')
 plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
 
 # Histogram for T = 2.4
 plt.subplot(1, 2, 2)
-plt.hist(t2_4_unordered_sample, bins=bins, density=True, alpha=0.7, color='red', edgecolor='black')
+plt.hist(t2_4_unordered_e, bins=bins, density=True, alpha=0.7, color='red', edgecolor='black')
 plt.title('Energy Distribution at T = 2.4')
 plt.xlabel('Energy per Spin $\epsilon$')
 plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
