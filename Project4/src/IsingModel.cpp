@@ -162,6 +162,7 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
 
     double E_sum = 0.0;
     double M_sum = 0.0;
+    double M_abs_sum = 0.0;
     double E2_sum = 0.0;
     double M2_sum = 0.0;
 
@@ -178,7 +179,8 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
 
             E_sum += E;
             E2_sum += E * E;
-            M_sum += std::abs(M);
+            M_abs_sum += std::abs(M);
+            M_sum += M;
             M2_sum += M * M;
 
             int adjusted_cycle = cycle - equilibration_steps + 1;
@@ -199,7 +201,7 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
     // Final averages over the MCMC cycles (post-equilibration)
     int measured_steps = num_cycles - equilibration_steps;
     average_energy = E_sum / measured_steps / N;
-    average_magnetisation = M_sum / measured_steps / N;
+    average_magnetisation = M_abs_sum / measured_steps / N;
     specific_heat = (E2_sum / measured_steps - E_sum * E_sum / (measured_steps * measured_steps)) / (T * T * N);
     susceptibility = (M2_sum / measured_steps - M_sum * M_sum / (measured_steps * measured_steps)) / (T * N);
 

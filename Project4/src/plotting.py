@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import linregress
 
-t1_ordered_i, t1_ordered_e, t1_ordered_cum_e, t1_ordered_sample = np.loadtxt("energy_L20_T1.000000_ordered.txt", unpack=True)
-t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_sample = np.loadtxt("energy_L20_T1.000000_unordered.txt", unpack=True)
-t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_sample = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
-t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_sample = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
+t1_ordered_i, t1_ordered_e, t1_ordered_cum_e, t1_ordered_mag = np.loadtxt("energy_L20_T1.000000_ordered.txt", unpack=True)
+t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_mag = np.loadtxt("energy_L20_T1.000000_unordered.txt", unpack=True)
+t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_mag = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
+t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_mag = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
 temp2, energy2, magnetization2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
 temp40, energy40, magnetization40, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)

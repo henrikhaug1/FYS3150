@@ -5,7 +5,7 @@
 #include <iomanip>
 #include "IsingModel.hpp"
 
-void write_to_file_energy(std::string filename, std::vector<double> energies, std::vector<double> cumulative_energies, std::vector<double> energy_samples)
+void write_to_file_energy(std::string filename, std::vector<double> energies, std::vector<double> cumulative_energies, std::vector<double> magnetisation)
 {
     int width = 10;
     int prec = 15;
@@ -13,7 +13,7 @@ void write_to_file_energy(std::string filename, std::vector<double> energies, st
     std::ofstream outfile(filename);
     for (size_t i = 0; i < energies.size(); ++i)
     {
-        outfile << i << std::setw(width) << energies[i] << std::setw(width) << cumulative_energies[i] << std::setw(width) << energy_samples[i] << "\n";
+        outfile << i << std::setw(width) << energies[i] << std::setw(width) << cumulative_energies[i] << std::setw(width) << magnetisation[i] << "\n";
     }
     outfile.close();
 
@@ -67,15 +67,15 @@ int main()
     
     std::vector<double> energies_ordered;
     std::vector<double> cumulative_energies_ordered;
-    std::vector<double> energy_samples_ordered;
+    std::vector<double> magnetisations_ordered;
 
     std::vector<double> energies_unordered;
     std::vector<double> cumulative_energies_unordered;
-    std::vector<double> energy_samples_unordered;
+    std::vector<double> magnetisations_unordered;
 
     // Ordered initial state
     IsingModel model_ordered(L, T, J, true); // 'true' for ordered state
-    model_ordered.metropolis(num_steps, energies_ordered, cumulative_energies_ordered, energies_ordered);
+    model_ordered.metropolis(num_steps, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
 
     std::cout << "---------- ORDERED ----------\n" << std::endl;
     model_ordered.spins.print("Ordered state spins");
@@ -90,7 +90,7 @@ int main()
 
     // Unordered initial state
     IsingModel model_unordered(L, T, J, false); // 'false' for unordered state
-    model_unordered.metropolis(num_steps, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
+    model_unordered.metropolis(num_steps, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
 
     std::cout << "---------- UNORDERED ----------\n" << std::endl;
     model_unordered.spins.print("Unordered state spins");
@@ -212,19 +212,6 @@ int main()
 
     T_c.print("Critical temp: ");
     
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
     return 0;
 }
