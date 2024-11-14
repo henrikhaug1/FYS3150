@@ -28,7 +28,8 @@ double IsingModel::delta_energy(int i, int j)
     int s = spins(i, j);
     int sum_neighbors = left + right + up + down;
 
-    return 2.0 * J * s * sum_neighbors;
+    double delta_e = 2.0 * J * s * sum_neighbors;
+    return delta_e;
 }
 /*
 std::vector<double> IsingModel::delta_energy_big(int i, int j)
@@ -95,40 +96,25 @@ void IsingModel::monte_carlo_step()
 
     for (int n = 0; n < L * L; n++)
     {
-        // 1. Sample a candidate x' according to the proposal pdf T(x_i → x')
+        // Select a random spin (i, j) and attempt to flip it
         int i = dist_pos(rng);
         int j = dist_pos(rng);
 
-        // In this case, the proposal distribution T(x_i → x') is uniform
-        // over all possible spins, so T(x_i → x') = 1 / (L * L)
-
-        // 2. Calculate the acceptance probability A(x_i → x')
+        // Calculate the energy difference for flipping this spin
         double dE = delta_energy(i, j);
 
-        // Compute p(x') and p(x_i)
-        // Since p(x) ∝ exp(-E / T), the ratio p(x') / p(x_i) = exp(-ΔE / T)
-        double p_ratio = std::exp(-dE / T);
+        // Calculate the acceptance probability p(s') / p(s)
+        double acceptance_prob = std::exp(-dE / T);
 
-        // Compute T(x_i → x') and T(x' → x_i)
-        // Since the proposal distribution is symmetric:
-        double T_forward = 1.0 / (L * L);  // T(x_i → x')
-        double T_backward = 1.0 / (L * L); // T(x' → x_i)
-
-        // Calculate the acceptance probability
-        double acceptance_ratio = (p_ratio * T_backward) / T_forward;
-        double acceptance_prob = std::min(1.0, acceptance_ratio);
-
-        // 3. Generate a random number r from U(0,1)
+        // Generate a random number and decide to accept or reject
         double r = dist_prob(rng);
-
-        // 4. Accept or reject the proposed move
-        if (r <= acceptance_prob)
+        if (r < acceptance_prob)
         {
-            spins(i, j) *= -1; // Accept: flip the spin
+            spins(i, j) *= -1; // Flip the spin
         }
-        // Else, reject: do nothing (spins(i, j) remains unchanged)
     }
 }
+
 
 
 /*
@@ -164,27 +150,28 @@ void IsingModel::monte_carlo_step()
 
 
 
-void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& energy_samples)
+void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& magnetisations)
 {
-    int equilibration_steps = num_steps / 10; // 10% of steps for equilibration
-    int total_steps = equilibration_steps + num_steps;
-
-    double E_sum = 0.0;
-    double E2_sum = 0.0;
-    double M_sum = 0.0;
-    double M2_sum = 0.0;
-
-    energies.clear();
-    cumulative_energies.clear();
-    energy_samples.clear();
-
+    int equilibration_steps = num_cycles / 10; // 10% of steps for equilibration
     int N = L * L;
 
-    for (int step = 0; step < total_steps; step++)
+    // Clear previous results
+    energies.clear();
+    cumulative_energies.clear();
+    magnetisations.clear();
+
+    double E_sum = 0.0;
+    double M_sum = 0.0;
+    double E2_sum = 0.0;
+    double M2_sum = 0.0;
+
+    for (int cycle = 0; cycle < num_cycles; cycle++)
     {
+        // Run a Monte Carlo step (complete one lattice update)
         monte_carlo_step();
 
-        if (step >= equilibration_steps)
+        // After equilibration, calculate and record quantities of interest
+        if (cycle >= equilibration_steps)
         {
             double E = total_energy(spins);
             double M = magnetisation();
@@ -194,31 +181,34 @@ void IsingModel::metropolis(int num_steps, std::vector<double>& energies, std::v
             M_sum += std::abs(M);
             M2_sum += M * M;
 
-            int N_eq = step - equilibration_steps + 1;
+            int adjusted_cycle = cycle - equilibration_steps + 1;
 
+            // Store energy per spin and cumulative averages
             double E_per_spin = E / N;
-            energy_samples.push_back(E_per_spin);
-            double avg_E_per_spin = (E_sum / N_eq) / N;
-
             energies.push_back(E_per_spin);
+
+            double avg_E_per_spin = (E_sum / adjusted_cycle) / N;
             cumulative_energies.push_back(avg_E_per_spin);
+
+            // Store magnetisation per spin
+            double M_per_spin = M / N;
+            magnetisations.push_back(M_per_spin);
         }
     }
 
-    double E_mean = E_sum / num_steps;
-    double E2_mean = E2_sum / num_steps;
-    double M_mean = M_sum / num_steps;
-    double M2_mean = M2_sum / num_steps;
+    // Final averages over the MCMC cycles (post-equilibration)
+    int measured_steps = num_cycles - equilibration_steps;
+    average_energy = E_sum / measured_steps / N;
+    average_magnetisation = M_sum / measured_steps / N;
+    specific_heat = (E2_sum / measured_steps - E_sum * E_sum / (measured_steps * measured_steps)) / (T * T * N);
+    susceptibility = (M2_sum / measured_steps - M_sum * M_sum / (measured_steps * measured_steps)) / (T * N);
 
-    std::cout << "E_mean " << E_mean << std::endl;
-    std::cout << "E2_mean " << E2_mean << std::endl;
-
-    // Assign to class variables
-    average_energy = E_mean / N;
-    average_magnetisation = M_mean / N;
-
-    specific_heat = (E2_mean - E_mean * E_mean) / (T * T * N);
-    susceptibility = (M2_mean - M_mean * M_mean) / (T * N);
+    /*
+    std::cout << "Average energy per spin: " << average_energy << std::endl;
+    std::cout << "Average magnetisation per spin: " << average_magnetisation << std::endl;
+    std::cout << "Specific heat: " << specific_heat << std::endl;
+    std::cout << "Susceptibility: " << susceptibility << std::endl;
+    */
 }
 
 

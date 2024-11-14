@@ -1,16 +1,21 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import linregress
 
 t1_ordered_i, t1_ordered_e, t1_ordered_cum_e, t1_ordered_sample = np.loadtxt("energy_L20_T1.000000_ordered.txt", unpack=True)
 t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_sample = np.loadtxt("energy_L20_T1.000000_unordered.txt", unpack=True)
 t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_sample = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
 t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_sample = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
+temp2, energy2, magnetization2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
 temp40, energy40, magnetization40, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
 temp60, energy60, magnetization60, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
 temp80, energy80, magnetization80, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
 temp100, energy100, magnetization100, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
 
+
+
+"""
 plt.plot(np.log10(t1_ordered_i), t1_ordered_e, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, ordered')
 plt.plot(np.log10(t1_unordered_i), t1_unordered_e, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, unordered')
 plt.plot(np.log10(t2_4_ordered_i), t2_4_ordered_e, '-', color='#e41a1c', alpha=0.4, linewidth=1.0, label='$T=2.4$ $J/k_{B}$, ordered')
@@ -32,7 +37,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
-
+"""
 
 
 bins = 50 
@@ -102,6 +107,24 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
+
+# For problem 2
+plt.plot(temp2, energy2, label="energy")
+plt.legend()
+plt.show()
+plt.plot(temp2, magnetization2, label="mag")
+plt.legend()
+plt.show()
+plt.plot(temp2, heat_cap2, label="heat cap")
+plt.legend()
+plt.show()
+plt.plot(temp2, sus2, label="sus")
+plt.legend()
+plt.show()
+
+
+
+
 
 
 

@@ -26,3 +26,4 @@ clean:
 	rm -f L60_func_of_temp.txt
 	rm -f L80_func_of_temp.txt
 	rm -f L100_func_of_temp.txt
+	rm -f L2_func_of_temp.txt

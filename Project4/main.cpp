@@ -44,16 +44,27 @@ void write_to_file_8(std::string filename, arma::vec temperature, std::vector<do
     outfile.close();
 }
 
+double critical_temperature(int lattice_sizes)
+{
+    double T_c_inf = 2.269;
+    double L_inverse = 1. / lattice_sizes;
+    double a = 1;
+    double T_c = a * L_inverse + T_c_inf;
+
+    return T_c;
+}
+
 
 
 int main()
 {
+    
     //---------- L = 2 ----------
     int L = 2;           // Lattice size
     double T = 1;      // Temperature
     int num_steps = 10000;  // Number of Monte Carlo cycles
     double J = 1.0;
-
+    
     std::vector<double> energies_ordered;
     std::vector<double> cumulative_energies_ordered;
     std::vector<double> energy_samples_ordered;
@@ -64,28 +75,65 @@ int main()
 
     // Ordered initial state
     IsingModel model_ordered(L, T, J, true); // 'true' for ordered state
-    model_ordered.spins.print();
     model_ordered.metropolis(num_steps, energies_ordered, cumulative_energies_ordered, energies_ordered);
 
-    std::cout << "Temperature: " << T << std::endl;
-    std::cout << "Average Energy per Spin (Ordered): " << model_ordered.average_energy << std::endl;
+    std::cout << "---------- ORDERED ----------\n" << std::endl;
+    model_ordered.spins.print("Ordered state spins");
+    std::cout << "Average Energy per Spin (Ordered):        " << model_ordered.average_energy << std::endl;
     std::cout << "Average Magnetization per Spin (Ordered): " << model_ordered.average_magnetisation << std::endl;
-    std::cout << "Specific Heat per Spin (Ordered): " << model_ordered.specific_heat << std::endl;
-    std::cout << "Susceptibility per Spin (Ordered): " << model_ordered.susceptibility << std::endl;
+    std::cout << "Specific Heat per Spin (Ordered):         " << model_ordered.specific_heat << std::endl;
+    std::cout << "Susceptibility per Spin (Ordered):        " << model_ordered.susceptibility << std::endl;
+    std::cout << "\n";
     std::cout << "\n";
 
-    model_ordered.spins.print();
+    
 
     // Unordered initial state
     IsingModel model_unordered(L, T, J, false); // 'false' for unordered state
     model_unordered.metropolis(num_steps, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
 
-    std::cout << "Average Energy per Spin (Unordered): " << model_unordered.average_energy << std::endl;
+    std::cout << "---------- UNORDERED ----------\n" << std::endl;
+    model_unordered.spins.print("Unordered state spins");
+    std::cout << "Average Energy per Spin (Unordered):        " << model_unordered.average_energy << std::endl;
     std::cout << "Average Magnetization per Spin (Unordered): " << model_unordered.average_magnetisation << std::endl;
-    std::cout << "Specific Heat per Spin (Unordered): " << model_unordered.specific_heat << std::endl;
-    std::cout << "Susceptibility per Spin (Unordered): " << model_unordered.susceptibility << std::endl;
+    std::cout << "Specific Heat per Spin (Unordered):         " << model_unordered.specific_heat << std::endl;
+    std::cout << "Susceptibility per Spin (Unordered):        " << model_unordered.susceptibility << std::endl;
 
 
+
+    //For problem 4
+    std::vector<double> av_energy;
+    std::vector<double> av_magnetisation;
+    std::vector<double> sp_heat;
+    std::vector<double> sus;
+
+    double dt2 = 0.01;
+    arma::vec temperature2 = arma::regspace(1, dt2, 10);
+
+    for (int i = 0; i < temperature2.n_elem; i++)
+    {    
+        IsingModel model_many = IsingModel(L, temperature2[i], J, false);
+
+        std::vector<double> energies;
+        std::vector<double> cumulative_energies;
+        std::vector<double> energy_samples;
+
+
+        model_many.metropolis(temperature2.n_elem, energies, cumulative_energies, energy_samples);
+
+        av_energy.push_back(model_many.average_energy);
+        av_magnetisation.push_back(model_many.average_magnetisation);
+        sp_heat.push_back(model_many.specific_heat);
+        sus.push_back(model_many.susceptibility);
+    }
+    
+    std::string filename = "L" + std::to_string(L) + "_func_of_temp.txt";
+    write_to_file_8(filename, temperature2, av_energy, av_magnetisation, sp_heat, sus);
+
+
+
+    
+    
     //---------- L = 20 ----------
     L = 20; // Update lattice size
     num_steps = 10000; // Adjust the number of steps as needed
@@ -120,15 +168,15 @@ int main()
 
         std::string filename_unordered = "energy_L" + std::to_string(L) + "_T" + std::to_string(T) + "_unordered.txt";
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, energy_samples_unordered);
-
+    
     }
-
-            // ---------- L = {40, 60, 80, 100} ----------
-
+    
+    
+    // ---------- L = {40, 60, 80, 100} ----------
     std::vector<int> lattice_sizes = {40, 60, 80, 100};
     double dt = 0.01;
-    arma::vec temperature = arma::regspace(2.1, dt, 2.4 + dt);
-    temperature.print();
+    arma::vec temperature = arma::regspace(2.1, dt, 2.4);
+    arma::vec T_c = arma::vec(4);
 
     for(int i = 0; i < lattice_sizes.size(); i++)
     {
@@ -139,7 +187,7 @@ int main()
 
         for (int j = 0; j < temperature.n_elem; j++)
         {    
-            IsingModel model_many = IsingModel(lattice_sizes[i], temperature[j], J, true);
+            IsingModel model_many = IsingModel(lattice_sizes[i], temperature[j], J, false);
             std::vector<double> energies;
             std::vector<double> cumulative_energies;
             std::vector<double> energy_samples;
@@ -156,7 +204,26 @@ int main()
 
         std::string filename = "L" + std::to_string(lattice_sizes[i]) + "_func_of_temp.txt";
         write_to_file_8(filename, temperature, av_energy, av_magnetisation, sp_heat, sus);
+    
+        T_c(i) = critical_temperature(lattice_sizes[i]);
+
     }
+
+    T_c.print("Critical temp: ");
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
     return 0;
 }
