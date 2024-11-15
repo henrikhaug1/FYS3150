@@ -27,3 +27,7 @@ clean:
 	rm -f L80_func_of_temp.txt
 	rm -f L100_func_of_temp.txt
 	rm -f L2_func_of_temp.txt
+	rm -f 2x2_energy_500.pdf
+	rm -f 2x2_mag_500.pdf
+	rm -f 2x2_Cv_500.pdf
+	rm -f 2x2_susc_500.pdf

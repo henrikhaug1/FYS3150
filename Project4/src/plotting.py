@@ -7,11 +7,11 @@ t1_unordered_i, t1_unordered_e, t1_unordered_cum_e, t1_unordered_mag = np.loadtx
 t2_4_ordered_i, t2_4_ordered_e, t2_4_ordered_cum_e, t2_4_ordered_mag = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
 t2_4_unordered_i, t2_4_unordered_e, t2_4_unordered_cum_e, t2_4_unordered_mag = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
-temp2, energy2, magnetization2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
-temp40, energy40, magnetization40, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
-temp60, energy60, magnetization60, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
-temp80, energy80, magnetization80, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
-temp100, energy100, magnetization100, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
+temp2, energy2, energy2_2, magnetization2, magnetization2_2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
+temp40, energy40, energy40_2, magnetization40, magnetization40_2, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
+temp60, energy60, energy60_2, magnetization60, magnetization60_2, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
+temp80, energy80, energy80_2, magnetization80, magnetization80_2, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
+temp100, energy100, energy100_2, magnetization100, magnetization100_2, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
 
 
 
@@ -67,18 +67,18 @@ plt.plot(temp40, energy60, label="L=60")
 plt.plot(temp40, energy80, label="L=80")
 plt.plot(temp40, energy100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Expected Energy", fontsize=16)
+plt.ylabel("Energy", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
 
 plt.plot(temp40, magnetization40, label="L=40")
-plt.plot(temp40, magnetization60, label="L=60")
-plt.plot(temp40, magnetization80, label="L=80")
-plt.plot(temp40, magnetization100, label="L=100")
+plt.plot(temp60, magnetization60, label="L=60")
+plt.plot(temp80, magnetization80, label="L=80")
+plt.plot(temp100, magnetization100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Expected magnetization", fontsize=16)
+plt.ylabel("Magnetization", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
@@ -86,11 +86,11 @@ plt.show()
 
 
 plt.plot(temp40, heat_cap40, label="L=40")
-plt.plot(temp40, heat_cap60, label="L=60")
-plt.plot(temp40, heat_cap80, label="L=80")
-plt.plot(temp40, heat_cap100, label="L=100")
+plt.plot(temp60, heat_cap60, label="L=60")
+plt.plot(temp80, heat_cap80, label="L=80")
+plt.plot(temp100, heat_cap100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Expected heat capacity", fontsize=16)
+plt.ylabel("Heat capacity", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
@@ -98,38 +98,97 @@ plt.show()
 
 
 plt.plot(temp40, sus40, label="L=40")
-plt.plot(temp40, sus60, label="L=60")
-plt.plot(temp40, sus80, label="L=80")
-plt.plot(temp40, sus100, label="L=100")
+plt.plot(temp60, sus60, label="L=60")
+plt.plot(temp80, sus80, label="L=80")
+plt.plot(temp100, sus100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Expected Susceptibility", fontsize=16)
+plt.ylabel("Susceptibility", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
 
 # For problem 2
-plt.plot(temp2, energy2, label="energy")
-plt.legend()
+k = 1 # 1.380649 * 10**(-23)
+T = temp2
+b = 1 / (k * T)
+Z = 2 *np.exp(8 * b) + 2 * np.exp(-8*b) + 12
+
+E = (1 / Z) * 16 * (np.exp(-8 *b) - np.exp(8 * b)) #Expectation values
+E2 = (1 / Z) * 128 * (np.exp(-8 *b) + np.exp(8 * b))
+
+E_N = E / 4
+
+M = (8 / Z) * (np.exp(8 * b) + 2) #Expectation values
+M2 = (32 / Z) * (np.exp(8 * b) + 1)
+
+M_N = M / 4
+M2_N = M2 / 4**2
+
+Cv_N = (b / (4 * T)) * (E2 - E**2) #Specific heat capacity
+chi_N = (b / 4) * (M2 - M**2)  #Magnetic susceptibility
+
+plt.plot(temp2, energy2_2, label = r"Avg $\epsilon^2$")
+plt.plot(temp2, E2 / 4**2, label = r'$\langle epsilon^2 \rangle$')
+plt.plot(temp2, energy2, label = r"Avg $\epsilon$")
+plt.plot(temp2, E_N, label = r'$\langle epsilon \rangle$')
+plt.xlabel('T', fontsize = 16)
+plt.ylabel(r"J, $J^2$", fontsize = 16)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
+plt.legend(fontsize = 16)
+plt.savefig("2x2_energy_500.pdf", format="pdf", bbox_inches="tight")
 plt.show()
-plt.plot(temp2, magnetization2, label="mag")
-plt.legend()
+
+plt.plot(temp2, magnetization2, label = r"Avg m")
+plt.plot(temp2, M_N, label = r'$\langle |m| \rangle$')
+plt.plot(temp2, magnetization2_2, label = r"Avg $m^2$")
+plt.plot(temp2, M2_N, label = r"$\langle m^2 \rangle $")
+plt.xlabel('T', fontsize = 16)
+plt.ylabel("1", fontsize = 16)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
+plt.legend(fontsize = 16)
+plt.savefig("2x2_mag_500.pdf", format="pdf", bbox_inches="tight")
 plt.show()
-plt.plot(temp2, heat_cap2, label="heat cap")
-plt.legend()
+
+plt.plot(temp2, heat_cap2, label = r"Avg $\frac{C_V}{N}$")
+plt.plot(temp2, Cv_N, label = r"$\frac{C_V}{N} $")
+plt.xlabel('T', fontsize = 16)
+plt.ylabel("1", fontsize = 16)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
+plt.legend(fontsize = 16)
+plt.savefig("2x2_Cv_500.pdf", format="pdf", bbox_inches="tight")
 plt.show()
-plt.plot(temp2, sus2, label="sus")
-plt.legend()
+
+plt.plot(temp2, sus2, label = r"Avg $\frac{\chi}{N}$")
+plt.plot(temp2, chi_N, label = r"$\frac{\chi}{N} $")
+plt.xlabel('T', fontsize = 16)
+plt.ylabel("1", fontsize = 16)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
+plt.legend(fontsize = 16)
+plt.savefig("2x2_susc_500.pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 
-# For problem 9
+"""
+
+def critical_temperature(lattice_sizes):
+
+    T_c_inf = 2.269
+    L_inverse = 1. / lattice_sizes
+    a = 1
+   	T_c = a * L_inverse + T_c_inf
+
+    return T_c
+
 
 
 # Given values
-T_c_inf = 2.269
 T_c_list = np.array([2.2940, 2.2857, 2.2815, 2.2790])
-lattice_sizes = np.array([40, 60, 80, 100])  # if you want to label each T_c value by its lattice size
+lattice_sizes = np.array([40, 60, 80, 100])
 temps = np.arange(2.1, 2.4, 0.01)
 
 # Plot the horizontal line for the infinite lattice critical temperature
@@ -143,6 +202,48 @@ plt.xlabel("Lattice Size")
 plt.ylabel("Critical Temperature $T_c$")
 plt.legend()
 plt.show()
+"""
+
+
+# For problem 9
+#lattice_sizes = np.array([40, 60, 80, 100])
+#heat_cap_lists = np.array([heat_cap40, heat_cap60, heat_cap80, heat_cap100])
+
+"""
+for i in range(1, len(heat_cap40)):
+	diff = 0
+	idx = 0
+	current_diff = abs(heat_cap40[i-1] - heat_cap[i])
+	if current_diff > diff:
+		diff = current_diff
+		idx = i
+
+T_c_estimate = temp40[i]
+print(T_c_estimate)
+"""
+
+
+max_sus_idx = [np.argmax(sus40), np.argmax(sus60), np.argmax(sus80), np.argmax(sus100)]
+max_temp = [temp40[max_sus_idx[0]], temp60[max_sus_idx[1]], temp80[max_sus_idx[2]], temp100[max_sus_idx[3]]]
+
+L_inverse = np.array([1./40, 1./60, 1./80, 1./100])
+
+coefficients = np.polyfit(L_inverse, max_temp, 1)
+slope, intercept = coefficients
+a = slope
+
+print(a)
+
+plt.scatter(L_inverse, max_temp, label='$T_c$')
+plt.plot(L_inverse, intercept + slope * L_inverse, 'r--', label='a')
+plt.xlabel('1/L')
+plt.ylabel('T_c(L)')
+plt.title('Linear Regression of T_c(L) vs 1/L')
+plt.legend()
+plt.show()
+
+print(intercept)
+
 
 
 
