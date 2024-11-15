@@ -123,7 +123,26 @@ plt.legend()
 plt.show()
 
 
+# For problem 9
 
+
+# Given values
+T_c_inf = 2.269
+T_c_list = np.array([2.2940, 2.2857, 2.2815, 2.2790])
+lattice_sizes = np.array([40, 60, 80, 100])  # if you want to label each T_c value by its lattice size
+temps = np.arange(2.1, 2.4, 0.01)
+
+# Plot the horizontal line for the infinite lattice critical temperature
+plt.axhline(y=T_c_inf, color='r', linestyle='--', label=f"$T_c$ (infinite) = {T_c_inf}")
+
+# Scatter plot of T_c values for finite lattice sizes
+plt.scatter(lattice_sizes, T_c_list, color='b', label="Finite Lattice T_c")
+
+# Labeling and display
+plt.xlabel("Lattice Size")
+plt.ylabel("Critical Temperature $T_c$")
+plt.legend()
+plt.show()
 
 
 
