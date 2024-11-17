@@ -10,10 +10,10 @@ const long double k_b = 1.0; //1.380649e-23;
 class IsingModel
 {
     public:
-    	int L;  // Lattice dimension
-        double T;  // Temperature
-        double J;  // Coupling constant
-        arma::Mat<int> spins;  // matrix for spin configuration
+    	int L;                  // Lattice dimension
+        double T;               // Temperature
+        double J;               // Coupling constant
+        arma::Mat<int> spins;   // Matrix for spin configuration
 
         double average_energy;
         double average_magnetisation;
@@ -21,6 +21,7 @@ class IsingModel
         double average_magnetisation2;
         double specific_heat;
         double susceptibility;
+
 
     // Constructor
     IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0, bool ordered=false);

@@ -52,25 +52,25 @@ double IsingModel::delta_energy_L_greater(int i, int j)
         count_neg +=1;
     }
 
-       if(right == -1)
+    if(right == -1)
     {
         count_neg +=1;
     }
 
-       if(up == -1)
+    if(up == -1)
     {
         count_neg +=1;
     }
 
-       if(down == -1)
+    if(down == -1)
     {
         count_neg +=1;
     }
 
     double delta_energy = possible_delta_E[count_neg];
     return delta_energy;
-
 }
+
 
 void IsingModel::monte_carlo_step()
 {
@@ -87,6 +87,7 @@ void IsingModel::monte_carlo_step()
         // Calculate the energy difference for flipping this spin
 
         double dE;
+        /*
         if(L <= 2)
         {
            dE = delta_energy_L2(i, j); 
@@ -95,6 +96,8 @@ void IsingModel::monte_carlo_step()
         {
            dE = delta_energy_L_greater(i, j); 
         }
+        */
+        dE = delta_energy_L2(i, j);
 
         // Calculate the acceptance probability p(s') / p(s)
         double acceptance_prob = std::exp(-dE / T);
@@ -146,6 +149,7 @@ void IsingModel::monte_carlo_step()
 void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& magnetisations)
 {
     int equilibration_steps = num_cycles / 10; // 10% of steps for equilibration
+    //int equilibration_steps = 0;
     int N = L * L;
 
     // Clear previous results
@@ -197,13 +201,6 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
     average_magnetisation2 = M2_sum / measured_steps / (N * N);
     specific_heat = (E2_sum / measured_steps - E_sum * E_sum / (measured_steps * measured_steps)) / (T * T * N);
     susceptibility = (M2_sum / measured_steps - M_sum * M_sum / (measured_steps * measured_steps)) / (T * N);
-
-    /*
-    std::cout << "Average energy per spin: " << average_energy << std::endl;
-    std::cout << "Average magnetisation per spin: " << average_magnetisation << std::endl;
-    std::cout << "Specific heat: " << specific_heat << std::endl;
-    std::cout << "Susceptibility: " << susceptibility << std::endl;
-    */
 }
 
 

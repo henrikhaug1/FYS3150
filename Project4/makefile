@@ -22,11 +22,17 @@ clean:
 	rm -f energy_L20_T1.000000_unordered.txt
 	rm -f energy_L20_T2.400000_ordered.txt
 	rm -f energy_L20_T2.400000_unordered.txt
+	rm -f L2_func_of_temp.txt
+	rm -f L4_func_of_temp.txt
+	rm -f L6_func_of_temp.txt
+	rm -f L8_func_of_temp.txt
+	rm -f L10_func_of_temp.txt
+	rm -f L15_func_of_temp.txt
+	rm -f L20_func_of_temp.txt
 	rm -f L40_func_of_temp.txt
 	rm -f L60_func_of_temp.txt
 	rm -f L80_func_of_temp.txt
 	rm -f L100_func_of_temp.txt
-	rm -f L2_func_of_temp.txt
 	rm -f 2x2_energy_500.pdf
 	rm -f 2x2_mag_500.pdf
 	rm -f 2x2_Cv_500.pdf
