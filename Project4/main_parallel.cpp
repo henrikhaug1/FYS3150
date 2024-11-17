@@ -129,10 +129,11 @@ int main()
 
         // ---------- L = {40, 60, 80, 100} ----------
 
-    std::vector<int> lattice_sizes = {40, 60, 80, 100};
-    double dt = 0.01;
-    arma::vec temperature = arma::regspace(2.1, dt, 2.4 + dt);
+    std::vector<int> lattice_sizes = {2, 4, 10, 20};
+    double dt = 0.1;
+    arma::vec temperature = arma::regspace(1, dt, 2.4 + dt);
     temperature.print();
+    int MCMC_steps = 1000000;
 
     omp_set_num_threads(4);
     #pragma omp parallel for
@@ -142,6 +143,7 @@ int main()
         std::vector<double> av_magnetisation;
         std::vector<double> sp_heat;
         std::vector<double> sus;
+        std::cout << "Starting" << i << std::endl;
 
         for (int j = 0; j < temperature.n_elem; j++)
         {    
@@ -151,7 +153,7 @@ int main()
             std::vector<double> energy_samples;
 
 
-            model_many.metropolis(temperature.n_elem, energies, cumulative_energies, energy_samples);
+            model_many.metropolis(MCMC_steps, energies, cumulative_energies, energy_samples);
 
             av_energy.push_back(model_many.average_energy);
             av_magnetisation.push_back(model_many.average_magnetisation);

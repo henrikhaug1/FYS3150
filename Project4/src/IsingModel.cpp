@@ -149,7 +149,7 @@ void IsingModel::monte_carlo_step()
 void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& magnetisations)
 {
     int equilibration_steps = num_cycles / 10; // 10% of steps for equilibration
-    //int equilibration_steps = 0;
+    // int equilibration_steps = 0; //For determining the burn-in time
     int N = L * L;
 
     // Clear previous results
@@ -199,8 +199,8 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
     average_energy2 = E2_sum / measured_steps / (N * N);
     average_magnetisation = M_sum / measured_steps / N;
     average_magnetisation2 = M2_sum / measured_steps / (N * N);
-    specific_heat = (E2_sum / measured_steps - E_sum * E_sum / (measured_steps * measured_steps)) / (T * T * N);
-    susceptibility = (M2_sum / measured_steps - M_sum * M_sum / (measured_steps * measured_steps)) / (T * N);
+    specific_heat = N * (average_energy2 - average_energy * average_energy) / (T * T);
+    susceptibility = N * (average_magnetisation2 - average_magnetisation * average_magnetisation) / (T);
 }
 
 

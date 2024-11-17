@@ -64,8 +64,8 @@ double critical_temperature(int lattice_sizes)
 int main()
 {
     
-    int mc_cycles = 100000;
-    double dt = 0.01;
+    int mc_cycles = 1000000;
+    double dt = 0.1;
     double J = 1.0;
 
 
@@ -161,11 +161,11 @@ int main()
 
         // Ordered initial state
         IsingModel ordered_model(20, T, J, true);
-        ordered_model.metropolis(1000, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
+        ordered_model.metropolis(mc_cycles, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
 
         // Unordered initial state
         IsingModel unordered_model(20, T, J, false);
-        unordered_model.metropolis(1000, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
+        unordered_model.metropolis(mc_cycles, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
 
         // Save energy data to files for plotting
         std::string filename_ordered = "energy_L" + std::to_string(20) + "_T" + std::to_string(T) + "_ordered.txt";
@@ -178,8 +178,9 @@ int main()
     
     
     // --------------- Problem 8 (L = {40, 60, 80, 100}) ---------------
-    std::vector<int> lattice_sizes = {2, 4, 6, 8, 10};
-    arma::vec temperatures8 = arma::regspace(2.1, dt, 2.4 + dt);
+    std::vector<int> lattice_sizes = {2, 4};
+
+    arma::vec temperatures8 = arma::regspace(1, dt, 2.4 + dt);
 
     for(int i = 0; i < lattice_sizes.size(); i++)
     {
