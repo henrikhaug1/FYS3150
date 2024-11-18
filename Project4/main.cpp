@@ -45,9 +45,10 @@ void write_to_file_8(std::string filename, arma::vec temperature, std::vector<do
                 << std::setw(width) << std::setprecision(prec) << heat_cap[i]
                 << std::setw(width) << std::setprecision(prec) << sus[i] << "\n";
     }
-
     outfile.close();
 }
+
+
 
 double critical_temperature(int lattice_sizes)
 {
@@ -64,8 +65,8 @@ double critical_temperature(int lattice_sizes)
 int main()
 {
     
-    int mc_cycles = 1000000;
-    double dt = 0.1;
+    int mc_cycles = 10000;
+    double dt = 0.01;
     double J = 1.0;
 
 
@@ -143,6 +144,9 @@ int main()
     write_to_file_8(filename, temperatures4, av_energy, av_energy2, av_magnetisation, av_magnetisation2, sp_heat, sus);
 
 
+
+
+
     
     // --------------- Problem 5 (L = 20) ---------------
     std::vector<double> temperatures5 = {1.0, 2.4}; // Temperatures to simulate
@@ -176,11 +180,15 @@ int main()
     
     }
     
-    
-    // --------------- Problem 8 (L = {40, 60, 80, 100}) ---------------
-    std::vector<int> lattice_sizes = {2, 4};
 
-    arma::vec temperatures8 = arma::regspace(1, dt, 2.4 + dt);
+
+
+
+    /* 
+    // --------------- Problem 8 (L = {40, 60, 80, 100}) ---------------
+    std::vector<int> lattice_sizes = {40, 60, 80, 100};
+
+    arma::vec temperatures8 = arma::regspace(2.1, dt, 2.4 + dt);
 
     for(int i = 0; i < lattice_sizes.size(); i++)
     {
@@ -213,7 +221,7 @@ int main()
         std::string filename = "L" + std::to_string(lattice_sizes[i]) + "_func_of_temp.txt";
         write_to_file_8(filename, temperatures8, av_energy, av_energy2, av_magnetisation, av_magnetisation2, sp_heat, sus);
     }
-    
+    */
     
 
     return 0;

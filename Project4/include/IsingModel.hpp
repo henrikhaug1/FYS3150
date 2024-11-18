@@ -26,13 +26,8 @@ class IsingModel
     // Constructor
     IsingModel(int L_in = 10, double temp_in = 1.0, double J_in = 1.0, bool ordered=false);
 
-    // Method to calculate delta energy for lattice size <= 2
-    double delta_energy_L2(int i, int j);
-
-    // Method to calculate delta energy for lattice size > 2
-    double delta_energy_L_greater(int i, int j);
-
-    //std::vector<double> delta_energy_big(int i, int j);
+    // Function to calculate dE
+    double delta_energy(int i, int j);
 
     void monte_carlo_step();
 

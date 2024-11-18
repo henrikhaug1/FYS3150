@@ -23,11 +23,6 @@ clean:
 	rm -f energy_L20_T2.400000_ordered.txt
 	rm -f energy_L20_T2.400000_unordered.txt
 	rm -f L2_func_of_temp.txt
-	rm -f L4_func_of_temp.txt
-	rm -f L6_func_of_temp.txt
-	rm -f L8_func_of_temp.txt
-	rm -f L10_func_of_temp.txt
-	rm -f L15_func_of_temp.txt
 	rm -f L20_func_of_temp.txt
 	rm -f L40_func_of_temp.txt
 	rm -f L60_func_of_temp.txt

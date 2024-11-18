@@ -7,48 +7,26 @@ T10_MC_cycles_u, eps_T10_u, mean_eps_T10_u, mag_T10_u = np.loadtxt("energy_L20_T
 T24_MC_cycles_o, eps_T24_o, mean_eps_T24_o, mag_T24_o = np.loadtxt("energy_L20_T2.400000_ordered.txt", unpack=True)
 T24_MC_cycles_u, eps_T24_u, mean_eps_T24_u, mag_T24_u = np.loadtxt("energy_L20_T2.400000_unordered.txt", unpack=True)
 
+
+
+# ---------- testing ---------
+# temp2, energy2, energy2_2, magnetization2, magnetization2_2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
+# temp4, energy4, energy2_4, magnetization4, magnetization2_4, heat_cap4, sus4 = np.loadtxt("L4_func_of_temp.txt", unpack=True, skiprows=1)
+# temp6, energy6, energy2_6, magnetization6, magnetization2_6, heat_cap6, sus6 = np.loadtxt("L6_func_of_temp.txt", unpack=True, skiprows=1)
+# temp8, energy8, energy2_8, magnetization8, magnetization2_8, heat_cap8, sus8 = np.loadtxt("L8_func_of_temp.txt", unpack=True, skiprows=1)
+# temp10, energy10, energy2_10, magnetization10, magnetization2_10, heat_cap10, sus10 = np.loadtxt("L10_func_of_temp.txt", unpack=True, skiprows=1)
+# temp15, energy15, energy2_15, magnetization15, magnetization2_15, heat_cap15, sus15 = np.loadtxt("L15_func_of_temp.txt", unpack=True, skiprows=1)
+# temp20, energy20, energy2_20, magnetization20, magnetization2_20, heat_cap20, sus20 = np.loadtxt("L20_func_of_temp.txt", unpack=True, skiprows=1)
+
+
+
+
 temp2, energy2, energy2_2, magnetization2, magnetization2_2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
-temp4, energy4, energy2_4, magnetization4, magnetization2_4, heat_cap4, sus4 = np.loadtxt("L4_func_of_temp.txt", unpack=True, skiprows=1)
-temp6, energy6, energy2_6, magnetization6, magnetization2_6, heat_cap6, sus6 = np.loadtxt("L6_func_of_temp.txt", unpack=True, skiprows=1)
-temp8, energy8, energy2_8, magnetization8, magnetization2_8, heat_cap8, sus8 = np.loadtxt("L8_func_of_temp.txt", unpack=True, skiprows=1)
-temp10, energy10, energy2_10, magnetization10, magnetization2_10, heat_cap10, sus10 = np.loadtxt("L10_func_of_temp.txt", unpack=True, skiprows=1)
-#temp15, energy15, energy2_15, magnetization15, magnetization2_15, heat_cap15, sus15 = np.loadtxt("L15_func_of_temp.txt", unpack=True, skiprows=1)
-#temp20, energy20, energy2_20, magnetization20, magnetization2_20, heat_cap20, sus20 = np.loadtxt("L20_func_of_temp.txt", unpack=True, skiprows=1)
+temp40, energy40, energy2_40, magnetization40, magnetization2_40, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
+temp60, energy60, energy2_60, magnetization60, magnetization2_60, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
+temp80, energy80, energy2_80, magnetization80, magnetization2_80, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
+temp100, energy100, energy2_100, magnetization100, magnetization2_100, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
 
-
-
-
-
-#temp40, energy40, energy40_2, magnetization40, magnetization40_2, heat_cap40, sus40 = np.loadtxt("L40_func_of_temp.txt", unpack=True, skiprows=1)
-#temp60, energy60, energy60_2, magnetization60, magnetization60_2, heat_cap60, sus60 = np.loadtxt("L60_func_of_temp.txt", unpack=True, skiprows=1)
-#temp80, energy80, energy80_2, magnetization80, magnetization80_2, heat_cap80, sus80 = np.loadtxt("L80_func_of_temp.txt", unpack=True, skiprows=1)
-#temp100, energy100, energy100_2, magnetization100, magnetization100_2, heat_cap100, sus100 = np.loadtxt("L100_func_of_temp.txt", unpack=True, skiprows=1)
-
-
-
-"""
-plt.plot(np.log10(t1_ordered_i), t1_ordered_e, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, ordered')
-plt.plot(np.log10(t1_unordered_i), t1_unordered_e, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label='$T=1.0$ $J/k_{B}$, unordered')
-plt.plot(np.log10(t2_4_ordered_i), t2_4_ordered_e, '-', color='#e41a1c', alpha=0.4, linewidth=1.0, label='$T=2.4$ $J/k_{B}$, ordered')
-plt.plot(np.log10(t2_4_unordered_i), t2_4_unordered_e, '-', color='#984ea3', alpha=0.4, linewidth=1.0, label='$T=2.4$ $J/k_{B}$, unordered')
-plt.xlabel("Monte Carlo Cycles", fontsize=16)
-plt.ylabel("Energy", fontsize=16)
-plt.xticks(fontsize=16)
-plt.yticks(fontsize=16)
-plt.legend(fontsize=16)
-plt.show()
-
-plt.plot(np.log10(t1_ordered_i), t1_ordered_cum_e, '-', linewidth=2.0, color='#377eb8', label='$T=1.0$ $J/k_{B}$, ordered')
-plt.plot(np.log10(t1_unordered_i), t1_unordered_cum_e, '-', linewidth=2.0, color='#4daf4a', label='$T=1.0$ $J/k_{B}$, unordered')
-plt.plot(np.log10(t2_4_ordered_i), t2_4_ordered_cum_e, '-', linewidth=2.0, color='#e41a1c', label='$T=2.4$ $J/k_{B}$, ordered')
-plt.plot(np.log10(t2_4_unordered_i), t2_4_unordered_cum_e, '-', linewidth=2.0, color='#984ea3', label='$T=2.4$ $J/k_{B}$, unordered')
-plt.xlabel("Monte Carlo Cycles", fontsize=16)
-plt.ylabel("Cumulative Energy", fontsize=16)
-plt.xticks(fontsize=16)
-plt.yticks(fontsize=16)
-plt.legend(fontsize=16)
-plt.show()
-"""
 
 
 plt.plot(np.log10(T10_MC_cycles_o), eps_T10_u, '-', color='#377eb8', alpha=0.4, linewidth=1.0)
@@ -87,17 +65,13 @@ plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
 plt.tight_layout()
 plt.show()
 
-plt.plot(temp2, energy2, label="L=2")
-plt.plot(temp2, energy4, label="L=4")
-plt.plot(temp2, energy6, label="L=6")
-plt.plot(temp2, energy8, label="L=8")
-plt.plot(temp2, energy10, label="L=10")
-#plt.plot(temp2, energy15, label="L=15")
-#plt.plot(temp2, energy20, label="L=20")
-#plt.plot(temp2, energy40, label="L=40")
-#plt.plot(temp2, energy60, label="L=60")
-#plt.plot(temp2, energy80, label="L=80")
-#plt.plot(temp2, energy100, label="L=100")
+
+
+#plt.plot(temp40, energy2, label="L=2")
+plt.plot(temp40, energy40, label="L=40")
+plt.plot(temp40, energy60, label="L=60")
+plt.plot(temp40, energy80, label="L=80")
+plt.plot(temp40, energy100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
 plt.ylabel("Energy", fontsize=16)
 plt.xticks(fontsize=16)
@@ -105,17 +79,14 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.show()
 
-plt.plot(temp2, magnetization2, label="L=2")
-plt.plot(temp2, magnetization4, label="L=4")
-plt.plot(temp2, magnetization6, label="L=6")
-plt.plot(temp2, magnetization8, label="L=8")
-plt.plot(temp2, magnetization10, label="L=10")
-#plt.plot(temp2, magnetization15, label="L=15")
-#plt.plot(temp2, magnetization20, label="L=20")
-#plt.plot(temp2, magnetization40, label="L=40")
-#plt.plot(temp2, magnetization60, label="L=60")
-#plt.plot(temp2, magnetization80, label="L=80")
-#plt.plot(temp2, magnetization100, label="L=100")
+
+
+
+#plt.plot(temp2, magnetization2, label="L=2")
+plt.plot(temp40, magnetization40, label="L=40")
+plt.plot(temp40, magnetization60, label="L=60")
+plt.plot(temp40, magnetization80, label="L=80")
+plt.plot(temp40, magnetization100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
 plt.ylabel("Magnetization", fontsize=16)
 plt.xticks(fontsize=16)
@@ -124,17 +95,12 @@ plt.legend(fontsize=16)
 plt.show()
 
 
-plt.plot(temp2, heat_cap2, label="L=2")
-plt.plot(temp2, heat_cap4, label="L=4")
-plt.plot(temp2, heat_cap6, label="L=6")
-plt.plot(temp2, heat_cap8, label="L=8")
-plt.plot(temp2, heat_cap10, label="L=10")
-#plt.plot(temp2, heat_cap15, label="L=15")
-#plt.plot(temp2, heat_cap20, label="L=20")
-#plt.plot(temp2, heat_cap40, label="L=40")
-#plt.plot(temp2, heat_cap60, label="L=60")
-#plt.plot(temp2, heat_cap80, label="L=80")
-#plt.plot(temp2, heat_cap100, label="L=100")
+
+#plt.plot(temp2, heat_cap2, label="L=2")
+plt.plot(temp40, heat_cap40, label="L=40")
+plt.plot(temp40, heat_cap60, label="L=60")
+plt.plot(temp40, heat_cap80, label="L=80")
+plt.plot(temp40, heat_cap100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
 plt.ylabel("Heat capacity", fontsize=16)
 plt.xticks(fontsize=16)
@@ -143,17 +109,13 @@ plt.legend(fontsize=16)
 plt.show()
 
 
-plt.plot(temp2, sus2, label="L=2")
-plt.plot(temp2, sus4, label="L=4")
-plt.plot(temp2, sus6, label="L=6")
-plt.plot(temp2, sus8, label="L=8")
-plt.plot(temp2, sus10, label="L=10")
-#plt.plot(temp2, sus15, label="L=15")
-#plt.plot(temp2, sus20, label="L=20")
-#plt.plot(temp2, sus40, label="L=40")
-#plt.plot(temp2, sus60, label="L=60")
-#plt.plot(temp2, sus80, label="L=80")
-#plt.plot(temp2, sus100, label="L=100")
+
+
+#plt.plot(temp2, sus2, label="L=2")
+plt.plot(temp40, sus40, label="L=40")
+plt.plot(temp40, sus60, label="L=60")
+plt.plot(temp40, sus80, label="L=80")
+plt.plot(temp40, sus100, label="L=100")
 plt.xlabel("Temperature", fontsize=16)
 plt.ylabel("Susceptibility", fontsize=16)
 plt.xticks(fontsize=16)
@@ -275,7 +237,7 @@ T_c_estimate = temp40[i]
 print(T_c_estimate)
 """
 
-
+"""
 max_sus_idx = [np.argmax(sus40), np.argmax(sus60), np.argmax(sus80), np.argmax(sus100)]
 max_temp = [temp40[max_sus_idx[0]], temp60[max_sus_idx[1]], temp80[max_sus_idx[2]], temp100[max_sus_idx[3]]]
 
@@ -296,7 +258,7 @@ plt.legend()
 plt.show()
 
 print(intercept)
-
+"""
 
 
 
