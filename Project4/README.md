@@ -7,16 +7,16 @@ This project is organized inside the Project4 folder in this manner:
 - include: contains the headerfile for the .cpp files located in src.
 
 ## Compiling and running the whole project 
-- However it is strongly recommended to use provided text files located in txt_files for plotting instead of making your own by running main_parallel.cpp
+It is strongly recommended to use provided text files located in txt_files for plotting instead of making your own by running main_parallel.cpp
 
-- make
-- make run_all
-- python3 src/plotting.py
+    make
+    make run_all
+    python3 src/plotting.py
 
 ## Compiling and running the whole project (recommended)
-- make main
-- ./main
-- python3 src/plotting.py
+    make main
+    ./main
+    python3 src/plotting.py
 
 #### Note: parallel part
 There is no need to compile and run main_parallel.cpp, the data produced by doing this is computationaly heavy, and already provided in the folder txt_files.
@@ -40,3 +40,8 @@ To run this code it is necessary to have the Armadillo (for linear algebra opera
 
 #### Compiler
 To compile this project, we used the Clang C++ compiler. If it's not available on your system, you can also compile the project using the GNU C++ compiler (g++).
+
+#### Make clean
+To remove all executable files, .txt files, and .pdf files, run the following command
+
+    make clean 
