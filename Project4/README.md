@@ -20,7 +20,7 @@ It is strongly recommended to use provided text files located in txt_files for p
 
 #### Note: parallel part
 There is no need to compile and run main_parallel.cpp, the data produced by doing this is computationaly heavy, and already provided in the folder txt_files.
-There is therefore only necessary to compile and run main.cpp to get produce the figures.  
+There is therefore only necessary to compile and run main.cpp to produce the figures.  
 
 
 ## Compiling and running files without using make:
