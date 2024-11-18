@@ -25,7 +25,7 @@ There is therefore only necessary to compile and run main.cpp to produce the fig
 
 ## Compiling and running files without using make:
 ### main.cpp:
-    c++-14 main.cpp src/IsingModel.cpp src/IsingModel.cpp -Iinclude -larmadillo -o main
+    c++-14 main.cpp src/IsingModel.cpp -Iinclude -larmadillo -o main
     ./main
 
 ### main_parallel.cpp:
