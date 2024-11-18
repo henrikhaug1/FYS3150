@@ -65,7 +65,7 @@ double critical_temperature(int lattice_sizes)
 int main()
 {
     
-    int mc_cycles = 10000;
+    int mc_cycles = 100000;
     double dt = 0.01;
     double J = 1.0;
 

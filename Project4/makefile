@@ -24,11 +24,14 @@ clean:
 	rm -f energy_L20_T2.400000_unordered.txt
 	rm -f L2_func_of_temp.txt
 	rm -f L20_func_of_temp.txt
-	rm -f L40_func_of_temp.txt
-	rm -f L60_func_of_temp.txt
-	rm -f L80_func_of_temp.txt
-	rm -f L100_func_of_temp.txt
 	rm -f 2x2_energy_500.pdf
 	rm -f 2x2_mag_500.pdf
 	rm -f 2x2_Cv_500.pdf
 	rm -f 2x2_susc_500.pdf
+	rm -f mc_cycles_vs_eps.pdf
+	rm -f eps_distribution_hist.pdf
+	rm -f temp_eps.pdf
+	rm -f temp_magnetisation.pdf
+	rm -f temp_heat_cap.pdf
+	rm -f temp_sus.pdf
+	rm -f problem9.pdf
