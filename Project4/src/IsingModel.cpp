@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "IsingModel.hpp"
+#include <iomanip>
 
 IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
     : L(L_in), T(temp_in), J(J_in), spins(L_in, L_in)
@@ -15,10 +16,13 @@ IsingModel::IsingModel(int L_in, double temp_in, double J_in, bool ordered)
         // Initialize spins randomly to +1 or -1 (unordered state)
         spins.imbue([]() { return arma::randi<int>(arma::distr_param(0, 1)) * 2 - 1; });
     }
-
 }
 
-double IsingModel::delta_energy_L2(int i, int j)
+
+
+
+
+double IsingModel::delta_energy(int i, int j)
 {
 	int left = spins(i, (j - 1 + L) % L);
     int right = spins(i, (j + 1) % L);
@@ -28,48 +32,10 @@ double IsingModel::delta_energy_L2(int i, int j)
     int s = spins(i, j);
     int sum_neighbors = left + right + up + down;
 
-    double delta_e = 2.0 * J * s * sum_neighbors;
-    return delta_e;
+    double dE = 2.0 * J * s * sum_neighbors;
+    return dE;
 }
 
-
-
-
-double IsingModel::delta_energy_L_greater(int i, int j)
-{
-    std::vector<double> possible_delta_E = {-8*J, -4*J, 0, 4*J, 8*J};
-
-    int left = spins(i, (j - 1 + L) % L);
-    int right = spins(i, (j + 1) % L);
-    int up = spins((i - 1 + L) % L, j);
-    int down = spins((i + 1) % L, j);
-
-
-    int count_neg = 0;
-
-    if(left == -1)
-    {
-        count_neg +=1;
-    }
-
-    if(right == -1)
-    {
-        count_neg +=1;
-    }
-
-    if(up == -1)
-    {
-        count_neg +=1;
-    }
-
-    if(down == -1)
-    {
-        count_neg +=1;
-    }
-
-    double delta_energy = possible_delta_E[count_neg];
-    return delta_energy;
-}
 
 
 void IsingModel::monte_carlo_step()
@@ -77,30 +43,36 @@ void IsingModel::monte_carlo_step()
     static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> dist_pos(0, L - 1);
     std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
+    double beta = 1./T;
+
+    std::map<int, double> boltzmann;
+    boltzmann[-8] = std::exp(8 * beta);
+    boltzmann[-4] = std::exp(4 * beta);
+    boltzmann[0] = 1.;
+    boltzmann[4] = std::exp(-4 * beta);
+    boltzmann[8] = std::exp(-8 * beta);
 
     for (int n = 0; n < L * L; n++)
     {
-        // Select a random spin (i, j) and attempt to flip it
+        // Select a random spin (i, j)
         int i = dist_pos(rng);
         int j = dist_pos(rng);
 
-        // Calculate the energy difference for flipping this spin
-
         double dE;
-        /*
-        if(L <= 2)
+        double boltzman_factor;
+        double acceptance_prob;
+
+        if(L<=2)
         {
-           dE = delta_energy_L2(i, j); 
+            dE = delta_energy(i, j);
+            boltzman_factor = std::exp(-dE / T);
+            acceptance_prob = std::min(1., boltzman_factor);
         }
         else
         {
-           dE = delta_energy_L_greater(i, j); 
+            dE = delta_energy(i, j);
+            acceptance_prob = std::min(1., boltzmann[dE]);
         }
-        */
-        dE = delta_energy_L2(i, j);
-
-        // Calculate the acceptance probability p(s') / p(s)
-        double acceptance_prob = std::exp(-dE / T);
 
         // Generate a random number and decide to accept or reject
         double r = dist_prob(rng);
@@ -112,36 +84,6 @@ void IsingModel::monte_carlo_step()
 }
 
 
-
-/*
-void IsingModel::monte_carlo_step()
-{
-    static std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<int> dist_pos(0, L - 1);
-    std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
-
-    for (int n = 0; n < L * L; n++)
-    {
-        int i = dist_pos(rng);
-        int j = dist_pos(rng);
-
-        double dE = delta_energy(i, j);
-
-        if (dE <= 0)
-        {
-            spins(i, j) *= -1; // Flip spin
-        }
-        else
-        {
-            double p = std::exp(-dE / T);
-            if (dist_prob(rng) < p)
-            {
-                spins(i, j) *= -1; // Flip spin
-            }
-        }
-    }
-}
-*/
 
 
 
@@ -205,6 +147,8 @@ void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::
 
 
 
+
+
 double IsingModel::total_energy(const arma::Mat<int>& spin_config)
 {
     double E = 0.0;
@@ -229,16 +173,25 @@ double IsingModel::energy_per_spin()
 	return total_energy(spins) / (L * L);
 }
 
+
+
+
 double IsingModel::magnetisation()
 {
     int M = arma::accu(spins);
     return static_cast<double>(M);
 }
 
+
+
+
 double IsingModel::magnetisation_per_spin()
 {
 	return magnetisation() / (L * L);
 }
+
+
+
 
 
 double IsingModel::partition_function()
