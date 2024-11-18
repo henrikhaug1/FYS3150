@@ -1,6 +1,6 @@
 # FYS3150 Project3
 
-## File organization:
+## File organization
 This project is organized inside the Project4 folder in this manner:
 - Project4 folder contains all main files needed to run the code for this project, a src folder, a include folder and a txt_files folder.
 - src: contains the .cpp files for the class IsingModel, and the parallelized version of the class IsingModel, and the .py files needed for plotting in this project. 
