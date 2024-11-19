@@ -144,7 +144,7 @@ plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
 plt.grid()
 
 plt.tight_layout()
-# plt.savefig("eps_distribution_hist.pdf")
+plt.savefig("eps_distribution_hist.pdf")
 plt.show()
 
 
@@ -155,13 +155,13 @@ plt.plot(temp40, energy40, label="L=40", marker='o')
 plt.plot(temp40, energy60, label="L=60", marker='o')
 plt.plot(temp40, energy80, label="L=80", marker='o')
 plt.plot(temp40, energy100, label="L=100", marker='o')
-plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Energy", fontsize=16)
+plt.xlabel("T", fontsize=16)
+plt.ylabel("$<\epsilon>$", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
-# plt.savefig("temp_eps.pdf")
+plt.savefig("temp_eps.pdf")
 plt.show()
 
 # Magnetisation
@@ -169,13 +169,13 @@ plt.plot(temp40, magnetisation40, label="L=40", marker='o')
 plt.plot(temp40, magnetisation60, label="L=60", marker='o')
 plt.plot(temp40, magnetisation80, label="L=80", marker='o')
 plt.plot(temp40, magnetisation100, label="L=100", marker='o')
-plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Magnetisation", fontsize=16)
+plt.xlabel("T", fontsize=16)
+plt.ylabel(r"$\langle | m | \rangle $", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
-# plt.savefig("temp_magnetisation.pdf")
+plt.savefig("temp_magnetisation.pdf")
 plt.show()
 
 # Heat capacity 
@@ -183,13 +183,13 @@ plt.plot(temp40, heat_cap40, label="L=40", marker='o')
 plt.plot(temp40, heat_cap60, label="L=60", marker='o')
 plt.plot(temp40, heat_cap80, label="L=80", marker='o')
 plt.plot(temp40, heat_cap100, label="L=100", marker='o')
-plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Heat capacity", fontsize=16)
+plt.xlabel("T", fontsize=16)
+plt.ylabel(r"$\frac{C_V}{N} $", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
-# plt.savefig("temp_heat_cap.pdf")
+plt.savefig("temp_heat_cap.pdf")
 plt.show()
 
 # Susceptibility
@@ -197,13 +197,13 @@ plt.plot(temp40, sus40, label="L=40", marker='o')
 plt.plot(temp40, sus60, label="L=60", marker='o')
 plt.plot(temp40, sus80, label="L=80", marker='o')
 plt.plot(temp40, sus100, label="L=100", marker='o')
-plt.xlabel("Temperature", fontsize=16)
-plt.ylabel("Susceptibility", fontsize=16)
+plt.xlabel("T", fontsize=16)
+plt.ylabel(r"$\frac{\chi}{N} $", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
-# plt.savefig("temp_sus.pdf")
+plt.savefig("temp_sus.pdf")
 plt.show()
 
 
@@ -225,40 +225,32 @@ T_c_Cv = np.array([temp40_fine[np.argmax(heat_cap40_fine)],
 				   temp40_fine[np.argmax(heat_cap80_fine)],
 				   temp40_fine[np.argmax(heat_cap100_fine)]]) 
 
-plt.figure(figsize=(12, 6))
 
-# Left subplot
-plt.subplot(1, 2, 1)
-plt.plot(1 / L, T_c_Cv, label='Data points for $C_V$', marker='o', linestyle='None')
-fit_CV = linregress(1 / L, T_c_Cv)
-slope_CV = fit_CV.slope
-intercept_CV = fit_CV.intercept
-plt.plot(1 / L, slope_CV / L + intercept_CV, label='1.078 $L^{-1}$ + 2.261 $Jk_B^{-1}$  (???)')
-plt.xlabel('$L^{-1}$')
-plt.ylabel('$T_c$ [J $k_B^{-1}$]')
-plt.legend()
-plt.grid()  # Apply grid to the left subplot
 
-# Right subplot
-plt.subplot(1, 2, 2)
-plt.plot(1 / L, T_c_X, label='Data points for $X$', marker='o', linestyle='None')
+print(f'T_c_X = {T_c_X}')
+print(f'T_c_Cv = {T_c_Cv}')
+
+
+
+
+#Susceptibility
+plt.plot(1 / L, T_c_X, label='Data points for $\chi$', marker='o', linestyle='None')
+print(linregress(1 / L, T_c_X))
 fit_X = linregress(1 / L, T_c_X)
-slope_X = fit_X.slope
-intercept_X = fit_X.intercept
-plt.plot(1 / L, slope_X / L + intercept_X, label='1.078 $L^{-1}$ + 2.261 $Jk_B^{-1}$   (???)')
-plt.xlabel('$L^{-1}$')
-plt.ylabel('$T_c$ [J $k_B^{-1}$]')
-plt.legend()
-plt.grid()  # Apply grid to the right subplot
-
+plt.plot(1 / L, fit_X.slope / L + fit_X.intercept, label='3.0378 $L^{-1}$ + 2.2405 $Jk_B^{-1}$')
+plt.xlabel('$L^{-1}$', fontsize=16)
+plt.ylabel('$T_c$ [J $k_B^{-1}$]', fontsize=16)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
 plt.tight_layout()
-#plt.savefig('problem9.pdf', format='pdf')
+plt.savefig('problem9.pdf', format='pdf')
+plt.grid()
 plt.show()
 
+r_value = fit_X.rvalue
+intercept_stderr = fit_X.intercept_stderr
 
-
-
-
-
-
+print(f"R² value for susceptibility fit: {r_value**2:.4f}")
+print(f"uncertainty value for susceptibility fit: {intercept_stderr:.4f}")
 
