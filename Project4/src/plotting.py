@@ -161,6 +161,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
+plt.tight_layout()
 plt.savefig("temp_eps.pdf")
 plt.show()
 
@@ -175,6 +176,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
+plt.tight_layout()
 plt.savefig("temp_magnetisation.pdf")
 plt.show()
 
@@ -189,6 +191,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
+plt.tight_layout()
 plt.savefig("temp_heat_cap.pdf")
 plt.show()
 
@@ -203,6 +206,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
+plt.tight_layout()
 plt.savefig("temp_sus.pdf")
 plt.show()
 
@@ -226,7 +230,6 @@ T_c_Cv = np.array([temp40_fine[np.argmax(heat_cap40_fine)],
 				   temp40_fine[np.argmax(heat_cap100_fine)]]) 
 
 
-
 print(f'T_c_X = {T_c_X}')
 print(f'T_c_Cv = {T_c_Cv}')
 
@@ -235,22 +238,45 @@ print(f'T_c_Cv = {T_c_Cv}')
 
 #Susceptibility
 plt.plot(1 / L, T_c_X, label='Data points for $\chi$', marker='o', linestyle='None')
-print(linregress(1 / L, T_c_X))
 fit_X = linregress(1 / L, T_c_X)
 plt.plot(1 / L, fit_X.slope / L + fit_X.intercept, label='3.0378 $L^{-1}$ + 2.2405 $Jk_B^{-1}$')
 plt.xlabel('$L^{-1}$', fontsize=16)
 plt.ylabel('$T_c$ [J $k_B^{-1}$]', fontsize=16)
-plt.xticks(fontsize=16)
+plt.xticks(fontsize=13)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.tight_layout()
-plt.savefig('problem9.pdf', format='pdf')
 plt.grid()
+plt.savefig("problem9_susceptibility.pdf", format="pdf")
 plt.show()
 
-r_value = fit_X.rvalue
-intercept_stderr = fit_X.intercept_stderr
+r_value_X = fit_X.rvalue
+intercept_X = fit_X.intercept
+intercept_stderr_X = fit_X.intercept_stderr
 
-print(f"R² value for susceptibility fit: {r_value**2:.4f}")
-print(f"uncertainty value for susceptibility fit: {intercept_stderr:.4f}")
+print(f"R² value for susceptibility fit: {r_value_X**2:.4f}")
+print(f"intercept value for susceptibility fit: {intercept_X:.4f}")
+print(f"uncertainty value for susceptibility fit: {intercept_stderr_X:.4f}")
+
+plt.plot(1 / L, T_c_Cv, label=r'Data points for $\frac{C_V}{N}$', marker='o', linestyle='None')
+fit_Cv = linregress(1 / L, T_c_Cv)
+plt.plot(1 / L, fit_Cv.slope / L + fit_Cv.intercept, label='3.0378 $L^{-1}$ + 2.2405 $Jk_B^{-1}$')
+plt.xlabel('$L^{-1}$', fontsize=16)
+plt.ylabel('$T_c$ [J $k_B^{-1}$]', fontsize=16)
+plt.xticks(fontsize=13)
+plt.yticks(fontsize=16)
+plt.legend(fontsize=16)
+plt.grid()
+plt.tight_layout()
+plt.savefig("problem9_heat_cap.pdf", format="pdf")
+plt.show()
+
+
+r_value_Cv = fit_Cv.rvalue
+intercept_Cv = fit_Cv.intercept
+intercept_stderr_Cv = fit_Cv.intercept_stderr
+
+print(f"R² value for heat capacity fit: {r_value_Cv**2:.4f}")
+print(f"intercept value for heat capacity fit: {intercept_Cv:.4f}")
+print(f"uncertainty value for heat capacity fit: {intercept_stderr_Cv:.4f}")
 

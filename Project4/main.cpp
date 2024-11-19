@@ -1,9 +1,9 @@
-#include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <iomanip>
 #include "IsingModel.hpp"
+#include <chrono>
 
 void write_to_file_energy(std::string filename, std::vector<double> energies, std::vector<double> cumulative_energies, std::vector<double> magnetisation)
 {
@@ -68,9 +68,7 @@ int main()
     int mc_cycles = 100000;
     double dt = 0.01;
     double J = 1.0;
-
-
-
+    /*
 
     // --------------- Problem 2 (L = 2) ---------------
     std::vector<double> energies_ordered;
@@ -179,20 +177,27 @@ int main()
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
     
     }
-    
+
+
+*/
 
 
 
+    // --------------- Problem 7 - Timing ---------------
+    // ----- Serial -----
+    std::vector<int> lattice_sizes = {4, 6, 8, 10};
+    arma::vec temperatures7 = arma::regspace(2.1, dt, 2.4 + dt);
 
-    /* 
-    // --------------- Problem 8 (L = {40, 60, 80, 100}) ---------------
-    std::vector<int> lattice_sizes = {40, 60, 80, 100};
+    std::cout << "MONTE CARLO CYCLES: " << mc_cycles << std::endl;
+    std::cout << "dt: " << dt << std::endl;
+    std::cout << "\n";
 
-    arma::vec temperatures8 = arma::regspace(2.1, dt, 2.4 + dt);
+    auto start = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0; i < lattice_sizes.size(); i++)
+    for (int i = 0; i < lattice_sizes.size(); i++)
     {
-        std::cout << "Starting L=" << lattice_sizes[i] << std::endl;
+
+
         std::vector<double> av_energy;
         std::vector<double> av_energy2;
         std::vector<double> av_magnetisation;
@@ -200,9 +205,11 @@ int main()
         std::vector<double> sp_heat;
         std::vector<double> sus;
 
-        for (int j = 0; j < temperatures8.n_elem; j++)
-        {    
-            IsingModel model_many(lattice_sizes[i], temperatures8[j], J, false);
+        for (int j = 0; j < temperatures7.n_elem; j++)
+        {
+            std::cout << std::left << "L=" << lattice_sizes[i] << std::setw(10) << "Temperature: " << temperatures7[j] << std::endl;
+
+            IsingModel model_many(lattice_sizes[i], temperatures7[j], J, false);
             std::vector<double> energies;
             std::vector<double> cumulative_energies;
             std::vector<double> magnetisations;
@@ -215,15 +222,18 @@ int main()
             av_magnetisation2.push_back(model_many.average_magnetisation2);
             sp_heat.push_back(model_many.specific_heat);
             sus.push_back(model_many.susceptibility);
-
         }
-
-        std::string filename = "L" + std::to_string(lattice_sizes[i]) + "_func_of_temp.txt";
-        write_to_file_8(filename, temperatures8, av_energy, av_energy2, av_magnetisation, av_magnetisation2, sp_heat, sus);
     }
-    */
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    std::cout << "Elapsed time: " << duration.count() << " ms" << std::endl;
+
+
+
+
     
 
     return 0;
 }
-
