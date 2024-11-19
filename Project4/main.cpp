@@ -68,7 +68,7 @@ int main()
     int mc_cycles = 100000;
     double dt = 0.01;
     double J = 1.0;
-    /*
+
 
     // --------------- Problem 2 (L = 2) ---------------
     std::vector<double> energies_ordered;
@@ -177,10 +177,6 @@ int main()
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
     
     }
-
-
-*/
-
 
 
     // --------------- Problem 7 - Timing ---------------
