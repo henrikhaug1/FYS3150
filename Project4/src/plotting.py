@@ -8,15 +8,20 @@ T10_MC_cycles_u, eps_T10_u, mean_eps_T10_u, mag_T10_u = np.loadtxt("txt_burn_in/
 T24_MC_cycles_o, eps_T24_o, mean_eps_T24_o, mag_T24_o = np.loadtxt("txt_burn_in/energy_L20_T2.400000_ordered.txt", unpack=True)
 T24_MC_cycles_u, eps_T24_u, mean_eps_T24_u, mag_T24_u = np.loadtxt("txt_burn_in/energy_L20_T2.400000_unordered.txt", unpack=True)
 
-
-temp2, energy2, energy2_2, magnetisation2, magnetisation2_2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
-
 # Pre-computed
 temp40, energy40, energy2_40, magnetisation40, magnetisation2_40, heat_cap40, sus40 = np.loadtxt("txt_heavy/L40_func_of_temp.txt", unpack=True, skiprows=1)
 temp60, energy60, energy2_60, magnetisation60, magnetisation2_60, heat_cap60, sus60 = np.loadtxt("txt_heavy/L60_func_of_temp.txt", unpack=True, skiprows=1)
 temp80, energy80, energy2_80, magnetisation80, magnetisation2_80, heat_cap80, sus80 = np.loadtxt("txt_heavy/L80_func_of_temp.txt", unpack=True, skiprows=1)
 temp100, energy100, energy2_100, magnetisation100, magnetisation2_100, heat_cap100, sus100 = np.loadtxt("txt_heavy/L100_func_of_temp.txt", unpack=True, skiprows=1)
 
+# Pre-computed: with 10% burn-in and 1 000 000
+T10_MC_cycles_o_hist, eps_T10_o_hist, mean_eps_T10_o_hist, mag_T10_o_hist = np.loadtxt("txt_histogram/energy_L20_T1.000000_ordered.txt", unpack=True)
+T10_MC_cycles_u_hist, eps_T10_u_hist, mean_eps_T10_u_hist, mag_T10_u_hist = np.loadtxt("txt_histogram/energy_L20_T1.000000_unordered.txt", unpack=True)
+T24_MC_cycles_o_hist, eps_T24_o_hist, mean_eps_T24_o_hist, mag_T24_o_hist = np.loadtxt("txt_histogram/energy_L20_T2.400000_ordered.txt", unpack=True)
+T24_MC_cycles_u_hist, eps_T24_u_hist, mean_eps_T24_u_hist, mag_T24_u_hist = np.loadtxt("txt_histogram/energy_L20_T2.400000_unordered.txt", unpack=True)
+
+
+temp2, energy2, energy2_2, magnetisation2, magnetisation2_2, heat_cap2, sus2 = np.loadtxt("L2_func_of_temp.txt", unpack=True, skiprows=1)
 
 
 
@@ -53,7 +58,7 @@ plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
 plt.legend(fontsize = 16)
 plt.grid()
-plt.savefig("2x2_energy_50000.pdf", format="pdf", bbox_inches="tight")
+# plt.savefig("2x2_energy_50000.pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 # Magnetisation
@@ -67,7 +72,7 @@ plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
 plt.legend(fontsize = 16)
 plt.grid()
-plt.savefig("2x2_mag_50000.pdf", format="pdf", bbox_inches="tight")
+# plt.savefig("2x2_mag_50000.pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 # Heat capacity
@@ -79,7 +84,7 @@ plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
 plt.legend(fontsize = 16)
 plt.grid()
-plt.savefig("2x2_Cv_50000.pdf", format="pdf", bbox_inches="tight")
+# plt.savefig("2x2_Cv_50000.pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 #Susceptibility
@@ -91,8 +96,10 @@ plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
 plt.legend(fontsize = 16)
 plt.grid()
-plt.savefig("2x2_susc_50000.pdf", format="pdf", bbox_inches="tight")
+# plt.savefig("2x2_susc_50000.pdf", format="pdf", bbox_inches="tight")
 plt.show()
+
+
 
 
 log_cycles = []
@@ -101,31 +108,35 @@ for i in range(1, len(T10_MC_cycles_o)):
 	log_cycles.append(np.log10(T10_MC_cycles_o[i]))
 
 # --------------- PROBLEM 5 ---------------
+# T = 1.0
 plt.plot(log_cycles, eps_T10_u, '-', color='#377eb8', alpha=0.4, linewidth=1.0, label=r'Current $\epsilon$, unordered')
-plt.plot(log_cycles, eps_T10_o, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label=r'Average $\langle \epsilon \rangle}$, unordered')
-plt.plot(log_cycles, mean_eps_T10_u, '-', linewidth=2.0, color='#377eb8', label=r'Current $\epsilon$, ordered')
-plt.plot(log_cycles, mean_eps_T10_o, '-', linewidth=2.0, color='#4daf4a', label=r'Average $\langle \epsilon \rangle}$, ordered')
+plt.plot(log_cycles, mean_eps_T10_u, '-', linewidth=2.0, color='#377eb8', label=r'Average $\langle \epsilon \rangle$, unordered')
+plt.plot(log_cycles, eps_T10_o, '-', color='#4daf4a', alpha=0.4, linewidth=1.0, label=r'Current $\epsilon$, ordered')
+plt.plot(log_cycles, mean_eps_T10_o, '-', linewidth=2.0, color='#4daf4a', label=r'Average $\langle \epsilon \rangle$, ordered')
 plt.xlabel("log(Monte Carlo Cycles)", fontsize=16)
 plt.ylabel("Energy [J]", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(fontsize=16)   
 plt.grid()
-# plt.savefig("mc_cycles_vs_eps.pdf")
+# plt.savefig("mc_cycles_vs_eps_T10.pdf")
 plt.show()
 
-plt.plot(log_cycles, eps_T24_u, '-', color='#e41a1c', alpha=0.4, linewidth=1.0)
-plt.plot(log_cycles, eps_T24_o, '-', color='#984ea3', alpha=0.4, linewidth=1.0)
-plt.plot(log_cycles, mean_eps_T24_u, '-', linewidth=2.0, color='#e41a1c', label='$T=2.4$ $J/k_{B}$, unordered')
-plt.plot(log_cycles, mean_eps_T24_o, '-', linewidth=2.0, color='#984ea3', label='$T=2.4$ $J/k_{B}$, ordered')
+# T = 2.4
+plt.plot(log_cycles, eps_T24_u, '-', color='#e41a1c', alpha=0.4, linewidth=1.0,  label=r'Current $\epsilon$, unordered')
+plt.plot(log_cycles, mean_eps_T24_u, '-', linewidth=2.0, color='#e41a1c', label=r'Average $\langle \epsilon \rangle$, unordered')
+plt.plot(log_cycles, eps_T24_o, '-', color='#984ea3', alpha=0.4, linewidth=1.0, label=r'Current $\epsilon$, ordered')
+plt.plot(log_cycles, mean_eps_T24_o, '-', linewidth=2.0, color='#984ea3', label=r'Average $\langle \epsilon \rangle$, ordered')
 plt.xlabel("log(Monte Carlo Cycles)", fontsize=16)
-plt.ylabel("Energy", fontsize=16)
+plt.ylabel("Energy [J]", fontsize=16)
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
-plt.legend(fontsize=16)
+plt.legend(fontsize=16)   
 plt.grid()
-# plt.savefig("mc_cycles_vs_eps.pdf")
+# plt.savefig("mc_cycles_vs_eps_T24.pdf")
 plt.show()
+
+
 
 
 
@@ -135,7 +146,7 @@ plt.figure(figsize=(12, 6))
 
 # Histogram for T = 1.0
 plt.subplot(1, 2, 1)
-plt.hist(eps_T10_o, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
+plt.hist(eps_T10_o_hist, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
 plt.title('Energy Distribution at T = 1.0')
 plt.xlabel('Energy per Spin $\epsilon$')
 plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
@@ -143,7 +154,7 @@ plt.grid()
 
 # Histogram for T = 2.4
 plt.subplot(1, 2, 2)
-plt.hist(eps_T24_o, bins=bins, density=True, alpha=0.7, color='red', edgecolor='black')
+plt.hist(eps_T24_o_hist, bins=bins, density=True, alpha=0.7, color='red', edgecolor='black')
 plt.title('Energy Distribution at T = 2.4')
 plt.xlabel('Energy per Spin $\epsilon$')
 plt.ylabel('Probability Density $p_{\epsilon}(\epsilon; T)$')
@@ -152,6 +163,8 @@ plt.grid()
 plt.tight_layout()
 # plt.savefig("eps_distribution_hist.pdf")
 plt.show()
+
+
 
 
 
@@ -168,7 +181,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
 plt.tight_layout()
-plt.savefig("temp_eps.pdf")
+# plt.savefig("temp_eps.pdf")
 plt.show()
 
 # Magnetisation
@@ -183,7 +196,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
 plt.tight_layout()
-plt.savefig("temp_magnetisation.pdf")
+# plt.savefig("temp_magnetisation.pdf")
 plt.show()
 
 # Heat capacity 
@@ -198,7 +211,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
 plt.tight_layout()
-plt.savefig("temp_heat_cap.pdf")
+# plt.savefig("temp_heat_cap.pdf")
 plt.show()
 
 # Susceptibility
@@ -213,7 +226,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
 plt.tight_layout()
-plt.savefig("temp_sus.pdf")
+# plt.savefig("temp_sus.pdf")
 plt.show()
 
 
@@ -236,11 +249,6 @@ T_c_Cv = np.array([temp40[np.argmax(heat_cap40)],
 				   temp40[np.argmax(heat_cap100)]]) 
 
 
-print(f'T_c_X = {T_c_X}')
-print(f'T_c_Cv = {T_c_Cv}')
-
-
-
 
 #Susceptibility
 plt.plot(1 / L, T_c_X, label='Data points for $\chi$', marker='o', linestyle='None')
@@ -253,7 +261,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.tight_layout()
 plt.grid()
-plt.savefig("problem9_susceptibility.pdf", format="pdf")
+# plt.savefig("problem9_susceptibility.pdf", format="pdf")
 plt.show()
 
 r_value_X = fit_X.rvalue
@@ -261,10 +269,13 @@ intercept_X = fit_X.intercept
 slope_X = fit_X.slope
 intercept_stderr_X = fit_X.intercept_stderr
 
-print(f"R² value for susceptibility fit: {r_value_X**2:.4f}")
-print(f"intercept value for susceptibility fit: {intercept_X:.4f}")
-print(f"uncertainty value for susceptibility fit: {intercept_stderr_X:.4f}")
-print(f"slope for susceptibility fit: {slope_X:.4f}")
+print("\n")
+print("---------- SUSCEPTIBILITY ----------")
+print(f"Critical temperatures for L = [40, 60, 80, 100] based on results from susceptibility: {T_c_X}")
+print(f"R² value for susceptibility fit:          {r_value_X**2:.4f}")
+print(f"Intercept value for susceptibility fit:   {intercept_X:.4f}")
+print(f"Uncertainty value for susceptibility fit: {intercept_stderr_X:.4f}")
+print(f"Slope for susceptibility fit:             {slope_X:.4f}")
 
 plt.plot(1 / L, T_c_Cv, label=r'Data points for $\frac{C_V}{N}$', marker='o', linestyle='None')
 fit_Cv = linregress(1 / L, T_c_Cv)
@@ -276,7 +287,7 @@ plt.yticks(fontsize=16)
 plt.legend(fontsize=16)
 plt.grid()
 plt.tight_layout()
-plt.savefig("problem9_heat_cap.pdf", format="pdf")
+# plt.savefig("problem9_heat_cap.pdf", format="pdf")
 plt.show()
 
 
@@ -285,8 +296,11 @@ intercept_Cv = fit_Cv.intercept
 slope_Cv = fit_Cv.slope
 intercept_stderr_Cv = fit_Cv.intercept_stderr
 
-print(f"R² value for heat capacity fit: {r_value_Cv**2:.4f}")
-print(f"intercept value for heat capacity fit: {intercept_Cv:.4f}")
-print(f"uncertainty value for heat capacity fit: {intercept_stderr_Cv:.4f}")
-print(f"slope for heat capacity fit: {slope_Cv:.4f}")
+print("\n")
+print("---------- HEAT CAPACITY ----------")
+print(f"Critical temperatures for L = [40, 60, 80, 100] based on results from heat capacity: {T_c_X}")
+print(f"R² value for heat capacity fit:          {r_value_Cv**2:.4f}")
+print(f"Intercept value for heat capacity fit:   {intercept_Cv:.4f}")
+print(f"Uncertainty value for heat capacity fit: {intercept_stderr_Cv:.4f}")
+print(f"Slope for heat capacity fit:             {slope_Cv:.4f}")
 

@@ -32,7 +32,8 @@ clean:
 	rm -f 2x2_mag_50000.pdf
 	rm -f 2x2_Cv_50000.pdf
 	rm -f 2x2_susc_50000.pdf
-	rm -f mc_cycles_vs_eps.pdf
+	rm -f mc_cycles_vs_eps_T10.pdf
+	rm -f mc_cycles_vs_eps_T24.pdf
 	rm -f eps_distribution_hist.pdf
 	rm -f temp_eps.pdf
 	rm -f temp_magnetisation.pdf

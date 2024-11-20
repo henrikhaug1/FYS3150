@@ -65,7 +65,7 @@ double critical_temperature(int lattice_sizes)
 int main()
 {
     
-    int mc_cycles = 10000;
+    int mc_cycles = 1000000;
     double dt = 0.01;
     double J = 1.0;
 
@@ -110,7 +110,7 @@ int main()
 
 
     // --------------- Problem 4 (L = 2) ---------------
-    std::cout << "---------- Analysing minimal amount of mc cycles for good agreement with anaytical results (T 4 ⋲ [1, 10])---------- " << std::endl;
+    std::cout << "---------- Analysing minimal amount of mc cycles for good agreement with anaytical results (T ⋲ [1, 10])---------- " << std::endl;
 
     std::vector<double> av_energy;
     std::vector<double> av_energy2;
@@ -151,13 +151,21 @@ int main()
 
     /*
 
-    Problem 5 is solved by using the same code as for problem 6, but with equilibration_step = 0 to genrerate the text files
-    for burn-in plots, located in the folder txt_burn_in. 
+    To genereate the plot for burn-in analysis we used the same code as for problem 6 (below), but with equilibration_step = 0 (in IsingModel.cpp method metropolis).
+    The files are pre computed and located in the folder txt_burn_in. 
+    mc_cycles = 1 000 000.
 
     */
 
 
-    
+
+    /*
+
+    Files computed for histogram of proability density is pre computed and located in the folder txt_histogram.
+
+    */
+
+    /*
     // --------------- Problem 6 (L = 20) ---------------
     std::vector<double> temperatures5 = {1.0, 2.4}; // Temperatures to simulate
     for (size_t t = 0; t < temperatures5.size(); t++)
@@ -189,7 +197,7 @@ int main()
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
     
     }
-    
+    */
 
 
     /*
@@ -235,9 +243,7 @@ int main()
         }
     }
     auto end = std::chrono::high_resolution_clock::now();
-
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
     std::cout << "Elapsed time: " << duration.count() << " ms" << std::endl;
     */
 

@@ -53,32 +53,6 @@ void write_to_file_8(std::string filename, arma::vec temperature, std::vector<do
 
 
 
-void write_to_file_8_fine(std::string filename, arma::vec temperature, std::vector<double> heat_cap, std::vector<double> sus)
-{
-    int width = 15;  
-    int prec = 8;     
-
-    std::ofstream outfile(filename);
-
-    outfile << std::left << std::setw(width) << "Temperature"
-            << std::setw(width) << "Heat Capacity"
-            << std::setw(width) << "Susceptibility" << "\n";
-
-    for (size_t i = 0; i < temperature.n_elem; ++i)
-    {
-        outfile << std::left << std::setw(width) << std::setprecision(prec) << temperature[i]
-                << std::setw(width) << std::setprecision(prec) << heat_cap[i]
-                << std::setw(width) << std::setprecision(prec) << sus[i] << "\n";
-    }
-    outfile.close();
-}
-
-
-
-
-
-
-
 
 int main()
 {
