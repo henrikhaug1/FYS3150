@@ -28,10 +28,16 @@ clean:
 	rm -f 2x2_mag_500.pdf
 	rm -f 2x2_Cv_500.pdf
 	rm -f 2x2_susc_500.pdf
+	rm -f 2x2_energy_50000.pdf
+	rm -f 2x2_mag_50000.pdf
+	rm -f 2x2_Cv_50000.pdf
+	rm -f 2x2_susc_50000.pdf
 	rm -f mc_cycles_vs_eps.pdf
 	rm -f eps_distribution_hist.pdf
 	rm -f temp_eps.pdf
 	rm -f temp_magnetisation.pdf
 	rm -f temp_heat_cap.pdf
 	rm -f temp_sus.pdf
-	rm -f problem9.pdf
+	rm -f problem9_heat_cap.pdf
+	rm -f problem9_susceptibility.pdf 
+

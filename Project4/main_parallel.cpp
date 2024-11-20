@@ -88,7 +88,7 @@ int main()
     double J = 1.0;
 
 
-
+    
     // --------------- Problem 8 (L = {40, 60, 80, 100}) ---------------
     std::vector<int> lattice_sizes = {40, 60, 80, 100};
     arma::vec temperatures8 = arma::regspace(2.1, dt, 2.4 + dt);
@@ -135,48 +135,9 @@ int main()
     }
     
 
-
-
-
-    
-    // --------------- Problem 8 fine (L = {40, 60, 80, 100}) ---------------
-    std::vector<int> lattice_sizes = {40, 60, 80, 100};
-    arma::vec temperatures8 = arma::regspace(2.26, dt, 2.32 + dt);
-
-    std::cout << "MONTE CARLO CYCLES: " << mc_cycles << std::endl;
-    std::cout << "\n";
-
-    omp_set_num_threads(4);
-    #pragma omp parallel for
-    for (int i = 0; i < lattice_sizes.size(); i++)
-    {
-
-        std::vector<double> sp_heat;
-        std::vector<double> sus;
-
-        for (int j = 0; j < temperatures8.n_elem; j++)
-        {
-            std::cout << std::left << "L=" << lattice_sizes[i] << std::setw(10) << "Temperature: " << temperatures8[j] << std::endl;
-
-            IsingModel model_many(lattice_sizes[i], temperatures8[j], J, false);
-            std::vector<double> energies;
-            std::vector<double> cumulative_energies;
-            std::vector<double> magnetisations;
-
-            model_many.metropolis(mc_cycles, energies, cumulative_energies, magnetisations);
-
-            sp_heat.push_back(model_many.specific_heat);
-            sus.push_back(model_many.susceptibility);
-        }
-
-        std::string filename = "L" + std::to_string(lattice_sizes[i]) + "_func_of_temp_fine.txt";
-        write_to_file_8_fine(filename, temperatures8, sp_heat, sus);
-
-        print_current_time("Finished lattice size L=" + std::to_string(lattice_sizes[i]));
-    }
     
 
-
+    /*
     // --------------- Problem 7 - Timing ---------------
     // ----- Parallel -----
     std::vector<int> lattice_sizes = {4, 6, 8, 10};
@@ -222,11 +183,9 @@ int main()
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
     std::cout << "Elapsed time: " << duration.count() << " ms" << std::endl;
-
+    */
 
     return 0;
 }

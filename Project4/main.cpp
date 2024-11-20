@@ -65,7 +65,7 @@ double critical_temperature(int lattice_sizes)
 int main()
 {
     
-    int mc_cycles = 100000;
+    int mc_cycles = 10000;
     double dt = 0.01;
     double J = 1.0;
 
@@ -84,7 +84,8 @@ int main()
     IsingModel L2_T1_ordered(2, 1, J, true);
     L2_T1_ordered.metropolis(mc_cycles, energies_ordered, cumulative_energies_ordered, magnetisations_ordered);
 
-    std::cout << "---------- ORDERED ----------" << std::endl;
+    std::cout << "---------- Comparing analytical and computed results (L=2, T=1, unorderd initial state) ---------- " << std::endl; 
+    std::cout << "----- ORDERED -----" << std::endl;
     std::cout << "Average Energy per Spin:          " << L2_T1_ordered.average_energy << std::endl;
     std::cout << "Average Magnetization per Spin:   " << L2_T1_ordered.average_magnetisation << std::endl;
     std::cout << "Specific Heat per Spin:           " << L2_T1_ordered.specific_heat << std::endl;
@@ -96,12 +97,12 @@ int main()
     IsingModel L2_T1_unordered(2, 1, J, false);
     L2_T1_unordered.metropolis(mc_cycles, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
 
-    std::cout << "---------- UNORDERED ----------" << std::endl;
+    std::cout << "----- UNORDERED -----" << std::endl;
     std::cout << "Average Energy per Spin:          " << L2_T1_unordered.average_energy << std::endl;
     std::cout << "Average Magnetization per Spin:   " << L2_T1_unordered.average_magnetisation << std::endl;
     std::cout << "Specific Heat per Spin:           " << L2_T1_unordered.specific_heat << std::endl;
     std::cout << "Susceptibility per Spin:          " << L2_T1_unordered.susceptibility << std::endl;
-
+    std::cout << "\n \n";
 
 
 
@@ -109,6 +110,8 @@ int main()
 
 
     // --------------- Problem 4 (L = 2) ---------------
+    std::cout << "---------- Analysing minimal amount of mc cycles for good agreement with anaytical results (T 4 ⋲ [1, 10])---------- " << std::endl;
+
     std::vector<double> av_energy;
     std::vector<double> av_energy2;
     std::vector<double> av_magnetisation;
@@ -116,10 +119,13 @@ int main()
     std::vector<double> sp_heat;
     std::vector<double> sus;
 
-    arma::vec temperatures4 = arma::regspace(2.1, dt, 2.4 + dt);
+    arma::vec temperatures4 = arma::regspace(1, dt, 10 + dt);
 
     for (int i = 0; i < temperatures4.n_elem; i++)
-    {    
+    {   
+
+        std::cout << "T =  " << temperatures4[i] << std::endl;
+ 
         IsingModel model_many(2, temperatures4[i], J, false);
 
         std::vector<double> energies;
@@ -128,7 +134,7 @@ int main()
         std::vector<double> magnetisations;
 
 
-        model_many.metropolis(mc_cycles, energies, cumulative_energies, magnetisations);
+        model_many.metropolis(500, energies, cumulative_energies, magnetisations);
 
         av_energy.push_back(model_many.average_energy);
         av_energy2.push_back(model_many.average_energy2);
@@ -143,10 +149,16 @@ int main()
 
 
 
+    /*
+
+    Problem 5 is solved by using the same code as for problem 6, but with equilibration_step = 0 to genrerate the text files
+    for burn-in plots, located in the folder txt_burn_in. 
+
+    */
 
 
     
-    // --------------- Problem 5 (L = 20) ---------------
+    // --------------- Problem 6 (L = 20) ---------------
     std::vector<double> temperatures5 = {1.0, 2.4}; // Temperatures to simulate
     for (size_t t = 0; t < temperatures5.size(); t++)
     {
@@ -177,8 +189,10 @@ int main()
         write_to_file_energy(filename_unordered, energies_unordered, cumulative_energies_unordered, magnetisations_unordered);
     
     }
+    
 
 
+    /*
     // --------------- Problem 7 - Timing ---------------
     // ----- Serial -----
     std::vector<int> lattice_sizes = {4, 6, 8, 10};
@@ -225,7 +239,7 @@ int main()
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << "Elapsed time: " << duration.count() << " ms" << std::endl;
-
+    */
 
 
 

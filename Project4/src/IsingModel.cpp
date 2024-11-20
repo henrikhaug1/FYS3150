@@ -91,7 +91,6 @@ void IsingModel::monte_carlo_step()
 void IsingModel::metropolis(int num_cycles, std::vector<double>& energies, std::vector<double>& cumulative_energies, std::vector<double>& magnetisations)
 {
     int equilibration_steps = num_cycles / 10; // 10% of steps for equilibration
-    // int equilibration_steps = 0; //For determining the burn-in time
     int N = L * L;
 
     // Clear previous results
