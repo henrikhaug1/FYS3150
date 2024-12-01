@@ -116,11 +116,13 @@ void PDEModel::construct_potential(arma::mat& V, const double v_0, const double 
 
     if(nr_slits % 2 == 0){//If there is an even amount of slits 
         int walls = nr_slits - 1; //Calculate the amount of walls
+
         for(int i = 0; i < walls; i++){//Leave the innermost wall, and remove the openings above and below accordingly. First upwards
             V.rows(centre_id + middle_wall_id / 2 + i * (2 * half_opening_id + middle_wall_id), centre_id + middle_wall_id / 2 + 2 * half_opening_id + i * (2 * half_opening_id + middle_wall_id)).fill(0);
         }//This is way easier to understand if you draw a sketch!
-        for(int i = 0; i <= walls; i++){//Then downwards
-            V.rows(centre_id - middle_wall_id / 2 - i * (2 * half_opening_id + middle_wall_id), centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id)).fill(0);
+
+        for(int i = 0; i < walls; i++){//Then downwards
+            V.rows(centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id), centre_id - middle_wall_id / 2 - i * (2 * half_opening_id + middle_wall_id)).fill(0);
         }//This is way easier to understand if you draw a sketch!
     } 
      
@@ -164,14 +166,12 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
     arma::cx_double i_dt_2(0., dt / 2);
     for (int j = 0; j < (M-2); j++){
         for (int i = 0; i < (M-2); i++){
-        
         k = pair_to_single_index(i, j, M-2);
         A(k,k) = 1. + 4.*r + i_dt_2 * V(i, j);   //a_k 
         B(k,k) = 1. - 4.*r - i_dt_2 * V(i, j);   //b_k
 
         }
     }
-
     A.diag(1) = -r_diag_1; 
     A.diag(-1) = -r_diag_1;
     A.diag(M - 2) = -r_diag_2; 
@@ -181,7 +181,7 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
     B.diag(-1) = r_diag_1;
     B.diag(M - 2) = r_diag_2; 
     B.diag(- (M - 2)) = r_diag_2;
-    
+
     return std::make_tuple(A,B);
 }
 
