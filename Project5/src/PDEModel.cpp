@@ -59,7 +59,7 @@ std::vector<arma::cx_vec> PDEModel::initial_state(int M)
 
     for(int p = 0; p < M; p++)
     {
-        std::cout << u[p] << std::endl;
+        p += 1;//std::cout << u[p] << std::endl;
     }
 
     return u;
@@ -79,7 +79,7 @@ std::vector<arma::cx_vec> PDEModel::normalised_initial_state(std::vector<arma::c
 
     for(int p = 0; p < M; p++)
     {
-        std::cout << u_normalised[p] << std::endl;
+        p += 1;//std::cout << u_normalised[p] << std::endl;
     }
 
     return u_normalised;
@@ -93,12 +93,12 @@ void PDEModel::set_initial_boundary_conditions(arma::mat hello)
 arma::mat PDEModel::construct_u_matrix()
 {
 
-
+    return 0;
 }
 
 arma::vec PDEModel::construct_u_vector()
 {
-
+    return 0;
 }
 
 int pair_to_single_index(int i, int j, int M)
@@ -106,51 +106,89 @@ int pair_to_single_index(int i, int j, int M)
     return j * M + i;
 }
 
-arma::mat PDEModel::construct_A_B(arma::vec a, arma::vec b, double r, int M)
+std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(arma::cx_double r, int M, arma::cx_vec& a, arma::cx_vec& b)
 {
-    arma::mat A((M-2) * (M-2), (M-2) * (M-2), arma::fill::zeros);
-    arma::mat B((M-2) * (M-2), (M-2) * (M-2), arma::fill::zeros);
+    int side_length = (M - 2) * (M - 2);
+    arma::sp_cx_mat A(side_length, side_length);
+    arma::sp_cx_mat B(side_length, side_length);
 
+    // making diagonals
+    arma::cx_vec r_diag_1(side_length - 1,   arma::fill::value(r));
+    arma::cx_vec r_diag_2(side_length - (M - 2), arma::fill::value(r));
 
-    // making first super diag 
-    arma::vec A_super = arma::vec((M-2) * (M-2) - 1, arma::fill::value(-r));
-    arma::vec A_sub = arma::vec((M-2) * (M-2) - 1, arma::fill::value(-r));
-
-    arma::vec B_super = arma::vec((M-2) * (M-2) - 1, arma::fill::value(r));
-    arma::vec B_sub = arma::vec((M-2) * (M-2) - 1, arma::fill::value(r));
-
-
+    //Removing Each M-2th diagonal 
     for(int i = 1; i < (M-2) * (M-2) - 1; i++)
     {
         if(i % (M-2) == 0)
         {
-            A_super(i-1) = 0;
-            A_sub(i-1) = 0;
-            B_super(i-1) = 0;
-            B_sub(i-1) = 0;
+            r_diag_1(i-1) = 0;
         }
     }
 
-    int idx_r_diag = (M - 2);
     A.diag(0) = a;
-    A.diag(idx_r_diag).fill(-r);
-    A.diag(-idx_r_diag).fill(-r);
-    A.diag(1) = A_super;
-    A.diag(-1) = A_sub;
+    A.diag(1) = -r_diag_1; 
+    A.diag(-1) = -r_diag_1;
+    A.diag(M - 2) = -r_diag_2; 
+    A.diag(- (M - 2)) = -r_diag_2;
 
     B.diag(0) = b;
-    B.diag(idx_r_diag).fill(r);
-    B.diag(-idx_r_diag).fill(r);
-    B.diag(1) = B_super;
-    B.diag(-1) = B_sub;
+    B.diag(1) = r_diag_1; 
+    B.diag(-1) = r_diag_1;
+    B.diag(M - 2) = r_diag_2; 
+    B.diag(- (M - 2)) = r_diag_2;
 
 
-    // A.print("A\n");
-    // B.print("B\n");
-
-
+    return std::make_tuple(A,B);
 }
 
+// A function that prints the structure of a sparse matrix to screen. Copy pasted from task.
+void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
+{
+    using namespace std;
+    using namespace arma;
+
+    // Declare a C-style 2D array of strings.
+    string S[A.n_rows][A.n_cols];  
+
+    // Initialise all the strings to " ".
+    for (int i =0; i < A.n_rows; i++)
+    {
+        for (int j = 0; j < A.n_cols; j++)
+        {
+            S[i][j] = " ";
+        }
+    }
+
+    // Next, we want to set the string to a dot at each non-zero element.
+    // To do this we use the special loop iterator from the sp_cx_mat class
+    // to help us loop over only the non-zero matrix elements.
+    sp_cx_mat::const_iterator it     = A.begin();
+    sp_cx_mat::const_iterator it_end = A.end();
+
+    int nnz = 0;
+    for(it; it != it_end; ++it)
+    {
+        S[it.row()][it.col()] = "•";
+        nnz++;
+    }
+
+    // Finally, print the matrix to screen.
+    cout << endl;
+    for (int i =0; i < A.n_rows; i++)
+    {
+        cout << "| ";
+        for (int j = 0; j < A.n_cols; j++)
+        {
+            cout << S[i][j] << " ";
+        }
+        cout <<  "|\n";
+    }
+
+    cout << endl;
+    cout << "matrix size: " << A.n_rows << "x" << A.n_cols << endl;
+    cout << "non-zero elements: " << nnz << endl ;
+    cout << endl;
+}
 
 
 void PDEModel::crank_nicolson(arma::mat A, arma::mat B, arma::vec u)

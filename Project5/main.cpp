@@ -26,10 +26,10 @@ int main()
 
 
 
-    arma::vec a = arma::vec({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
-    arma::vec b = arma::vec({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
-    int M = 6;
-    double r = 2.;
+    arma::cx_vec a = arma::cx_vec({1, 2, 3, 4, 5, 6, 7, 8, 9});//, 10, 11, 12, 13, 14, 15, 16});
+    arma::cx_vec b = arma::cx_vec({1, 2, 3, 4, 5, 6, 7, 8, 9});//, 10, 11, 12, 13, 14, 15, 16});
+    int M = 5;
+    arma::cx_double r(2.0, 0);
     double dt = 0.1;
     double dx = 0.1;
     double dy = 0.1;
@@ -39,13 +39,19 @@ int main()
     double p_y = 0;
     double sigma_x = 0.05;
     double sigma_y = 0.05;
+
     PDEModel model(dt, dx, dy, x_c, y_c, sigma_x, sigma_y, p_x, p_y);
     std::vector u = model.initial_state(M);
     model.normalised_initial_state(u);
-    model.construct_A_B(a, b, r, M);
 
+    auto result = model.construct_A_B(r, M, a, b);
 
-
+    // Plotting code to see structure of A or B matrix
+    // arma::sp_cx_mat A = std::get<0>(result);
+    // arma::sp_cx_mat B = std::get<1>(result);
+    // std::cout << 'Shape of Matrices A and B' << std::endl;
+    // model.print_sp_matrix_structure(A);
+    // model.print_sp_matrix_structure(B);
 
 	return 0;
 }

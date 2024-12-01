@@ -39,10 +39,11 @@ class PDEModel
 
     arma::vec construct_u_vector();
 
-    arma::mat construct_A_B(arma::vec a, arma::vec b, double r, int M);
-
     int pair_to_single_index(int i, int j, int M);
 
+    std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> construct_A_B(arma::cx_double r, int M, arma::cx_vec& a, arma::cx_vec& b);
+
+    void print_sp_matrix_structure(const arma::sp_cx_mat& A);
 
     void crank_nicolson(arma::mat A, arma::mat B, arma::vec u);
 
