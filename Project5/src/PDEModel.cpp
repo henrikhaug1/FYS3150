@@ -101,13 +101,49 @@ arma::vec PDEModel::construct_u_vector()
     return 0;
 }
 
-int pair_to_single_index(int i, int j, int M)
+void PDEModel::construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening)
 {
-    return j * M + i;
+    //Converting from positions to indexes
+    int centre_id = (M - 2) * centre;
+    int half_width_id = (M - 2) * thickness / 2;
+    int middle_wall_id = (M - 2) * middle_wall;
+    int half_opening_id = (M - 2) * opening / 2;
+    V.cols(centre_id - half_width_id, centre_id + half_width_id).fill(v_0);  //Filling the wall
+
+    if(nr_slits == 0){ //If there are no slits, the wall is complete
+        return;
+    }
+
+    if(nr_slits % 2 == 0){//If there is an even amount of slits 
+        int walls = nr_slits - 1; //Calculate the amount of walls
+        for(int i = 0; i < walls; i++){//Leave the innermost wall, and remove the openings above and below accordingly. First upwards
+            V.rows(centre_id + middle_wall_id / 2 + i * (2 * half_opening_id + middle_wall_id), centre_id + middle_wall_id / 2 + 2 * half_opening_id + i * (2 * half_opening_id + middle_wall_id)).fill(0);
+        }//This is way easier to understand if you draw a sketch!
+        for(int i = 0; i <= walls; i++){//Then downwards
+            V.rows(centre_id - middle_wall_id / 2 - i * (2 * half_opening_id + middle_wall_id), centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id)).fill(0);
+        }//This is way easier to understand if you draw a sketch!
+    } 
+     
+    if(nr_slits % 2 == 1){//If there is an odd amount of slits 
+        int slits = (nr_slits + 1) / 2; //Calculate the nr. of slits on each side (+ the middle one)
+        for(int i = 0; i < slits; i++){//Remove openings accordingly. First upwards
+            V.rows(centre_id - half_opening_id + i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id + i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+        }
+        for(int i = 0; i < slits; i++){//Then downwards
+            V.rows(centre_id - half_opening_id - i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id - i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+        }  
+    } 
 }
 
-std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(arma::cx_double r, int M, arma::cx_vec& a, arma::cx_vec& b)
+int PDEModel::pair_to_single_index(int i, int j, int matrix_side_length)
 {
+    return j * matrix_side_length + i;
+}
+
+std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M, const double dx, const double dt, const arma::mat V)
+{
+    arma::cx_double r(0., dt / (2 * dx * dx));
+
     int side_length = (M - 2) * (M - 2);
     arma::sp_cx_mat A(side_length, side_length);
     arma::sp_cx_mat B(side_length, side_length);
@@ -124,20 +160,28 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(arma::cx_dou
             r_diag_1(i-1) = 0;
         }
     }
+    int k;
+    arma::cx_double i_dt_2(0., dt / 2);
+    for (int j = 0; j < (M-2); j++){
+        for (int i = 0; i < (M-2); i++){
+        
+        k = pair_to_single_index(i, j, M-2);
+        A(k,k) = 1. + 4.*r + i_dt_2 * V(i, j);   //a_k 
+        B(k,k) = 1. - 4.*r - i_dt_2 * V(i, j);   //b_k
 
-    A.diag(0) = a;
+        }
+    }
+
     A.diag(1) = -r_diag_1; 
     A.diag(-1) = -r_diag_1;
     A.diag(M - 2) = -r_diag_2; 
     A.diag(- (M - 2)) = -r_diag_2;
 
-    B.diag(0) = b;
     B.diag(1) = r_diag_1; 
     B.diag(-1) = r_diag_1;
     B.diag(M - 2) = r_diag_2; 
     B.diag(- (M - 2)) = r_diag_2;
-
-
+    
     return std::make_tuple(A,B);
 }
 

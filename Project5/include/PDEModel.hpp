@@ -39,9 +39,11 @@ class PDEModel
 
     arma::vec construct_u_vector();
 
+    void construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening);
+
     int pair_to_single_index(int i, int j, int M);
 
-    std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> construct_A_B(arma::cx_double r, int M, arma::cx_vec& a, arma::cx_vec& b);
+    std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> construct_A_B(const int M, const double dx, const double dt, const arma::mat V);
 
     void print_sp_matrix_structure(const arma::sp_cx_mat& A);
 
