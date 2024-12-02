@@ -19,13 +19,11 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
     sigma_y = sigma_y_in;
     p_x = p_x_in;
     p_y = p_y_in;
-
-
 }
 
-std::vector<arma::cx_vec> PDEModel::initial_state(int M)
+arma::cx_vec PDEModel::initial_state(int M)
 {
-    std::vector<arma::cx_vec> u(M, arma::cx_vec(M, arma::fill::zeros));
+    arma::cx_vec u((M-2) * (M-2), arma::fill::zeros);
 
     arma::vec x = arma::regspace(0, dx, M - 1); 
     arma::vec y = arma::regspace(0, dy, M - 1);
@@ -36,7 +34,6 @@ std::vector<arma::cx_vec> PDEModel::initial_state(int M)
 
     for (int j = 0; j < M; ++j) 
     {
-        arma::cx_vec u_element(M, arma::fill::zeros);
         double x_val = x[j];
 
         for(int k = 0; k < M; k++)
@@ -50,11 +47,8 @@ std::vector<arma::cx_vec> PDEModel::initial_state(int M)
                                             - i * p_x * x_val
                                             + i * p_y * y_val;
 
-            u_element[k] = std::exp(exponent); // Assign the complex exponential value
+            u(k) = std::exp(exponent); // Assign the complex exponential value
         }
-
-        u[j] = u_element;
-
     }
 
     for(int p = 0; p < M; p++)
@@ -66,20 +60,14 @@ std::vector<arma::cx_vec> PDEModel::initial_state(int M)
 }
 
 
-std::vector<arma::cx_vec> PDEModel::normalised_initial_state(std::vector<arma::cx_vec> u)
+arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
 {
     int M = u.size();
-    std::vector<arma::cx_vec> u_normalised(M);
-
-    for(int i = 0; i < M; i++)
-    {
-        u_normalised[i] = arma::normalise(u[i]);
-    }
-
+    arma::cx_vec u_normalised = u / arma::norm(u, 2); // Normalize by L2 norm
 
     for(int p = 0; p < M; p++)
     {
-        p += 1;//std::cout << u_normalised[p] << std::endl;
+        p += 1; //std::cout << u_normalised[p] << std::endl;
     }
 
     return u_normalised;
@@ -235,9 +223,12 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
 }
 
 
-void PDEModel::crank_nicolson(arma::mat A, arma::mat B, arma::vec u)
+arma::cx_vec PDEModel::crank_nicolson(arma::sp_cx_mat A, arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
 {
-
+    arma::cx_vec u_1;             //The next time step
+    arma::cx_vec b = B * u;       //First matrix multiplying the right side 
+    u_1 = arma::spsolve(A, b);    //Then solving for the next time step using a sparse solver
+    return u_1;
 }
 
 

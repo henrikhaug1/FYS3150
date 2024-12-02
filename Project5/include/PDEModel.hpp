@@ -28,9 +28,9 @@ class PDEModel
                double p_x, double p_y);
 
     // Initial conditions u_ij^0
-    std::vector<arma::cx_vec> initial_state(int M);
+    arma::cx_vec initial_state(int M);
 
-    std::vector<arma::cx_vec> normalised_initial_state(std::vector<arma::cx_vec> u);
+    arma::cx_vec normalised_initial_state(arma::cx_vec u);
 
     // setting initial and boundary conditions
     void set_initial_boundary_conditions(arma::mat hello);
@@ -47,9 +47,7 @@ class PDEModel
 
     void print_sp_matrix_structure(const arma::sp_cx_mat& A);
 
-    void crank_nicolson(arma::mat A, arma::mat B, arma::vec u);
-
-
+    arma::cx_vec crank_nicolson(arma::sp_cx_mat A, arma::sp_cx_mat B, arma::cx_vec u);
 };
 
 #endif
