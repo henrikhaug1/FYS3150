@@ -20,7 +20,7 @@ void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
 
 int main()
 {
-    int M = 10;
+    int M = 100;
     double dt = 2.5e-5;
     double T = 0.002;
     arma::vec t = arma::regspace(0, dt, T);
@@ -55,13 +55,13 @@ int main()
 
     arma::cx_mat U((M-2) * (M-2), timesteps);   //Will store all the time iterations of u
     U.col(0) = u;                               //Saving first u
+    std::cout << U.col(0) << std::endl;
     for (size_t i = 1; i < timesteps; ++i)      //Finding the u of all time steps
     {
         arma::cx_vec u_1 = model.crank_nicolson(A, B, U.col(i-1)); //Finding next u
         U.col(i) = u_1;                                            //Saving the next u
         std::cout << i << std::endl;
     }
-    
     arma::cx_mat U_conj = arma::conj(U);
     arma::mat P = arma::real(U_conj % U);       //This P matrix is a 2D one representing a 3D one
 

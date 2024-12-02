@@ -20,7 +20,7 @@ timesteps = cols
 # Reshape the 2D array into a 3D array
 P = P.reshape((M_2, M_2, timesteps)) 
 
-t_3_id = [1, int(timesteps / 2), timesteps - 1]
+t_3_id = [0, int(timesteps / 2), timesteps - 1]
 
 for i in t_3_id:
     plt.figure(figsize=(10, 10))

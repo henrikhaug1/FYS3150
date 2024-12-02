@@ -23,23 +23,29 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
 
 arma::cx_vec PDEModel::initial_state(int M)
 {
-    int side_length = (M-2) * (M-2);
+    int side_length = (M-2) * (M-2);                //Initializing a flat 2D matrix
     arma::cx_vec u(side_length, arma::fill::zeros);
 
-    std::complex<double> i(0, 1);
+    std::complex<double> i(0, 1);       //Comlex number
 
-    for (int j = 0; j < M-2; ++j) 
+    for (int j = 0; j < M-2; j++)       //Looping over the matrix
     {
-        double x_val = j / (M-2);
-        for(int k = 0; k < M-2; k++)
+        double x_val = 1.0 * j / (M-2);
+        for(int k = 0; k < M-2; k++)    
         {
-            double y_val = k / (M-2);
+            double y_val = 1.0 * k / (M-2);
             std::complex<double> exponent = - (x_val - x_c) * (x_val - x_c) / (2 * sigma_x * sigma_x)
                                             - (y_val - y_c) * (y_val - y_c) / (2 * sigma_y * sigma_y)
                                             + i * p_x * x_val
                                             + i * p_y * y_val;
+            std::cout << j << std::endl;
+            std::cout << k << std::endl;
+            std::cout << x_val << std::endl;
+            std::cout << y_val << std::endl;
+            std::cout << exponent << std::endl;
             int l = pair_to_single_index(j, k, M-2);
             u(l) = std::exp(exponent); // Assign the complex exponential value
+            std::cout << u(l) << std::endl;
         }
     }
 
