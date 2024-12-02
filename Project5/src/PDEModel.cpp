@@ -26,7 +26,7 @@ arma::cx_vec PDEModel::initial_state(int M)
     int side_length = (M-2) * (M-2);                //Initializing a flat 2D matrix
     arma::cx_vec u(side_length, arma::fill::zeros);
 
-    std::complex<double> i(0, 1);       //Comlex number
+    std::complex<double> i(0, 1.0);       //Comlex number
 
     for (int j = 0; j < M-2; j++)       //Looping over the matrix
     {
@@ -38,14 +38,8 @@ arma::cx_vec PDEModel::initial_state(int M)
                                             - (y_val - y_c) * (y_val - y_c) / (2 * sigma_y * sigma_y)
                                             + i * p_x * x_val
                                             + i * p_y * y_val;
-            std::cout << j << std::endl;
-            std::cout << k << std::endl;
-            std::cout << x_val << std::endl;
-            std::cout << y_val << std::endl;
-            std::cout << exponent << std::endl;
             int l = pair_to_single_index(j, k, M-2);
             u(l) = std::exp(exponent); // Assign the complex exponential value
-            std::cout << u(l) << std::endl;
         }
     }
 
@@ -153,7 +147,7 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
     for (int j = 0; j < (M-2); j++){
         for (int i = 0; i < (M-2); i++){
         k = pair_to_single_index(i, j, M-2);
-        A(k,k) = 1. + 4.*r + i_dt_2 * V(j, i);   //a_k  Apparently the indexes need to be transposed
+        A(k,k) = 1. + 4.*r + i_dt_2 * V(j, i);   //a_k  Apparently the indexes need to be transposed to get the correct plot
         B(k,k) = 1. - 4.*r - i_dt_2 * V(j, i);   //b_k
 
         }
@@ -221,7 +215,7 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
 }
 
 
-arma::cx_vec PDEModel::crank_nicolson(arma::sp_cx_mat A, arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
+arma::cx_vec PDEModel::crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
 {
     arma::cx_vec u_1;             //The next time step
     arma::cx_vec b = B * u;       //First matrix multiplying the right side 

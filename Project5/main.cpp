@@ -29,8 +29,8 @@ int main()
     double dy = 0.1;
     double x_c = 0.25;
     double y_c = 0.5;
-    double p_x = 200;
-    double p_y = 0;
+    double p_x = 200.0;
+    double p_y = 0.0;
     double sigma_x = 0.05;
     double sigma_y = 0.05;
 
@@ -55,17 +55,22 @@ int main()
 
     arma::cx_mat U((M-2) * (M-2), timesteps);   //Will store all the time iterations of u
     U.col(0) = u;                               //Saving first u
-    std::cout << U.col(0) << std::endl;
     for (size_t i = 1; i < timesteps; ++i)      //Finding the u of all time steps
     {
         arma::cx_vec u_1 = model.crank_nicolson(A, B, U.col(i-1)); //Finding next u
         U.col(i) = u_1;                                            //Saving the next u
+        // std::cout << u_1((M-2) * (M-2) / 2) << std::endl;
         std::cout << i << std::endl;
     }
     arma::cx_mat U_conj = arma::conj(U);
     arma::mat P = arma::real(U_conj % U);       //This P matrix is a 2D one representing a 3D one
 
+    arma::mat U_real = arma::real(U);
+    arma::mat U_imag = arma::imag(U);
+
     save_matrix_to_csv(P, "P.csv");
+    save_matrix_to_csv(U_real, "U_Real.csv");
+    save_matrix_to_csv(U_imag, "U_imag.csv");
 
     //Plotting code to see structure of A or B matrix
     // std::cout << "Shape of Matrices A and B" << std::endl;
