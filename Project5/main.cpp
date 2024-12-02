@@ -1,8 +1,7 @@
 #include "PDEModel.hpp"
-
 #include <iostream>
 #include <armadillo>
-
+#include <iomanip> // For setting precision
 
 void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
     std::ofstream file(filename);
@@ -17,6 +16,21 @@ void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
     }
     file.close();
 }
+void save_vector_to_csv(const arma::vec& vec, const std::string& filename) {
+    std::ofstream file(filename);
+
+    // Set precision to 16 decimal places
+    file << std::setprecision(16) << std::scientific;
+
+    for (size_t i = 0; i < vec.n_elem; ++i) {
+        file << vec[i];
+        if (i < vec.n_elem - 1) {
+            file << ","; // Use comma as a separator
+        }
+    }
+    file << "\n"; // Add a newline at the end
+    file.close();
+}
 
 int main()
 {
@@ -25,8 +39,8 @@ int main()
     double T = 0.002;
     arma::vec t = arma::regspace(0, dt, T);
     int timesteps = t.n_elem;                   
-    double dx = 0.1;
-    double dy = 0.1;
+    double dx = 0.005;
+    double dy = 0.005;
     double x_c = 0.25;
     double y_c = 0.5;
     double p_x = 200.0;
@@ -71,6 +85,12 @@ int main()
     save_matrix_to_csv(P, "P.csv");
     save_matrix_to_csv(U_real, "U_Real.csv");
     save_matrix_to_csv(U_imag, "U_imag.csv");
+
+    arma::vec p(timesteps);
+    for(size_t i = 0; i < timesteps; ++i){
+        p(i) = arma::accu(P.col(i));        //Summing up all the probabilites of each time step
+    }
+    save_vector_to_csv(p, "Prob_vec.csv");
 
     //Plotting code to see structure of A or B matrix
     // std::cout << "Shape of Matrices A and B" << std::endl;

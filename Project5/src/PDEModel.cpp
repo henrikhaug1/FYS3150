@@ -23,31 +23,27 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
 
 arma::cx_vec PDEModel::initial_state(int M)
 {
-    int side_length = (M-2) * (M-2);                //Initializing a flat 2D matrix
-    arma::cx_vec u(side_length, arma::fill::zeros);
+    int side_length = (M-2) * (M-2);    //Initializing a flat 2D matrix
+    arma::cx_vec u(side_length);
 
-    std::complex<double> i(0, 1.0);       //Comlex number
+    arma::cx_double i(0.0, 1.0);
 
     for (int j = 0; j < M-2; j++)       //Looping over the matrix
     {
         double x_val = 1.0 * j / (M-2);
+
         for(int k = 0; k < M-2; k++)    
         {
-            double y_val = 1.0 * k / (M-2);
-            std::complex<double> exponent = - (x_val - x_c) * (x_val - x_c) / (2 * sigma_x * sigma_x)
-                                            - (y_val - y_c) * (y_val - y_c) / (2 * sigma_y * sigma_y)
-                                            + i * p_x * x_val
-                                            + i * p_y * y_val;
+            double y_val = 1.0 * k / (M-2); 
+
+            arma::cx_double exponent = - (x_val - x_c) * (x_val - x_c) / (2 * sigma_x * sigma_x)
+                                       - (y_val - y_c) * (y_val - y_c) / (2 * sigma_y * sigma_y)
+                                       + i * p_x * x_val + i * p_y * y_val; // We ignore optimizing the flops 
+                                                                            // for readability as this part is not looped
             int l = pair_to_single_index(j, k, M-2);
             u(l) = std::exp(exponent); // Assign the complex exponential value
         }
     }
-
-    for(int p = 0; p < M; p++)
-    {
-        p += 1;//std::cout << u[p] << std::endl;
-    }
-
     return u;
 }
 
@@ -55,6 +51,7 @@ arma::cx_vec PDEModel::initial_state(int M)
 arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
 {
     int M = u.size();
+
     arma::cx_vec u_normalised = u / arma::norm(u, 2); // Normalize by L2 norm
 
     for(int p = 0; p < M; p++)

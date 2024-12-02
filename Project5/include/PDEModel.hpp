@@ -47,7 +47,7 @@ class PDEModel
 
     void print_sp_matrix_structure(const arma::sp_cx_mat& A);
 
-    arma::cx_vec crank_nicolson(arma::sp_cx_mat A, arma::sp_cx_mat B, arma::cx_vec u);
+    arma::cx_vec crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx_mat B, arma::cx_vec u);
 };
 
 #endif
