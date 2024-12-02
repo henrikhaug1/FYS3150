@@ -23,31 +23,23 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
 
 arma::cx_vec PDEModel::initial_state(int M)
 {
-    arma::cx_vec u((M-2) * (M-2), arma::fill::zeros);
-
-    arma::vec x = arma::regspace(0, dx, M - 1); 
-    arma::vec y = arma::regspace(0, dy, M - 1);
-
+    int side_length = (M-2) * (M-2);
+    arma::cx_vec u(side_length, arma::fill::zeros);
 
     std::complex<double> i(0, 1);
 
-
-    for (int j = 0; j < M; ++j) 
+    for (int j = 0; j < M-2; ++j) 
     {
-        double x_val = x[j];
-
-        for(int k = 0; k < M; k++)
+        double x_val = j / (M-2);
+        for(int k = 0; k < M-2; k++)
         {
-
-            
-            double y_val = y[k];
-
+            double y_val = k / (M-2);
             std::complex<double> exponent = - (x_val - x_c) * (x_val - x_c) / (2 * sigma_x * sigma_x)
                                             - (y_val - y_c) * (y_val - y_c) / (2 * sigma_y * sigma_y)
-                                            - i * p_x * x_val
+                                            + i * p_x * x_val
                                             + i * p_y * y_val;
-
-            u(k) = std::exp(exponent); // Assign the complex exponential value
+            int l = pair_to_single_index(j, k, M-2);
+            u(l) = std::exp(exponent); // Assign the complex exponential value
         }
     }
 
@@ -155,8 +147,8 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
     for (int j = 0; j < (M-2); j++){
         for (int i = 0; i < (M-2); i++){
         k = pair_to_single_index(i, j, M-2);
-        A(k,k) = 1. + 4.*r + i_dt_2 * V(i, j);   //a_k 
-        B(k,k) = 1. - 4.*r - i_dt_2 * V(i, j);   //b_k
+        A(k,k) = 1. + 4.*r + i_dt_2 * V(j, i);   //a_k  Apparently the indexes need to be transposed
+        B(k,k) = 1. - 4.*r - i_dt_2 * V(j, i);   //b_k
 
         }
     }

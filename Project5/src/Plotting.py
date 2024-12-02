@@ -8,14 +8,22 @@ P_file = 'P.csv'
 
 pot_data = pd.read_csv(potential_file, header=None)
 max_pot = np.max(pot_data)
-P = pd.read_csv(P_file, header = None)
+P = pd.read_csv(P_file, header = None)      # P is 2D
+P = P.values
 
-print(P)
+rows, cols = P.shape
+
+M_2 = int(np.sqrt(rows))
+
+timesteps = cols
+
+# Reshape the 2D array into a 3D array
+P = P.reshape((M_2, M_2, timesteps)) 
 
 for i in range(2):
     plt.figure(figsize=(10, 10))
-    sns.heatmap(pot_data / max_pot, cmap='viridis', square=True, label = f'Potential = {max_pot}') #Normalized potential
-    sns.heatmap(P, cmap='viridis', square=True, label = f'Wavefunction') #Normalized potential
+    # sns.heatmap(pot_data / (max_pot), cmap='viridis', square=True, label = f'Potential = {max_pot}') #Normalized potential
+    sns.heatmap(P[:,:,i], cmap='viridis', square=True, label = f'Wavefunction') #Normalized potential
     plt.title('Heatmap of Matrix')
     plt.xlabel('X axis')
     plt.ylabel('Y axis')

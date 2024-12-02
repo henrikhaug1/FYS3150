@@ -32,11 +32,29 @@ void save_complex_matrix_to_csv(const arma::cx_mat& matrix, const std::string& f
     file.close();
 }
 
+void save_cube_to_csv(const arma::cube& cube, const std::string& filename) {
+    std::ofstream file(filename);
+    for (size_t k = 0; k < cube.n_slices; ++k) {
+        file << "# Slice " << k << "\n";  
+        for (size_t i = 0; i < cube.n_rows; ++i) {
+            for (size_t j = 0; j < cube.n_cols; ++j) {
+                file << cube(i, j, k);
+                if (j < cube.n_cols - 1) {
+                    file << ","; 
+                }
+            }
+            file << "\n"; 
+        }
+        file << "\n"; 
+    }
+    file.close();
+}
+
 
 int main()
 {
-    int M = 50;
-    double dt = 2.5e-5;
+    int M = 100;
+    double dt = 0.001;//2.5e-5;
     double T = 5 * dt; //0.008
     arma::vec t = arma::regspace(0, dt, T);
     int timesteps = t.n_elem;                   
@@ -72,21 +90,28 @@ int main()
     U.col(0) = u;                               //Saving first u
     for (size_t i = 1; i < timesteps; ++i)      //Finding the u of all time steps
     {
-        std::cout << i << std::endl;
+        // std::cout << U.col(i) << std::endl;
         arma::cx_vec u_1 = model.crank_nicolson(A, B, U.col(i-1)); //Finding next u
         U.col(i) = u_1;                                            //Saving the next u
         std::cout << i << std::endl;
     }
+    
+    arma::cx_mat U_conj = arma::conj(U);
+    arma::mat P = arma::real(U_conj % U);       //This P matrix is a 2D one representing a 3D one
 
-    arma::cx_mat U_conj = arma::trans(arma::conj(U));
+    save_matrix_to_csv(P, "P.csv");
 
-    arma::cx_mat P = U_conj * U;
-
-    // save_complex_matrix_to_csv(P, "P.csv");
-
-    arma::mat U_real = arma::real(U);
-    std::cout << U_real << std::endl;
-    save_matrix_to_csv(U_real, "P_csv");
+    // arma::cube P_3D(M-2, M-2, timesteps);       //Converting to 3D
+    // for (size_t k = 0; k < timesteps; ++k) {
+    //     for (size_t i = 0; i < (M-2); ++i) {
+    //         for (size_t j = 0; j < (M-2); ++j) {
+    //             size_t flat_index = i * (M-2) + j;
+    //             P_3D(i, j, k) = P(flat_index, k);
+    //         }
+    //     }
+    // }
+    // std::cout << P_3D << std::endl;
+    // save_cube_to_csv(P_3D, "P.csv");
 
     //Plotting code to see structure of A or B matrix
     // std::cout << "Shape of Matrices A and B" << std::endl;
