@@ -20,10 +20,12 @@ timesteps = cols
 # Reshape the 2D array into a 3D array
 P = P.reshape((M_2, M_2, timesteps)) 
 
-for i in range(2):
+t_3_id = [1, int(timesteps / 2), timesteps - 1]
+
+for i in t_3_id:
     plt.figure(figsize=(10, 10))
     # sns.heatmap(pot_data / (max_pot), cmap='viridis', square=True, label = f'Potential = {max_pot}') #Normalized potential
-    sns.heatmap(P[:,:,i], cmap='viridis', square=True, label = f'Wavefunction') #Normalized potential
+    sns.heatmap(P[:,:,i], cmap='viridis', square=True, label = f'Wavefunction') 
     plt.title('Heatmap of Matrix')
     plt.xlabel('X axis')
     plt.ylabel('Y axis')
