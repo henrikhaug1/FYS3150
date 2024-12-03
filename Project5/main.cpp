@@ -35,31 +35,34 @@ void save_vector_to_csv(const arma::vec& vec, const std::string& filename) {
 int main()
 {
     double dt = 2.5e-5;
-    double T = 0.008;
+    double T = 0.002;
     arma::vec t = arma::regspace(0, dt, T);
     int timesteps = t.n_elem;                   
     double dx = 0.005;
     double dy = 0.005;
-    int M = 100;//1 / dx;
+    int M = 1 / dx;
     double x_c = 0.25;
     double y_c = 0.5;
     double p_x = 200.0;
     double p_y = 0.0;
     double sigma_x = 0.05;
-    double sigma_y = 0.05;
+    double sigma_y = 0.2;
 
     PDEModel model(dt, dx, dy, x_c, y_c, sigma_x, sigma_y, p_x, p_y); //Creating model
 
     arma::mat V(M-2, M-2, arma::fill::zeros);               //Creating potential
-    double v_0 = 0.0;//1e10;
-    int nr_slits = 2;
+    double v_0 = 1e10;
+    int nr_slits = 3;
     double thickness = 0.02;
     double centre = 0.5;
     double middle_wall = 0.05;
     double opening = 0.05;
     model.construct_potential(V, v_0, M, nr_slits, thickness, centre, middle_wall, opening);
 
-    save_matrix_to_csv(V, "Potential.csv");        //Saving the potential for plotting
+    arma::mat V_full(M, M, arma::fill::zeros); //Fixing boundary conditions before plotting
+    V_full.submat(1, 1, M-2, M-2) = V; 
+
+    save_matrix_to_csv(V_full, "Potential.csv");        //Saving the potential for plotting
 
     auto result = model.construct_A_B(M, dx, dt, V);        //Creating A and B using potential
     arma::sp_cx_mat A = std::get<0>(result);

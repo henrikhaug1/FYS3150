@@ -10,7 +10,6 @@ U_imag_file = 'U_imag.csv'
 prob_file = 'Prob_vec.csv'
 
 pot_data = pd.read_csv(potential_file, header=None)
-max_pot = np.max(pot_data)
 P = pd.read_csv(P_file, header = None)                # P is 2D representing 3D
 U_real = pd.read_csv(U_real_file, header = None)     
 U_imag = pd.read_csv(U_imag_file, header = None)      
@@ -44,52 +43,59 @@ U_real[1:M_2+1, 1:M_2+1, :] = U_real_sim
 U_imag[1:M_2+1, 1:M_2+1, :] = U_imag_sim
 
 num_labels = 6  
-x_ticks = np.linspace(0, M, num_labels)  
+ticks = np.linspace(0, M, num_labels)  
 x_labels = np.linspace(0, 1, num_labels) 
 y_labels = np.linspace(1, 0, num_labels) #The y-axis' are inverted
 
-T = 0.008
+T = 0.002
 
 def plot_probabilities():
-    time = np.linspace(0, T, timesteps)
-    prob_log = np.log(prob)
-    plt.plot(time, prob_log)
-    plt.xlabel('time', fontsize = 16)
-    plt.ylabel('log(probability)', fontsize = 16)
+    time = np.linspace(0, T * 1000, timesteps)
+    y_min = np.min(prob)
+    y_max = np.max(prob)
+    plt.plot(time, prob)
+    plt.ylim(y_min, y_max)
+    plt.xlabel(r'time $\cdot 10^{3}$', fontsize = 16)
+    plt.ylabel('probability', fontsize = 16)
     plt.xticks(fontsize = 16)
     plt.yticks(fontsize = 16)
-    plt.savefig("probabilites_no_pot.pdf")
+    plt.grid()
+    plt.tight_layout()
+    plt.savefig("probabilites_with_pot.pdf")
     plt.show()
 # plot_probabilities()
 
 def plot_potential():
-    plt.figure(figsize=(10, 10))
-    sns.heatmap(pot_data, cmap='viridis', square=True, xticklabels=x_ticks, yticklabels=x_ticks)
-    # plt.title('The double slit', fontsize = 18)
-    plt.xticks(x_ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
-    plt.yticks(x_ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16) 
-    plt.xlabel('X axis', fontsize = 16)
-    plt.ylabel('Y axis', fontsize = 16)
+    sns.heatmap(pot_data, cmap='viridis', square=True, xticklabels=ticks, yticklabels=ticks)
+    plt.xticks(ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
+    plt.yticks(ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16) 
+    cbar = plt.gca().collections[-1].colorbar
+    cbar.ax.tick_params(labelsize=16)  
+    plt.xlabel('x', fontsize = 16)
+    plt.ylabel('y', fontsize = 16)
     plt.tight_layout()
-    plt.savefig("no_slits.pdf")
+    plt.savefig("three_slits.pdf")
     plt.show()
-plot_potential()
+# plot_potential()
 
-def plot_three_times(data):
+def plot_three_times(data, label):
     'data is either P, U_real, or U_imag'
     t_3_id = [0, int(timesteps / 2), timesteps - 1]
-    for i in t_3_id:
-        plt.figure(figsize=(10, 10))
-        # sns.heatmap(pot_data / (max_pot), cmap='viridis', square=True, label = f'Potential = {max_pot}') #Normalized potential. doesn't quite work
-        sns.heatmap(data[:,:,i], cmap='viridis', square=True) 
-        # plt.title('Probability of finding the particle', fontsize = 18)
-        plt.xlabel('X axis', fontsize = 16)
-        plt.ylabel('Y axis', fontsize = 16)
-        plt.xticks(x_ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
-        plt.yticks(x_ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16) 
-        plt.savefig(f"time_plot_{i}.pdf")
+    for i in range(len(t_3_id)):
+        sns.heatmap(data[:,:,t_3_id[i]], cmap='viridis', square=True) 
+        cbar = plt.gca().collections[-1].colorbar
+        cbar.ax.tick_params(labelsize=16)  
+        plt.xlabel('x', fontsize = 16)
+        plt.ylabel('y', fontsize = 16)
+        plt.xticks(ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
+        plt.yticks(ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16)
+        plt.tight_layout() 
+        plt.savefig(f"time_plot_{label}_{t_3_id[i]}_double_slit.pdf")
         plt.show()
-plot_three_times(P)
+# plot_three_times(P, 'P')
+# plot_three_times(U_real, 'real')
+# plot_three_times(U_imag, 'imag')
+
 
 def plot_prob_screen(x, t):
     'Takes in the position and time of the screen'
@@ -101,12 +107,14 @@ def plot_prob_screen(x, t):
     y = np.linspace(0, 1, M)
 
     plt.plot(y, p_screen)
-    plt.ylabel('probability', fontsize = 16)
+    plt.ylabel('Probability', fontsize = 16)
     plt.xlabel('y', fontsize = 16)
     plt.xticks(fontsize = 16)
     plt.yticks(fontsize = 16)
-    plt.savefig("Screen_ _slit.pdf")
+    plt.grid()
+    plt.tight_layout()
+    plt.savefig("Screen_three_slit.pdf")
     plt.show()
 x = 0.8
 t = 0.002
-plot_prob_screen(x, t)
+# plot_prob_screen(x, t)
