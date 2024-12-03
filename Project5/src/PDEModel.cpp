@@ -23,12 +23,12 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
 
 arma::cx_vec PDEModel::initial_state(int M)
 {
-    int side_length = (M-2) * (M-2);    //Initializing a flat 2D matrix
+    int side_length = (M-2) * (M-2);    //Initializing a flat 2D matrix within the boundary conditions
     arma::cx_vec u(side_length);
 
     arma::cx_double i(0.0, 1.0);
 
-    for (int j = 0; j < M-2; j++)       //Looping over the matrix. This will ensure the boundary conditions 
+    for (int j = 0; j < M-2; j++)       //Looping over the matrix. This ensures the boundary conditions as the wavefunction is undefined outside this scope
     {                                   //As the wave function will simple be undefined at x(0) and so on.
         double x_val = 1.0 * j / (M-2);
 

@@ -23,15 +23,28 @@ prob = prob.values[0]
 
 rows, cols = P.shape
 M_2 = int(np.sqrt(rows))
+M = M_2 + 2
 timesteps = cols
 
 # Reshape the 2D array into a 3D array
-P = P.reshape((M_2, M_2, timesteps)) 
-U_real = U_real.reshape((M_2, M_2, timesteps)) 
-U_imag = U_imag.reshape((M_2, M_2, timesteps)) 
+P_sim = P.reshape((M_2, M_2, timesteps)) 
+U_real_sim = U_real.reshape((M_2, M_2, timesteps)) 
+U_imag_sim = U_imag.reshape((M_2, M_2, timesteps)) 
+
+"""
+All the matrices are within the boundary conditions, and in order for the axes 
+to be correct when plotting, we need to add a border of 0's
+"""
+P = np.zeros((M, M, timesteps))
+U_real = np.zeros((M, M, timesteps))
+U_imag = np.zeros((M, M, timesteps))
+
+P[1:M_2+1, 1:M_2+1, :] = P_sim
+U_real[1:M_2+1, 1:M_2+1, :] = U_real_sim
+U_imag[1:M_2+1, 1:M_2+1, :] = U_imag_sim
 
 num_labels = 6  
-x_ticks = np.linspace(0, M_2, num_labels)  
+x_ticks = np.linspace(0, M, num_labels)  
 x_labels = np.linspace(0, 1, num_labels) 
 y_labels = np.linspace(1, 0, num_labels) #The y-axis' are inverted
 
@@ -47,7 +60,7 @@ def plot_probabilities():
     plt.yticks(fontsize = 16)
     plt.savefig("probabilites_no_pot.pdf")
     plt.show()
-plot_probabilities()
+# plot_probabilities()
 
 def plot_potential():
     plt.figure(figsize=(10, 10))
@@ -80,12 +93,12 @@ plot_three_times(P)
 
 def plot_prob_screen(x, t):
     'Takes in the position and time of the screen'
-    x_id = int( x * (M_2 - 1) )
+    x_id = int( x * (M - 1) )
     t_id = int( (t / T) * (timesteps - 1) )
     
     p_screen = P[:, x_id, t_id]
     p_screen = p_screen / np.linalg.norm(p_screen)  #Needs to be normalized as we expect to find the particle here
-    y = np.linspace(0, 1, M_2)
+    y = np.linspace(0, 1, M)
 
     plt.plot(y, p_screen)
     plt.ylabel('probability', fontsize = 16)
