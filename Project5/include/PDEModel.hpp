@@ -32,13 +32,6 @@ class PDEModel
 
     arma::cx_vec normalised_initial_state(arma::cx_vec u);
 
-    // setting initial and boundary conditions
-    void set_initial_boundary_conditions(arma::mat hello);
-
-    arma::mat construct_u_matrix();
-
-    arma::vec construct_u_vector();
-
     void construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening);
 
     int pair_to_single_index(int i, int j, int M);

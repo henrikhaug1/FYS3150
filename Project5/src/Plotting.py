@@ -35,14 +35,17 @@ x_ticks = np.linspace(0, M_2, num_labels)
 x_labels = np.linspace(0, 1, num_labels) 
 y_labels = np.linspace(1, 0, num_labels) #The y-axis' are inverted
 
+T = 0.008
+
 def plot_probabilities():
-    time = np.linspace(0, 0.002, timesteps)
+    time = np.linspace(0, T, timesteps)
     prob_log = np.log(prob)
     plt.plot(time, prob_log)
     plt.xlabel('time', fontsize = 16)
     plt.ylabel('log(probability)', fontsize = 16)
     plt.xticks(fontsize = 16)
     plt.yticks(fontsize = 16)
+    plt.savefig("probabilites_no_pot.pdf")
     plt.show()
 plot_probabilities()
 
@@ -54,7 +57,8 @@ def plot_potential():
     plt.yticks(x_ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16) 
     plt.xlabel('X axis', fontsize = 16)
     plt.ylabel('Y axis', fontsize = 16)
-    plt.legend()
+    plt.tight_layout()
+    plt.savefig("no_slits.pdf")
     plt.show()
 plot_potential()
 
@@ -70,5 +74,26 @@ def plot_three_times(data):
         plt.ylabel('Y axis', fontsize = 16)
         plt.xticks(x_ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
         plt.yticks(x_ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16) 
+        plt.savefig(f"time_plot_{i}.pdf")
         plt.show()
 plot_three_times(P)
+
+def plot_prob_screen(x, t):
+    'Takes in the position and time of the screen'
+    x_id = int( x * (M_2 - 1) )
+    t_id = int( (t / T) * (timesteps - 1) )
+    
+    p_screen = P[:, x_id, t_id]
+    p_screen = p_screen / np.linalg.norm(p_screen)  #Needs to be normalized as we expect to find the particle here
+    y = np.linspace(0, 1, M_2)
+
+    plt.plot(y, p_screen)
+    plt.ylabel('probability', fontsize = 16)
+    plt.xlabel('y', fontsize = 16)
+    plt.xticks(fontsize = 16)
+    plt.yticks(fontsize = 16)
+    plt.savefig("Screen_ _slit.pdf")
+    plt.show()
+x = 0.8
+t = 0.002
+plot_prob_screen(x, t)

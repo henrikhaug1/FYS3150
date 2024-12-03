@@ -12,7 +12,7 @@ void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
                 file << ","; 
             }
         }
-        file << "\n"; 
+        file << "\n";  
     }
     file.close();
 }
@@ -34,13 +34,13 @@ void save_vector_to_csv(const arma::vec& vec, const std::string& filename) {
 
 int main()
 {
-    int M = 100;
     double dt = 2.5e-5;
-    double T = 0.002;
+    double T = 0.008;
     arma::vec t = arma::regspace(0, dt, T);
     int timesteps = t.n_elem;                   
     double dx = 0.005;
     double dy = 0.005;
+    int M = 100;
     double x_c = 0.25;
     double y_c = 0.5;
     double p_x = 200.0;
@@ -65,7 +65,7 @@ int main()
     arma::sp_cx_mat B = std::get<1>(result);
 
     arma::cx_vec u = model.initial_state(M);   //Initializing initial state
-    u = model.normalised_initial_state(u);                  //Normalizes initial state
+    u = model.normalised_initial_state(u);     //Normalizes initial state
 
     arma::cx_mat U((M-2) * (M-2), timesteps);   //Will store all the time iterations of u
     U.col(0) = u;                               //Saving first u

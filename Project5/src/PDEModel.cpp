@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
+ 
 PDEModel::PDEModel(double dt_in, double dx_in, double dy_in, 
                    double x_c_in, double y_c_in, 
                    double sigma_x_in, double sigma_y_in, 
@@ -28,8 +28,8 @@ arma::cx_vec PDEModel::initial_state(int M)
 
     arma::cx_double i(0.0, 1.0);
 
-    for (int j = 0; j < M-2; j++)       //Looping over the matrix
-    {
+    for (int j = 0; j < M-2; j++)       //Looping over the matrix. This will ensure the boundary conditions 
+    {                                   //As the wave function will simple be undefined at x(0) and so on.
         double x_val = 1.0 * j / (M-2);
 
         for(int k = 0; k < M-2; k++)    
@@ -47,7 +47,6 @@ arma::cx_vec PDEModel::initial_state(int M)
     return u;
 }
 
-
 arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
 {
     int M = u.size();
@@ -60,22 +59,6 @@ arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
     }
 
     return u_normalised;
-}
-
-void PDEModel::set_initial_boundary_conditions(arma::mat hello)
-{
-
-}
-
-arma::mat PDEModel::construct_u_matrix()
-{
-
-    return 0;
-}
-
-arma::vec PDEModel::construct_u_vector()
-{
-    return 0;
 }
 
 void PDEModel::construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening)
@@ -146,9 +129,9 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
         k = pair_to_single_index(i, j, M-2);
         A(k,k) = 1. + 4.*r + i_dt_2 * V(j, i);   //a_k  Apparently the indexes need to be transposed to get the correct plot
         B(k,k) = 1. - 4.*r - i_dt_2 * V(j, i);   //b_k
-
         }
     }
+    
     A.diag(1) = -r_diag_1; 
     A.diag(-1) = -r_diag_1;
     A.diag(M - 2) = -r_diag_2; 
@@ -211,7 +194,6 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
     cout << endl;
 }
 
-
 arma::cx_vec PDEModel::crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
 {
     arma::cx_vec u_1;             //The next time step
@@ -219,5 +201,4 @@ arma::cx_vec PDEModel::crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx
     u_1 = arma::spsolve(A, b);    //Then solving for the next time step using a sparse solver
     return u_1;
 }
-
 
