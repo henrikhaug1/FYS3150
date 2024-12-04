@@ -74,7 +74,7 @@ def plot_potential():
     plt.xlabel('x', fontsize = 16)
     plt.ylabel('y', fontsize = 16)
     plt.tight_layout()
-    plt.savefig("three_slits.pdf")
+    plt.savefig("two_slits.pdf")
     plt.show()
 # plot_potential()
 
@@ -103,7 +103,8 @@ def plot_prob_screen(x, t):
     t_id = int( (t / T) * (timesteps - 1) )
     
     p_screen = P[:, x_id, t_id]
-    p_screen = p_screen / np.linalg.norm(p_screen)  #Needs to be normalized as we expect to find the particle here
+    p_screen = p_screen / np.sum(p_screen)  #Needs to be normalized as we expect to find the particle here
+
     y = np.linspace(0, 1, M)
 
     plt.plot(y, p_screen)
@@ -117,4 +118,4 @@ def plot_prob_screen(x, t):
     plt.show()
 x = 0.8
 t = 0.002
-# plot_prob_screen(x, t)
+plot_prob_screen(x, t)
