@@ -253,13 +253,8 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
 
 arma::cx_vec PDEModel::crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
 {
-<<<<<<< HEAD
     arma::cx_vec u_1;      
     arma::cx_vec b = B * u;      
-=======
-    arma::cx_vec u_1;             //The next time step
-    arma::cx_vec b = B * u;       //First matrix multiplying the right side 
->>>>>>> a32a3bdee517cda38bc977524d0c16c5e8a32e4c
     u_1 = arma::spsolve(A, b);    //Then solving for the next time step using a sparse solver
     return u_1;
 }
