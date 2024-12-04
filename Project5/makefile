@@ -14,6 +14,10 @@ run_all: all
 clean:
 	rm -f main
 	rm -f Potential.csv
+	rm -f Prob_vec.csv
+	rm -f U_imag.csv
+	rm -f U_Real.csv
+	rm -f P.csv
 
 
 
