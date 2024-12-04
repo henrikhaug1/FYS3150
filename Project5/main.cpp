@@ -41,11 +41,16 @@ void save_vector_to_csv(const arma::vec& vec, const std::string& filename) {
 int main()
 {
 
+<<<<<<< HEAD
 
 
 
     // ---------- Setting up simulation parameters ----------
     double dt = 2.5e-5;
+=======
+    // Creating our model 
+    double dt = 2.5e-3;
+>>>>>>> a32a3bdee517cda38bc977524d0c16c5e8a32e4c
     double T = 0.002;
     arma::vec t = arma::regspace(0, dt, T);
     int timesteps = t.n_elem;                   
@@ -78,7 +83,11 @@ int main()
     arma::mat V_full(M, M, arma::fill::zeros);             
     V_full.submat(1, 1, M-2, M-2) = V; 
 
+<<<<<<< HEAD
     save_matrix_to_csv(V_full, "pre_computed/Potential_2.csv");        
+=======
+    save_matrix_to_csv(V_full, "Potential_2.csv");         //Saving the potential for plotting
+>>>>>>> a32a3bdee517cda38bc977524d0c16c5e8a32e4c
 
 
 
@@ -117,6 +126,7 @@ int main()
     arma::mat U_real = arma::real(U);
     arma::mat U_imag = arma::imag(U);
 
+<<<<<<< HEAD
 
 
 
@@ -125,12 +135,21 @@ int main()
     save_matrix_to_csv(P, "pre_computed/P_2.csv");
     save_matrix_to_csv(U_real, "pre_computed/U_real.csv");
     save_matrix_to_csv(U_imag, "pre_computed/U_imag.csv");
+=======
+    save_matrix_to_csv(P, "P_2.csv");
+    save_matrix_to_csv(U_real, "U_Real_2.csv");
+    save_matrix_to_csv(U_imag, "U_imag_2.csv");
+>>>>>>> a32a3bdee517cda38bc977524d0c16c5e8a32e4c
 
     arma::vec p(timesteps);
     for(size_t i = 0; i < timesteps; ++i){
         p(i) = arma::accu(P.col(i));        //Summing up all the probabilites of each time step
     }
+<<<<<<< HEAD
     save_vector_to_csv(p, "pre_computed/Prob_vec_2.csv");
+=======
+    save_vector_to_csv(p, "Prob_vec_2.csv");
+>>>>>>> a32a3bdee517cda38bc977524d0c16c5e8a32e4c
 
     //Plotting code to see structure of A or B matrix
     std::cout << "Shape of Matrices A and B" << std::endl;
