@@ -37,7 +37,6 @@ int main()
 {
 
     // Creating our model 
-    // double dt = 2.5e-5;
     double dt = 2.5e-3;
     double T = 0.002;
     arma::vec t = arma::regspace(0, dt, T);
@@ -69,7 +68,7 @@ int main()
     arma::mat V_full(M, M, arma::fill::zeros);           //Fixing boundary conditions before plotting
     V_full.submat(1, 1, M-2, M-2) = V; 
 
-    save_matrix_to_csv(V_full, "Potential.csv");         //Saving the potential for plotting
+    save_matrix_to_csv(V_full, "Potential_2.csv");         //Saving the potential for plotting
 
     auto result = model.construct_A_B(M, dx, dt, V);        
     arma::sp_cx_mat A = std::get<0>(result);
@@ -97,15 +96,15 @@ int main()
     arma::mat U_real = arma::real(U);
     arma::mat U_imag = arma::imag(U);
 
-    save_matrix_to_csv(P, "P.csv");
-    save_matrix_to_csv(U_real, "U_Real.csv");
-    save_matrix_to_csv(U_imag, "U_imag.csv");
+    save_matrix_to_csv(P, "P_2.csv");
+    save_matrix_to_csv(U_real, "U_Real_2.csv");
+    save_matrix_to_csv(U_imag, "U_imag_2.csv");
 
     arma::vec p(timesteps);
     for(size_t i = 0; i < timesteps; ++i){
         p(i) = arma::accu(P.col(i));        //Summing up all the probabilites of each time step
     }
-    save_vector_to_csv(p, "Prob_vec.csv");
+    save_vector_to_csv(p, "Prob_vec_2.csv");
 
     //Plotting code to see structure of A or B matrix
     // std::cout << "Shape of Matrices A and B" << std::endl;
