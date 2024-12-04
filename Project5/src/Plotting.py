@@ -3,11 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-potential_file = 'Potential.csv'
-P_file = 'P.csv'
-U_real_file = 'U_Real.csv'
-U_imag_file = 'U_imag.csv'
-prob_file = 'Prob_vec.csv'
+potential_file = 'Potential_2.csv'
+P_file = 'P_2.csv'
+U_real_file = 'U_Real_2.csv'
+U_imag_file = 'U_imag_2.csv'
+prob_file = 'Prob_vec_2.csv'
 
 pot_data = pd.read_csv(potential_file, header=None)
 P = pd.read_csv(P_file, header = None)                # P is 2D representing 3D
@@ -118,4 +118,42 @@ def plot_prob_screen(x, t):
     plt.show()
 x = 0.8
 t = 0.002
-plot_prob_screen(x, t)
+# plot_prob_screen(x, t)
+
+
+
+from matplotlib.animation import FuncAnimation
+
+def update(frame, data, heatmap, ax, label):
+    heatmap.set_data(data[:, :, frame])
+    ax.set_title(f"Time step {frame+1} - {label}", fontsize=16)  # Update the title for each frame
+    return heatmap,
+
+def animate_heatmap(data, label, timesteps):
+    fig, ax = plt.subplots()
+    # Setup initial heatmap
+    heatmap = ax.imshow(data[:, :, 0], cmap='viridis', interpolation='nearest')
+    cbar = fig.colorbar(heatmap, ax=ax)
+    cbar.ax.tick_params(labelsize=16)
+    
+    plt.xticks(ticks, [f"{label:.1f}" for label in x_labels], fontsize = 16)  
+    plt.yticks(ticks, [f"{label:.1f}" for label in y_labels], fontsize = 16)
+    
+    # Plot x and y labels only once
+    ax.set_xlabel('x', fontsize=16)
+    ax.set_ylabel('y', fontsize=16)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"{label:.1f}" for label in x_labels], fontsize=16)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels([f"{label:.1f}" for label in y_labels], fontsize=16)
+    
+    anim = FuncAnimation(fig, update, fargs=(data, heatmap, ax, label),
+                         frames=timesteps, interval=200/3, blit=False, repeat=False)
+    
+    plt.tight_layout()
+    plt.show()
+    return anim
+
+label = 'example_label'
+anim = animate_heatmap(P, label, timesteps)
+anim.save('filename.mp4')
