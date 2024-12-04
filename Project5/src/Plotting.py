@@ -3,11 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-potential_file = 'Potential_2.csv'
-P_file = 'P_2.csv'
-U_real_file = 'U_Real_2.csv'
-U_imag_file = 'U_imag_2.csv'
-prob_file = 'Prob_vec_2.csv'
+potential_file = 'pre_computed/Potential_2.csv'
+P_file = 'pre_computed/P_2.csv'
+U_real_file = 'pre_computed/U_Real_2.csv'
+U_imag_file = 'pre_computed/U_imag_2.csv'
+prob_file = 'pre_computed/Prob_vec_2.csv'
 
 pot_data = pd.read_csv(potential_file, header=None)
 P = pd.read_csv(P_file, header = None)                # P is 2D representing 3D
@@ -154,6 +154,11 @@ def animate_heatmap(data, label, timesteps):
     plt.show()
     return anim
 
-label = 'example_label'
+label = 'mip'
 anim = animate_heatmap(P, label, timesteps)
-anim.save('filename.mp4')
+anim.save('animation.mp4')
+
+
+
+
+

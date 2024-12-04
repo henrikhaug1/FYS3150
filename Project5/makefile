@@ -1,5 +1,5 @@
 CC = c++-14
-FLAGS = -Iinclude -larmadillo
+FLAGS = -Iinclude -larmadillo -lsuperlu -lblas -llapack
 
 .PHONY: all clean
 
@@ -13,11 +13,9 @@ run_all: all
 
 clean:
 	rm -f main
-	rm -f Potential.csv
-	rm -f Prob_vec.csv
-	rm -f U_imag.csv
-	rm -f U_Real.csv
-	rm -f P.csv
+	rm -f Potential_2.csv
+	rm -f Prob_vec_2.csv
+	rm -f animation.mp4
 
 
 

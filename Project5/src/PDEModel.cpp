@@ -17,7 +17,9 @@ PDEModel::PDEModel(double dt_in, double dx_in, double dy_in,
     p_y = p_y_in;
 }
 
-// FIX LATER, SLOW CODE 
+
+
+
 arma::cx_vec PDEModel::initial_state(int M)
 {
     int side_length = (M-2) * (M-2);    //Initializing a flat 2D matrix within the boundary conditions
@@ -45,6 +47,8 @@ arma::cx_vec PDEModel::initial_state(int M)
 }
 
 
+
+
 arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
 {
     int M = u.size();
@@ -59,6 +63,10 @@ arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
     return u_normalised;
 }
 
+
+
+
+
 void PDEModel::construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening)
 {
     //Converting from positions to indexes
@@ -68,37 +76,77 @@ void PDEModel::construct_potential(arma::mat& V, const double v_0, const double 
     int half_opening_id = (M - 2) * opening / 2;
     V.cols(centre_id - half_width_id, centre_id + half_width_id).fill(v_0);  //Filling the wall
 
-    if(nr_slits == 0){ //If there are no slits, the wall is complete
+
+    //If there are no slits, the wall is complete
+    if(nr_slits == 0)
+    { 
         return;
     }
 
-    if(nr_slits % 2 == 0){//If there is an even amount of slits 
-        int walls = nr_slits - 1; //Calculate the amount of walls
+    //In the case of an even amount of slits
+    if(nr_slits % 2 == 0)                //Even amount of slits 
+    {               
+        int walls = nr_slits - 1;        //Calculate the amount of walls
 
-        for(int i = 0; i < walls; i++){//Leave the innermost wall, and remove the openings above and below accordingly. First upwards
-            V.rows(centre_id + middle_wall_id / 2 + i * (2 * half_opening_id + middle_wall_id), centre_id + middle_wall_id / 2 + 2 * half_opening_id + i * (2 * half_opening_id + middle_wall_id)).fill(0);
-        }//This is way easier to understand if you draw a sketch!
 
-        for(int i = 0; i < walls; i++){//Then downwards
-            V.rows(centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id), centre_id - middle_wall_id / 2 - i * (2 * half_opening_id + middle_wall_id)).fill(0);
-        }//This is way easier to understand if you draw a sketch!
+        /* ----- This is way easier to understand if you draw a sketch! ----- */
+
+        //Leave the innermost wall, and remove the openings above and below accordingly
+
+        //First upwards
+        for(int i = 0; i < walls; i++)
+        {
+            V.rows(centre_id + middle_wall_id / 2 + i * (2 * half_opening_id + middle_wall_id), 
+                   centre_id + middle_wall_id / 2 + 2 * half_opening_id + i * (2 * half_opening_id + middle_wall_id)).fill(0);
+        }
+
+        //Then downwards
+        for(int i = 0; i < walls; i++)
+        {
+            V.rows(centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id), 
+                   centre_id - middle_wall_id / 2 - i * (2 * half_opening_id + middle_wall_id)).fill(0);
+        }
     } 
      
-    if(nr_slits % 2 == 1){//If there is an odd amount of slits 
-        int slits = (nr_slits + 1) / 2; //Calculate the nr. of slits on each side (+ the middle one)
-        for(int i = 0; i < slits; i++){//Remove openings accordingly. First upwards
-            V.rows(centre_id - half_opening_id + i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id + i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+
+    //In the case of an odd amount of slits      
+    if(nr_slits % 2 == 1)
+    {
+
+        //Calculate the number of slits on each side (+ the middle one)
+        int slits = (nr_slits + 1) / 2; 
+        
+        /* ----- Remove openings accordingly ----- */
+
+        // First upwards
+        for(int i = 0; i < slits; i++)
+        {
+            V.rows(centre_id - half_opening_id + i * (middle_wall_id + 2 * half_opening_id), 
+                   centre_id + half_opening_id + i * (middle_wall_id + 2 * half_opening_id)).fill(0);
         }
-        for(int i = 0; i < slits; i++){//Then downwards
-            V.rows(centre_id - half_opening_id - i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id - i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+
+
+        //Then downwards
+        for(int i = 0; i < slits; i++)
+        {
+            V.rows(centre_id - half_opening_id - i * (middle_wall_id + 2 * half_opening_id), 
+                   centre_id + half_opening_id - i * (middle_wall_id + 2 * half_opening_id)).fill(0);
         }  
     } 
 }
+
+
+
+
 
 int PDEModel::pair_to_single_index(int i, int j, int matrix_side_length)
 {
     return j * matrix_side_length + i;
 }
+
+
+
+
 
 std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M, const double dx, const double dt, const arma::mat V)
 {
@@ -143,9 +191,17 @@ std::tuple<arma::sp_cx_mat,arma::sp_cx_mat> PDEModel::construct_A_B(const int M,
     return std::make_tuple(A,B);
 }
 
-// A function that prints the structure of a sparse matrix to screen. Copy pasted from task.
+
 void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
 {
+
+    /*
+
+    A function that prints the structure of a sparse matrix to screen.
+
+    */
+
+
     using namespace std;
     using namespace arma;
 
@@ -197,9 +253,9 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
 
 arma::cx_vec PDEModel::crank_nicolson(const arma::sp_cx_mat A, const arma::sp_cx_mat B, arma::cx_vec u) //Solves u for one time step 
 {
-    arma::cx_vec u_1;             //The next time step
-    arma::cx_vec b = B * u;       //First matrix multiplying the right side 
-    u_1 = arma::spsolve(A, b, "lapack");    //Then solving for the next time step using a sparse solver
+    arma::cx_vec u_1;      
+    arma::cx_vec b = B * u;      
+    u_1 = arma::spsolve(A, b);    //Then solving for the next time step using a sparse solver
     return u_1;
 }
 
