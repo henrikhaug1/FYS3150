@@ -4,6 +4,7 @@
 #include <iostream>
 #include <armadillo>
 #include <vector>
+#include <iomanip>
 
 
 class PDEModel

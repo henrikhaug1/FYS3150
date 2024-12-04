@@ -1,6 +1,5 @@
 CC = c++-14
 FLAGS = -Iinclude -larmadillo
-OMPFLAGS = -fopenmp
 
 .PHONY: all clean
 
@@ -14,3 +13,11 @@ run_all: all
 
 clean:
 	rm -f main
+	rm -f Potential.csv
+
+
+
+
+
+
+
