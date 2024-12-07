@@ -25,7 +25,9 @@ Modify the first lines in Plotting.py in this manner
     U_real_file = 'pre_computed/U_real_2.csv'
     U_imag_file = 'pre_computed/U_imag_2.csv'
     prob_file = 'pre_computed/Prob_vec_2.csv' 
+Followed by 
 
+    python3 src/Plotting.py
 
 
 ### Note 
