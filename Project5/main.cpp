@@ -1,7 +1,8 @@
 #include "PDEModel.hpp"
 
 
-void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
+void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) 
+{
     std::ofstream file(filename);
     for (size_t i = 0; i < matrix.n_rows; ++i) {
         for (size_t j = 0; j < matrix.n_cols; ++j) {
@@ -17,7 +18,8 @@ void save_matrix_to_csv(const arma::mat& matrix, const std::string& filename) {
 
 
 
-void save_vector_to_csv(const arma::vec& vec, const std::string& filename) {
+void save_vector_to_csv(const arma::vec& vec, const std::string& filename) 
+{
     std::ofstream file(filename);
 
     // Set precision to 16 decimal places
@@ -79,7 +81,7 @@ int main()
     arma::mat V_full(M, M, arma::fill::zeros);             
     V_full.submat(1, 1, M-2, M-2) = V; 
 
-    save_matrix_to_csv(V_full, "pre_computed/Potential_2.csv");        
+    save_matrix_to_csv(V_full, "Potential_2.csv");        
 
 
 
@@ -119,22 +121,24 @@ int main()
     arma::mat U_real = arma::real(U);
     arma::mat U_imag = arma::imag(U);
 
+
+
     // ---------- Saving data to produce plots and animations ----------
-    save_matrix_to_csv(P, "pre_computed/P_2.csv");
-    save_matrix_to_csv(U_real, "pre_computed/U_real.csv");
-    save_matrix_to_csv(U_imag, "pre_computed/U_imag.csv");
+    save_matrix_to_csv(P, "P_2.csv");
+    save_matrix_to_csv(U_real, "U_real_2.csv");
+    save_matrix_to_csv(U_imag, "U_imag_2.csv");
 
     arma::vec p(timesteps);
     for(size_t i = 0; i < timesteps; ++i){
         p(i) = arma::accu(P.col(i));        //Summing up all the probabilites of each time step
     }
-    save_vector_to_csv(p, "pre_computed/Prob_vec_2.csv");
+    save_vector_to_csv(p, "Prob_vec_2.csv");
 
 
     //Plotting code to see structure of A or B matrix
-    std::cout << "Shape of Matrices A and B" << std::endl;
-    model.print_sp_matrix_structure(A);
-    model.print_sp_matrix_structure(B);
+    // std::cout << "Shape of Matrices A and B" << std::endl;
+    // model.print_sp_matrix_structure(A);
+    // model.print_sp_matrix_structure(B);
 
 
 

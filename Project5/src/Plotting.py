@@ -3,11 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-potential_file = 'pre_computed/Potential_2.csv'
-P_file = 'pre_computed/P_2.csv'
-U_real_file = 'pre_computed/U_Real_2.csv'
-U_imag_file = 'pre_computed/U_imag_2.csv'
-prob_file = 'pre_computed/Prob_vec_2.csv'
+potential_file = 'Potential_2.csv'
+P_file = 'P_2.csv'
+U_real_file = 'U_real_2.csv'
+U_imag_file = 'U_imag_2.csv'
+prob_file = 'Prob_vec_2.csv'
 
 pot_data = pd.read_csv(potential_file, header=None)
 P = pd.read_csv(P_file, header = None)                # P is 2D representing 3D
@@ -76,7 +76,7 @@ def plot_potential():
     plt.tight_layout()
     plt.savefig("two_slits.pdf")
     plt.show()
-# plot_potential()
+plot_potential()
 
 def plot_three_times(data, label):
     'data is either P, U_real, or U_imag'
@@ -92,9 +92,9 @@ def plot_three_times(data, label):
         plt.tight_layout() 
         plt.savefig(f"time_plot_{label}_{t_3_id[i]}_double_slit.pdf")
         plt.show()
-# plot_three_times(P, 'P')
-# plot_three_times(U_real, 'real')
-# plot_three_times(U_imag, 'imag')
+plot_three_times(P, 'P')
+plot_three_times(U_real, 'real')
+plot_three_times(U_imag, 'imag')
 
 
 def plot_prob_screen(x, t):
@@ -118,7 +118,7 @@ def plot_prob_screen(x, t):
     plt.show()
 x = 0.8
 t = 0.002
-# plot_prob_screen(x, t)
+plot_prob_screen(x, t)
 
 
 
@@ -126,11 +126,12 @@ from matplotlib.animation import FuncAnimation
 
 def update(frame, data, heatmap, ax, label):
     heatmap.set_data(data[:, :, frame])
-    ax.set_title(f"Time step {frame+1} - {label}", fontsize=16)  # Update the title for each frame
+    ax.set_title(f"{label} - Time step {frame}", fontsize=16)  # Update the title for each frame
     return heatmap,
 
 def animate_heatmap(data, label, timesteps):
     fig, ax = plt.subplots()
+
     # Setup initial heatmap
     heatmap = ax.imshow(data[:, :, 0], cmap='viridis', interpolation='nearest')
     cbar = fig.colorbar(heatmap, ax=ax)
@@ -154,7 +155,7 @@ def animate_heatmap(data, label, timesteps):
     plt.show()
     return anim
 
-label = 'mip'
+label = 'Animation of Double Slit'
 anim = animate_heatmap(P, label, timesteps)
 anim.save('animation.mp4')
 

@@ -67,13 +67,16 @@ arma::cx_vec PDEModel::normalised_initial_state(arma::cx_vec u)
 
 
 
+
+
 void PDEModel::construct_potential(arma::mat& V, const double v_0, const double M, const int nr_slits, const double thickness, const double centre, const double middle_wall, const double opening)
 {
+
     //Converting from positions to indexes
-    int centre_id = (M - 2) * centre;
-    int half_width_id = (M - 2) * thickness / 2;
-    int middle_wall_id = (M - 2) * middle_wall;
-    int half_opening_id = (M - 2) * opening / 2;
+    int centre_id = (M - 2) * centre;         //Remembering that the centre of V is in an (M-2)(M-2) matrix
+    int half_width_id = M * thickness / 2;    //But the actual size of the indices should reflect the final M * M matrix
+    int middle_wall_id = M * middle_wall;
+    int half_opening_id = M * opening / 2;
     V.cols(centre_id - half_width_id, centre_id + half_width_id).fill(v_0);  //Filling the wall
 
 
@@ -83,15 +86,19 @@ void PDEModel::construct_potential(arma::mat& V, const double v_0, const double 
         return;
     }
 
-    //In the case of an even amount of slits
-    if(nr_slits % 2 == 0)                //Even amount of slits 
-    {               
-        int walls = nr_slits - 1;        //Calculate the amount of walls
+
+    //In the case of an even amount of slits 
+    if(nr_slits % 2 == 0)
+    {
+
+        //Calculate the amount of walls
+        int walls = nr_slits - 1; 
 
 
         /* ----- This is way easier to understand if you draw a sketch! ----- */
 
-        //Leave the innermost wall, and remove the openings above and below accordingly
+
+        //Leave the innermost wall, and remove the openings above and below accordingly. 
 
         //First upwards
         for(int i = 0; i < walls; i++)
@@ -100,7 +107,8 @@ void PDEModel::construct_potential(arma::mat& V, const double v_0, const double 
                    centre_id + middle_wall_id / 2 + 2 * half_opening_id + i * (2 * half_opening_id + middle_wall_id)).fill(0);
         }
 
-        //Then downwards
+
+        //First downwards
         for(int i = 0; i < walls; i++)
         {
             V.rows(centre_id - middle_wall_id / 2 - 2 * half_opening_id - i * (2 * half_opening_id + middle_wall_id), 
@@ -109,32 +117,27 @@ void PDEModel::construct_potential(arma::mat& V, const double v_0, const double 
     } 
      
 
-    //In the case of an odd amount of slits      
+    //In the case of an odd amount of slits 
     if(nr_slits % 2 == 1)
-    {
-
+    { 
         //Calculate the number of slits on each side (+ the middle one)
-        int slits = (nr_slits + 1) / 2; 
-        
-        /* ----- Remove openings accordingly ----- */
+        int slits = (nr_slits + 1) / 2;    
 
-        // First upwards
+
+        /* ----- Remove openings accordingly ----- */
+        
+        //First upwards
         for(int i = 0; i < slits; i++)
         {
-            V.rows(centre_id - half_opening_id + i * (middle_wall_id + 2 * half_opening_id), 
-                   centre_id + half_opening_id + i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+            V.rows(centre_id - half_opening_id + i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id + i * (middle_wall_id + 2 * half_opening_id)).fill(0);
         }
 
-
         //Then downwards
-        for(int i = 0; i < slits; i++)
-        {
-            V.rows(centre_id - half_opening_id - i * (middle_wall_id + 2 * half_opening_id), 
-                   centre_id + half_opening_id - i * (middle_wall_id + 2 * half_opening_id)).fill(0);
+        for(int i = 0; i < slits; i++){
+            V.rows(centre_id - half_opening_id - i * (middle_wall_id + 2 * half_opening_id), centre_id + half_opening_id - i * (middle_wall_id + 2 * half_opening_id)).fill(0);
         }  
     } 
 }
-
 
 
 
@@ -217,9 +220,14 @@ void PDEModel::print_sp_matrix_structure(const arma::sp_cx_mat& A)
         }
     }
 
-    // Next, we want to set the string to a dot at each non-zero element.
-    // To do this we use the special loop iterator from the sp_cx_mat class
-    // to help us loop over only the non-zero matrix elements.
+    /*
+
+    Next, we want to set the string to a dot at each non-zero element.
+    To do this we use the special loop iterator from the sp_cx_mat class
+    to help us loop over only the non-zero matrix elements.
+
+    */
+    
     sp_cx_mat::const_iterator it     = A.begin();
     sp_cx_mat::const_iterator it_end = A.end();
 
