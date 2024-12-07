@@ -116,7 +116,7 @@ def plot_three_times(data, label):
 
 
 
-def plot_prob_screen(x, t):
+def plot_prob_screen(x, t, T):
 
     """ Takes in the position and time of the screen """
 
@@ -187,7 +187,7 @@ plot_potential()
 plot_three_times(P, 'P')
 plot_three_times(U_real, 'real')
 plot_three_times(U_imag, 'imag')
-plot_prob_screen(x=0.8, t=0.002)
+plot_prob_screen(x=0.8, t=0.002, T=0.002)
 
 label = 'Animation of Double Slit'
 anim = animate_heatmap(P, label, timesteps)
