@@ -76,7 +76,7 @@ def plot_probabilities(T):
     plt.yticks(fontsize = 16)
     plt.grid()
     plt.tight_layout()
-    plt.savefig("probabilites_with_pot.pdf")
+    plt.savefig("probabilities_with_pot.pdf")
     plt.show()
 
 
@@ -153,7 +153,7 @@ def update(frame, data, heatmap, ax, label):
 
 
 def animate_heatmap(data, label, timesteps):
-    
+
     fig, ax = plt.subplots()
 
     # Setup initial heatmap

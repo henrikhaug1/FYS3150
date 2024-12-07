@@ -31,4 +31,3 @@ clean:
 	rm -f time_plot_P_80_double_slit.pdf
 	rm -f two_slits.pdf
 	rm -f probabilities_with_pot.pdf
-	rm -f two_slits.gif
