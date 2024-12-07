@@ -70,7 +70,7 @@ int main()
     // ---------- Setting up the potential matrix V ----------
     arma::mat V(M-2, M-2, arma::fill::zeros);               
     double v_0 = 1e10;
-    int nr_slits = 3;
+    int nr_slits = 2;
     double thickness = 0.02;
     double centre = 0.5;
     double middle_wall = 0.05;
