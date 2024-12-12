@@ -22,16 +22,15 @@ void save_vector_to_csv(const arma::vec& vec, const std::string& filename)
 {
     std::ofstream file(filename);
 
-    // Set precision to 16 decimal places
     file << std::setprecision(16) << std::scientific;
 
     for (size_t i = 0; i < vec.n_elem; ++i) {
         file << vec[i];
         if (i < vec.n_elem - 1) {
-            file << ","; // Use comma as a separator
+            file << ","; 
         }
     }
-    file << "\n"; // Add a newline at the end
+    file << "\n"; 
     file.close();
 }
 
